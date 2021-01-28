@@ -1,5 +1,6 @@
 {
   "name": "sonyprdana/php-mvc",
+  "description": "Very light php mvc, include cli easyer to creat controller view and model quikly ",
   "type": "framework",
   "license": "MIT",
   "authors": [
