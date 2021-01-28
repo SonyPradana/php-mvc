@@ -1,0 +1,7 @@
+
+.env
+/vendor/
+/node_modules/
+composer.lock
+package-lock.json
+yarn.lock

@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>  
+  <?php include($_SERVER['DOCUMENT_ROOT'] . '/resources/components/meta/metatag.php') ?>
+
+  <link rel="stylesheet" href="/src/css/style.css">
+  <script src="/src/bundle.js"></script>
+</head>
+<body>  
+</body>
+</html>

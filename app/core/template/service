@@ -1,0 +1,33 @@
+<?php
+
+use System\Helper\HttpHeader;
+
+class __service__Service
+{
+  // private function
+  private function useAuth()
+  {
+    // cek access    
+  }
+
+  private function errorhandler()
+  {
+    HttpHeader::printJson(['status' => 'bad request'], 500, [
+      "headers" => array (
+        'HTTP/1.1 400 Bad Request',
+        'Content-Type: application/json'
+      )
+    ]);
+  }
+
+  public function Test(array $request): array
+  {
+    return array (
+      'status'  => 'ok',
+      'data'    => null,
+      'error'   => false,
+      'headers' => array('HTTP/1.1 200 Oke')
+    );
+  }
+}
+

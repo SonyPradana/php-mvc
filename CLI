@@ -1,0 +1,7 @@
+<?php
+define("APP_START", microtime(true));
+
+require_once './vendor/autoload.php';
+
+// call CLI
+$new_cli = new \System\Apps\CLI($argv, __DIR__);
