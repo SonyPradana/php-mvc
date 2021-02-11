@@ -5,6 +5,16 @@ namespace System\Database\MyQuery;
 interface ConditionInterface
 {
   /**
+   * Where statment dengan membandikan varibale,
+   * compire bisa <, >, atau =
+   *
+   * @param string $bind key atau nama column
+   * @param string $comparattion Tanda hubung untuk membadingkan
+   * @param string $value Value atau nilai pembanding
+   */
+  public function compare(string $bind, string $comparation, string $value);
+
+  /**
    * Where statment untuk membandinkan kesamaan variable (=)
    *
    * @param string $key Key atau nama column

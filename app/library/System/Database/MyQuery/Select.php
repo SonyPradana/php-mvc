@@ -4,8 +4,8 @@ namespace System\Database\MyQuery;
 
 use System\Database\MyPDO;
 use System\Database\MyQuery;
+use System\Database\MyQuery\Join\Join;
 
-// TODO: put query builer in this class not excute class
 class Select extends Fetch implements ConditionInterface
 {
   public function __construct(string $table_name, array $columns_name, MyPDO $PDO = null)
@@ -29,6 +29,29 @@ class Select extends Fetch implements ConditionInterface
   public function __toString()
   {
     return $this->builder();
+  }
+
+  /**
+   * Membuat join table
+   *  - inner join
+   *  - left join
+   *  - right join
+   *  - full join
+   * @param Join $join_table Configure type of join
+   */
+  public function join(Join $join_table)
+  {
+    // overide master table
+    $join_table($this->_table);
+
+    $this->_join = $join_table->stringJoin();
+    return $this;
+  }
+
+  public function compare(string $bind, string $comparation, string $value)
+  {
+    $this->comparation($bind, $comparation, $value, false);
+    return $this;
   }
 
   public function equal(string $bind, string $value)
@@ -121,8 +144,9 @@ class Select extends Fetch implements ConditionInterface
     $where  = $this->getWhere();
     $limit = $this->_limit_start < 0 ? "LIMIT $this->_limit_end" : "LIMIT $this->_limit_start, $this->_limit_end";
     $limit = $this->_limit_end < 1 ? '' : $limit;
+    $join = $this->_join;
 
-    $this->_query = "SELECT $column FROM `$this->_table` $where $this->_sort_order $limit";
+    $this->_query = "SELECT $column FROM `$this->_table` $join$where $this->_sort_order $limit";
     return $this->_query;
   }
 }

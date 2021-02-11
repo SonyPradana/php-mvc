@@ -34,6 +34,9 @@ abstract class Query
   protected $_filters = array();
   protected $_strict_mode = true;
 
+  // join
+  protected $_join = '';
+
   /**
    * reset all property
    */
@@ -131,7 +134,7 @@ abstract class Query
       $value        = $fieldValue['value'];
       $comparation  = $fieldValue['comparation'];
       if ($value != null || $value != '') {
-        $query[] = "($fieldName $comparation :$fieldName)";
+        $query[] = "($this->_table.$fieldName $comparation :$fieldName)";
       }
     }
 

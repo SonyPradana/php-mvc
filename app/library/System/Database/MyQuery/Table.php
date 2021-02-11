@@ -6,8 +6,6 @@ use System\Database\MyPDO;
 use System\Database\MyQuery\Insert;
 use System\Database\MyQuery\Select;
 
-use function PHPUnit\Framework\returnSelf;
-
 class Table
 {
   protected $PDO = null;

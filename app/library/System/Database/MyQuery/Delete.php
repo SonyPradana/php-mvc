@@ -17,6 +17,11 @@ class Delete extends Execute implements ConditionInterface
     return $this->builder();
   }
 
+  public function compare(string $bind, string $comparation, string $value)
+  {
+    $this->comparation($bind, $comparation, $value, false);
+    return $this;
+  }
 
   public function equal(string $bind, string $value)
   {
