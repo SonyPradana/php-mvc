@@ -48,31 +48,55 @@ class Select extends Fetch implements ConditionInterface
     return $this;
   }
 
-  public function compare(string $bind, string $comparation, string $value)
-  {
-    $this->comparation($bind, $comparation, $value, false);
-    return $this;
-  }
-
   public function equal(string $bind, string $value)
   {
-    $this->comparation($bind, '=', $value, false);
+    $this->compare($bind, '=', $value, false);
     return $this;
   }
 
   public function like(string $bind, string $value)
   {
-    $this->comparation($bind, 'LIKE', $value, false);
+    $this->compare($bind, 'LIKE', $value, false);
     return $this;
   }
 
   public function where(string $where_condition, ?array $binder = null)
   {
-    $this->_where = $where_condition;
+    $this->_where[] = $where_condition;
 
     if ($binder != null) {
       $this->_binder = array_merge($this->_binder, $binder);
     }
+
+    return $this;
+  }
+
+  public function between(string $column_name, string $val_1, string $val_2)
+  {
+    $this->where(
+      "(`$this->_table`.`$column_name` BETWEEN :b_start AND :b_end)",
+      array(
+        [':b_start', $val_1],
+        [':b_end', $val_2]
+      )
+    );
+    return $this;
+  }
+
+  public function in(string $column_name, array $val)
+  {
+    $binds = [];
+    $binder = [];
+    foreach ($val as $key => $bind) {
+      $binds[] = ":in_$key";
+      $binder[] = [":in_$key", $bind];
+    }
+    $bindString = implode(', ', $binds);
+
+    $this->where(
+      "(`$this->_table`.`$column_name` IN ($bindString))",
+      $binder
+    );
 
     return $this;
   }
@@ -119,7 +143,7 @@ class Select extends Fetch implements ConditionInterface
   public function order(string $column_name, int $order_using = MyQuery::ORDER_ASC)
   {
     $order = $order_using == 0 ? 'ASC' : 'DESC';
-    $this->_sort_order = "ORDER BY `$column_name` $order";
+    $this->_sort_order = "ORDER BY `$this->_table`.`$column_name` $order";
     return $this;
   }
 

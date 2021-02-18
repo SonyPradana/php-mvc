@@ -24,7 +24,7 @@ abstract class Query
   const ORDER_DESC = 1;
 
   // final where statmnet
-  protected $_where = null;
+  protected $_where = array();
   // Grouping
   protected $_group_by = null;
 
@@ -47,7 +47,7 @@ abstract class Query
     $this->_binder        = array();
     $this->_limit_start   = 0;
     $this->_limit_end     = 0;
-    $this->_where         = null;
+    $this->_where         = array();
     $this->_group_filters = array();
     $this->_filters       = array();
     $this->_strict_mode   = true;
@@ -65,7 +65,7 @@ abstract class Query
    * @param string $comparation tanda hubung yang akan digunakan (AND|OR|>|<|=|LIKE)
    * @param string $value Value atau nilai dari key atau nama column
    */
-  public function comparation(string $bind, string $comparation, string $value, bool $bindValue = false)
+  public function compare(string $bind, string $comparation, string $value, bool $bindValue = false)
   {
     $this->_binder[] = array($bind, $value);
     $this->_filters[$bind] = array (
@@ -82,17 +82,19 @@ abstract class Query
    */
   protected function getWhere(): string
   {
-    $merging  = $this->mergeFilters();
-    $where    = $this->splitGrupsFilters($merging);
+    $merging      = $this->mergeFilters();
+    $where        = $this->splitGrupsFilters($merging);
+    $glue         = $this->_strict_mode ? ' AND ' : ' OR ';
+    $whereCostume = implode($glue, $this->_where);
 
-    if ($where != '' && $this->_where !='') {
+    if ($where != '' && $whereCostume != '') {
       // menggabungkan basic where dengan costume where
-      $costumeWhere = $this->_strict_mode ? " AND $this->_where" : " OR $this->_where";
-      return "WHERE $where $costumeWhere";
-    } elseif ($where == '' && $this->_where !='') {
+      $whereString = $this->_strict_mode ? " AND $whereCostume" : " OR $whereCostume";
+      return "WHERE $where $whereString";
+    } elseif ($where == '' && $whereCostume != '') {
       // hanya menggunkan costume where
-      $costumeWhere = $this->_strict_mode ? " $this->_where" : " $this->_where";
-      return "WHERE $costumeWhere";
+      $whereString = $this->_strict_mode ? " $whereCostume" : " $whereCostume";
+      return "WHERE $whereString";
     } elseif ($where != '') {
       // hanya mengunakan basic where
       return "WHERE $where";
