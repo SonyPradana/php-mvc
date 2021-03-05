@@ -67,9 +67,18 @@ class ServicesController extends Controller
       if (method_exists($service, $method_nama)) {
         return call_user_func_array([$service, $method_nama], $args);
       }
+
+      return array (
+        'status'  => 'Service Not Found',
+        'code'    => 404,
+        'message' => "Service not found $service_nama",
+        'headers' => ['HTTP/1.1 404 Service Not Foud']
+      );
     }
     return array (
       'status'  => 'Bad Request',
+      'code'    => 400,
+      'message' => APP_FULLPATH['services'] . $service_nama,
       'headers' => ['HTTP/1.1 400 Bad Request']
     );
   }

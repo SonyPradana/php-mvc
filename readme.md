@@ -11,6 +11,7 @@ php mvc with minum mvc frame work. is simple and easy to use
 - secure 'public/' folder
 - builtin npm (sass, traser) -> minify css, js
 - CLI command
+- ready to use Rest API (get, post, put)
 
 ## Optional Feature
 - laravel-mix
@@ -27,7 +28,7 @@ this app is ready to use vue route, be default vue route is disable using commen
 //     require("tailwindcss"),
 //   ])
 ```
-- router
+- vue router
 ```php
 // vue apps router - optional
 // if you use vue-router (sub path) forget register router here
@@ -36,14 +37,14 @@ this app is ready to use vue route, be default vue route is disable using commen
 // });
 ```
 
-## serve your apps (4 steps)
+## Serve your apps (4 steps)
 - clone this repository
 ```bash
 git clone https://github.com/SonyPradana/php-mvc my-project-name
  ```
  - composer update
  ```bash
- composer insatall
+ composer install
  ```
 - building recouce css / js (optional)
 ```bash
@@ -54,13 +55,13 @@ npm run dev
 ```bash
 php -S 127.0.0.1:3000 -t public/
 ```
-### short hand to setup project
-you can do manual by follow instruction before, or run this commend to easy setup (its same)
+### Short hand to setup project
+you can do manual by follow instruction above, or run this command to easy setup (its same result)
 ```bash
 # type or copy this command to your terminal
 ./bin/setup.sh
 ```
-## built in cli command
+## Built in cli command
 ### make controll and view
 ```bash
 php cli make:controller controllerName
@@ -74,8 +75,8 @@ php cli make:models user --table-name=users
 before you make model, make sure database config has set.
 to config your database you must copy ```.env.example``` to ```.env```.
 
-## built in Query Builder
-ofcource we are support CRUD data base, this a sample
+## Built in Query Builder
+of cource we are support CRUD data base, this a sample
 ### Select data 
 ```php
 $db = new MyQuery();
@@ -89,6 +90,7 @@ its same with SQL query
 ```SQL
 SELECT `column_1` FROM `table_name` WHERE (`column_2` = 'fast_mvc')
 ```
+also support join table
 ### Update data 
 ```php
 $db = new MyQuery();
@@ -119,8 +121,13 @@ $db('table_name')
   ->equal('column_3', 'slow_mvc')
   ->execute();
 ```
-its PDO supported, include cancel transation
+its supported cancel transation if you needed
 
 
-## Update and Maintenance  
-this repository will be maintans every thursday or friday (probely 😅)
+## Update and Maintenance 🚀
+this repository will be maintans every thursday or friday (probely 😅), Open contribution
+
+## Todo
+- Support Basic Auth
+- Support MiddleWare Router
+- Update able using composer

@@ -1,23 +1,13 @@
 <?php
 
-use System\Helper\HttpHeader;
+use System\Apps\Service;
 
-class __service__Service
+class __service__Service extends Service
 {
   // private function
   private function useAuth()
   {
     // cek access    
-  }
-
-  private function errorhandler()
-  {
-    HttpHeader::printJson(['status' => 'bad request'], 500, [
-      "headers" => array (
-        'HTTP/1.1 400 Bad Request',
-        'Content-Type: application/json'
-      )
-    ]);
   }
 
   public function Test(array $request): array
@@ -28,6 +18,11 @@ class __service__Service
       'error'   => false,
       'headers' => array('HTTP/1.1 200 Oke')
     );
+  }
+
+  public function Test_404(array $request): array
+  {
+    return $this->error(404);
   }
 }
 
