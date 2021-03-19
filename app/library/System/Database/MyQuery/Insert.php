@@ -17,10 +17,11 @@ class Insert extends Execute
     return $this->builder();
   }
 
-  public function values(array $value)
+  public function values(array $values)
   {
-    foreach ($value as $bind) {
-      $this->_binder = array($bind[0], $bind[1], true);
+    foreach ($values as $key => $value) {
+      var_dump($key, $value);
+      $this->_binder = array($key, $value, true);
     }
     return $this;
   }

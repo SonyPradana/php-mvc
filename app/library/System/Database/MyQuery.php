@@ -33,4 +33,10 @@ class MyQuery
   {
     return new Table($table_name, $this->PDO);
   }
+
+  public static function conn(string $table_name, MyPDO $PDO = null)
+  {
+    $conn = new MyQuery($PDO);
+    return $conn->table($table_name);
+  }
 }
