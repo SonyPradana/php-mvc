@@ -54,6 +54,8 @@ npm run dev
 - serve your page
 ```bash
 php -S 127.0.0.1:3000 -t public/
+# or using cli command
+php cli serve
 ```
 ### Short hand to setup project
 you can do manual by follow instruction above, or run this command to easy setup (its same result)

@@ -153,6 +153,14 @@ class CLI
           break;
 
       }
+    } elseif (substr( $main_argument, 0, 5) === "serve") {
+      $usePort = $option[0] ?? 3000;
+      // run serve command
+      echo "\n\e[32mserver is running:\e[0m\n";
+      echo "\thttp://localhost:$usePort\n";
+      echo "\thttp://127.0.0.1:$usePort\n\n";
+
+      echo shell_exec("php -S 127.0.0.1:$usePort -t public/");
     } else {
       $this->printHelp();
     }
@@ -218,19 +226,21 @@ class CLI
   private function printHelp()
   {
     // print all avlibale cmd
-    echo "Welocome to cli CLI\n";
-    echo "Usage: \t php cli [flag]\n";
-    echo "       \t php cli [option] [argumnet]\n";
-    echo "avilable flag [flag]\n";
-    echo "\t--help\t\tgeting help all command\n";
-    echo "\t--version\tget version cli cli\n";
-    echo "avilable option [option] [classname]\n";
-    echo "\tmake:controller [controller_name]\teasy way make controller and view\n";
-    echo "\tmake:view [view_name]\t\t\teasy way make view\n";
-    echo "\tmake:service [service_name]\t\teasy way make service\n";
-    echo "\tmake:model [model_name] [flag]\teasy way make model\n";
-    echo "\tmake:models [models_name] [flag]\teasy way make models\n";
-    echo "\t\t\noptional: [flag]\n";
-    echo "\t--table-name=[table_name]\tget table column when creating model\n";
+    echo "\nWelocome to php-mvc cli\n";
+    echo "\nRun:\n\t\e[32mphp\e[0m cli [flag]\n";
+    echo "       \t\e[32mphp\e[0m cli [command] [option]\n";
+    echo "       \t\e[32mphp\e[0m cli [command] [option] \e[2m[--argumnet]\e[0m\n";
+    echo "\navilable flag: \n";
+    echo "\t\e[2m--help\e[0m\t\tgeting help all command\n";
+    echo "\t\e[2m--version\e[0m\tget version cli cli\n";
+    echo "\navilable command: \n";
+    echo "\t\e[32mmake\e[0m:controller [controller_name]\teasy way make controller and view\n";
+    echo "\t\e[32mmake\e[0m:view [view_name]\t\t\teasy way make view\n";
+    echo "\t\e[32mmake\e[0m:service [service_name]\t\teasy way make service\n";
+    echo "\t\e[32mmake\e[0m:model [model_name] \e[2m[argument]\e[0m\teasy way make model\n";
+    echo "\t\e[32mmake\e[0m:models [models_name] \e[2m[argument]\e[0m\teasy way make models\n";
+    echo "\t\e[32mserve\e[0m [port_number] \t\t\tserve your application (port is optional)";
+    echo "\t\t\n\navilable argument:\n";
+    echo "\t\e[2m--table-name=[table_name]\e[0m\t\tget table column when creating model\n";
   }
 }

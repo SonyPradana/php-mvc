@@ -8,7 +8,7 @@ class IndexController extends Controller
   {
     return $this->view('index', array (
       'contents' => array (
-        'say' => 'hello'
+        'say' => 'hello, php enthusiastic'
       )
     ));
   }
