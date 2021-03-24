@@ -2,7 +2,7 @@
 
 return array (
   'BASEURL' => dirname(__DIR__, 2),
-  
+
   'time_zone' => 'Asia/Jakarta',
 
   /**
@@ -25,4 +25,7 @@ return array (
   'SERVICES_PATH'   => '/app/services/',
 
   'COMPONENT_PATH'  => '/resources/components/',
+
+  'COMMAND_PATH'  => '/app/commands/',
+
 );
