@@ -32,7 +32,7 @@ class CLI
         $className    = $cmd['class'];
         $functionName = $cmd['fn'];
 
-        if (file_exists(APP_FULLPATH['command'] . $className . '.php')) {
+        if (file_exists(APP_FULLPATH['commands'] . $className . '.php')) {
           $service = new $className($arguments);
           if (method_exists($service, $functionName)) {
             call_user_func([$service, $functionName]);

@@ -29,6 +29,11 @@ class MyPDO
     }
   }
 
+  public static function conn(string $database_name = DB_NAME)
+  {
+    return (new MyPDO($database_name));
+  }
+
   /**
    *  mempersiapkan statement pada query
    */

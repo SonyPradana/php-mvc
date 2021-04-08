@@ -11,6 +11,7 @@ class Command
 
   public function __construct(array $argv)
   {
+    // catch input argument from command line
     $this->CMD    = $argv[1] ?? '';
     $this->OPTION = Array(
       $argv[2] ?? '',
@@ -32,6 +33,9 @@ class Command
   const BG_WHITE    = 107;
   // more code see https://misc.flogisoft.com/bash/tip_colors_and_formatting
 
+  /**
+   * Default class to run some code
+   */
   public function println()
   {
     echo $this->textGreen('Command') . "\n";
@@ -42,6 +46,45 @@ class Command
     $toString = implode(";", $rule);
     $string   = "\e[$toString" . "m$text";
     return $reset ? $string . "\e[0m" : $string;
+  }
+
+  protected function prints(array $string): void
+  {
+    foreach ($string as $print) {
+      echo $print;
+    }
+  }
+
+  protected function print_n(int $count = 1): void
+  {
+    for ($i = 0; $i < $count; $i++) {
+      echo "\n";
+    }
+  }
+
+  protected function print_t(int $count = 1): void
+  {
+    for ($i = 0; $i < $count; $i++) {
+      echo "\t";
+    }
+  }
+
+  protected function newLine(int $count = 1): string
+  {
+    $res = '';
+    for ($i = 0; $i < $count; $i++) {
+      $res .= "\n";
+    }
+    return $res;
+  }
+
+  protected function tabs(int $count = 1): string
+  {
+    $res = '';
+    for ($i = 0; $i < $count; $i++) {
+      $res .= "\t";
+    }
+    return $res;
   }
 
   /** code (bash): 31 */

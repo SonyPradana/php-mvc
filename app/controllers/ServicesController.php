@@ -65,7 +65,7 @@ class ServicesController extends Controller
     if (file_exists(APP_FULLPATH['services'] . $service_nama . '.php')) {
       $service = new $service_nama;
       if (method_exists($service, $method_nama)) {
-        return call_user_func_array([$service, $method_nama], $args);
+        return call_user_func_array([$service, $method_nama], $args) ?? [];
       }
 
       return array (

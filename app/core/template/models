@@ -5,7 +5,7 @@ namespace Model\@__models__;
 use System\Database\MyModel;
 use System\Database\MyPDO;
 
-class __models__ extends MyModel
+class __models__s extends MyModel
 {
   /**
    * @param MyPDO $PDO DataBase class Dependency Injection

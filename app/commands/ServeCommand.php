@@ -10,12 +10,15 @@ class ServeCommand extends Command
     $port = $port == '' ? '8080' :$port;
     $localIP = getHostByName(getHostName());
 
-    echo "Server runing add:";
-    echo "\n- Local:\t" .   $this->textBlue("http://localhost:$port");
-    echo "\n- Network:\t" . $this->textBlue("http://$localIP:$port");
+    $this->prints([
+      "Server runing add:",
+      "\n- Local:\t" .   $this->textBlue("http://localhost:$port"),
+      "\n- Network:\t" . $this->textBlue("http://$localIP:$port"),
 
-    echo $this->textBlue("\n\nINFO");
-    echo " server runing...\n";
+      $this->textYellow("\n\nctrl+c to stop server"),
+      $this->textBlue("\n\nINFO"),
+      " server runing...\n",
+    ]);
 
     shell_exec("php -S 127.0.0.1:$port -t public/");
   }
