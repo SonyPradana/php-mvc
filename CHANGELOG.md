@@ -5,9 +5,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [0.1.3] - 2021-04-16
 ### Added
 - CLI support multy echo using prints(), and new line & tabs)
-- MyPDO support new constructor with static function
+- CLI make model, auto create property base on table column
+- MyPDO support static function and singleton
 
 ### Fixed
 - CLI make:model/models not replace table name and/or table entry (columns)
