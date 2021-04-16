@@ -174,7 +174,14 @@ class MakerCommand extends Command
     }
   }
 
-
+  /**
+   * Replece template to new class/resoure
+   *
+   * @param string $argument Name of Class/file
+   * @param array $make_option Configuration to replace template
+   * @param string $folder Create folder for save location
+   * @return boolean True if templete success copie
+  */
   private function makeTemplate(string $argument, array $make_option, string $folder = ''): bool
   {
     $folder = ucfirst($folder);
@@ -197,7 +204,15 @@ class MakerCommand extends Command
     return $isCopied === false ? false : true;
   }
 
-  private function FillModelDatabase(string $model_location, string $table_name)
+  /**
+   * Fill template with property
+   * base on databe table
+   *
+   * @param string $model_location File location (model)
+   * @param string $table_name Tabel name to sync with model
+   * @return boolean True if templete success copie
+  */
+  private function FillModelDatabase(string $model_location, string $table_name): bool
   {
     $table_column = MyQuery::conn("COLUMNS", MyPDO::conn("INFORMATION_SCHEMA"))
       ->select()
@@ -205,19 +220,41 @@ class MakerCommand extends Command
       ->equal("TABLE_NAME", $table_name)
       ->all() ?? [];
 
-    $toString = '';
+    $column_template = '';
+    $getter_template = '';
+    $setter_template = '';
+
     foreach ($table_column as $column) {
-      $toString .= "'" . $column['COLUMN_NAME'] . "' => null,\n\t\t\t";
+      if ($column['COLUMN_NAME'] != 'id') {
+        $column_template .= "'" . $column['COLUMN_NAME'] . "' => null,\n\t\t\t";
+        $getter_template .= $this->TemplateGetterModel($column['COLUMN_NAME']);
+        $setter_template .= $this->TemplateSetterModel($column['COLUMN_NAME']);
+      }
+
     }
 
     $getContent = file_get_contents($model_location);
+    // replece table name
     $getContent = str_replace('__table__', $table_name, $getContent);
-    $getContent = str_replace('__column__', $toString, $getContent);
+    // replace teble column
+    $getContent = str_replace('__column__', $column_template, $getContent);
+    // replece getter and setter
+    $getContent = str_replace('__getter__', $getter_template, $getContent);
+    $getContent = str_replace('__setter__', $setter_template, $getContent);
+
     $isCopied   = file_put_contents($model_location, $getContent);
 
     return $isCopied === false ? false : true;
   }
 
+  /**
+   * Fill template with property
+   * base on databe table
+   *
+   * @param string $model_location File location (models)
+   * @param string $table_name Tabel name to sync with models
+   * @return boolean True if templete success copie
+  */
   private function FillModelsDatabase(string $model_location, string $table_name)
   {
     $getContent = file_get_contents($model_location);
@@ -227,4 +264,33 @@ class MakerCommand extends Command
     return $isCopied === false ? false : true;
   }
 
+  // helper
+
+  /**
+   * Helper for make model
+   */
+  private function TemplateGetterModel(string $column_name): string
+  {
+    return
+      "\n\t"    . "public function $column_name()" .
+      "\n\t"    . "{" .
+      "\n\t\t"  . "return " . "$" . "this->COLUMNS['$column_name'];" .
+      "\n\t"    . "}" .
+      "\n";
+  }
+
+  /**
+   * Helper for make model
+   */
+  private function TemplateSetterModel(string $column_name): string
+  {
+    $functionName = ucfirst($column_name);
+    return
+      "\n\t"      . "public function set$functionName(int " . "$" . "val)" .
+      "\n\t"      . "{" .
+      "\n\t\t"    . "$" . "this->COLUMNS['$column_name'] = " . "$" . "val;" .
+      "\n\t\t"    . "return " . "$" . "this;" .
+      "\n\t"      . "}" .
+      "\n";
+  }
 }

@@ -14,8 +14,11 @@ final class BasicTest extends TestCase
     $this->assertFileExists('./bootstrap/autoload.php');
 
     $this->assertFileExists('./app/core/CLI.php');
+    $this->assertFileExists('./app/core/Command.php');
+    $this->assertFileExists('./app/core/Config.php');
     $this->assertFileExists('./app/core/Controller.php');
     $this->assertFileExists('./app/core/Router.php');
+    $this->assertFileExists('./app/core/Service.php');
 
     $this->assertFileExists('./app/core/template/controller');
     $this->assertFileExists('./app/core/template/model');
@@ -31,11 +34,11 @@ final class BasicTest extends TestCase
     $this->assertFileExists('./public/index.php');
 
     $this->assertFileExists('./.env.example');
+    $this->assertFileExists('./CHANGELOG.md');
+    $this->assertFileExists('./CLI');
     $this->assertFileExists('./composer.json');
     $this->assertFileExists('./package.json');
-    $this->assertFileExists('./CLI');
     $this->assertFileExists('./webpack.mix.js');
-    $this->assertFileExists('./CHANGELOG.md');
   }
 
   public function testAssetStrucktur(): void
