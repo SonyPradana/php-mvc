@@ -48,7 +48,11 @@ class HelpCommand extends Command
       "\n\t" . $this->textGreen("make") . ":service [services_name]\t\t\tgenerate new service",
       "\n\t" . $this->textGreen("make") . ":model [model_name] " . $this->textDim("[argument]") . "\t\tgenerate new model",
       "\n\t" . $this->textGreen("make") . ":models [models_name] " . $this->textDim("[argument]") . "\t\tgenerate new models",
+      "\n",
       "\n\t" . $this->textGreen("serve") . " [port_number] " . "\t\t\t\tserve server with port number (default 8080)",
+      "\n",
+      "\n\t" . $this->textGreen("cron") . $this->tabs(6) . "Run cron job (all shadule)",
+      "\n\t" . $this->textGreen("cron") . ":work" . $this->tabs(5) . "Run virtual cron job in terminal",
 
       "\n\nAvilable argument:",
       "\n\t" . $this->textDim("--table-name=[table_name]") . "\tget table column when creating model/models",
