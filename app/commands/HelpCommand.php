@@ -2,8 +2,32 @@
 
 use System\Apps\Command;
 
+use System\Apps\CLI;
+
 class HelpCommand extends Command
 {
+
+  public static array $command = array(
+    [
+      "cmd"       => ["-h", "--help"],
+      'mode'      => "full",
+      "class"     => self::class,
+      "fn"        => "println",
+    ],
+    [
+      "cmd"       => ["-v", "--version"],
+      'mode'      => "full",
+      "class"     => self::class,
+      "fn"        => "versionCek",
+    ],
+    [
+      "cmd"       => "--list",
+      'mode'      => "full",
+      "class"     => self::class,
+      "fn"        => "commandList",
+    ],
+  );
+
   public function println()
   {
     $this->prints([
@@ -51,7 +75,7 @@ class HelpCommand extends Command
     echo "List of all command registered:";
     $this->print_n(2);
 
-    foreach (COMMAND_CONFIG as $commands) {
+    foreach (CLI::$command as $commands) {
       // get command
       if (is_array($commands['cmd'])) {
         echo $this->textBlue(implode(", ", $commands['cmd']));

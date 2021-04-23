@@ -5,6 +5,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Added
+- Support single cron job to handle all schadule
+- Model support static function
+
+### Changed
+- Changed regester command from config file to CLI class (/app/core/CLI.php)
 
 ## [0.1.3] - 2021-04-16
 ### Added

@@ -4,6 +4,16 @@ use System\Apps\Command;
 
 class ServeCommand extends Command
 {
+
+  public static array $command = array(
+    [
+      "cmd"       => "serve",
+      "mode"      => "full",
+      "class"     => "ServeCommand",
+      "fn"        => "serve",
+    ],
+  );
+
   public function Serve()
   {
     $port = $this->OPTION[0] ?? '8080';

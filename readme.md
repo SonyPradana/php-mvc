@@ -1,6 +1,6 @@
 # PHP MVC
 
-php mvc with minum mvc frame work. is simple and easy to use
+Php mvc with minum mvc framework (skeleton project). is simple and easy to use
 
 ## Feature
 - mvc structur
@@ -113,9 +113,11 @@ UPDATE `table_name` SET `column_3` = 'simple_mvc' WHERE (`column_2` = 'fast_mvc'
 $db = new MyQuery();
 $db('table_name')
   ->insert()
-  ->value('column_1', '')
-  ->value('column_2', 'simple_mvc')
-  ->value('column_3', 'fast_mvc')
+  ->values([
+    'column_1'  => '',
+    'column_2'  => 'simple_mvc',
+    'column_3'  => 'fast_mvc'
+    ])
   ->execute();
 // delete
 $db('table_name')
@@ -124,6 +126,68 @@ $db('table_name')
   ->execute();
 ```
 its supported cancel transation if you needed
+
+## Cron job schaduler
+Command chaduler for run cron job, just run one cron job to handle all shaduler. cli will automatily run your any shaduler base time you set.
+
+### Register command
+```php
+// ../app/command/CronCommand.php
+class CronCommand
+{
+  public function schaduler(Schadule $schadule): void
+  {
+    // put your schaduller here
+    $schadule->call(function() {
+      echo "Its Cron Job Schaduller, run every hour\n";
+    })
+    ->hourly();
+    // add schaule as many as possible
+  }
+}
+```
+#### avilable time
+ - justintime - run every cron call
+ - everyTenMinute - run every 10 minute
+ - everyThirtyMinutes - run every 30 minute
+ - everyTwoHour - run every 2 hour
+ - everyTwelveHour - run every 12 hour / half day
+ - hourly - run every 1 hour
+ - haurlyAt - run every single hour (costume time)
+ - daily - run every 00.00 
+ - dailyAt - run every single day 1-31 (costume time)
+ - weekly - run every week (sunday)
+ - mountly - run every frist day in mount
+
+### Cli command
+```bash
+  php CLI cron
+  # will run shaduler in the same time you type
+
+  php CLi cron:work
+  # simultanly run cronjob every minute
+```
+### Setup local cron schaduller
+here the sample use ```cron:work```:
+```bash
+Simulate Cron in terminal (every minute)
+
+Ctrl+C to stop
+Run Cron at - Fri, 20 19
+Run Cron at - Fri, 20 20
+Run Cron at - Fri, 20 21
+...
+...
+Run Cron at - Fri, 24 59
+```
+will cek every minute in your schadule
+### Setup serve cron schaduller
+on your server cron job command type
+```bash
+* * * * * * usr/local/bin/php ../bin/cron.script.php >/dev/null 2>&1
+```
+locate cron to cron.script.php
+### Setup 
 
 
 ## Update and Maintenance 🚀

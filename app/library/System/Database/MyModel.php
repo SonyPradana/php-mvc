@@ -270,4 +270,9 @@ abstract class MyModel
 
       return $this->PDO->resultset();
     }
+
+    public static function with(MyPDO $pdo)
+    {
+      return new static($pdo);
+    }
 }
