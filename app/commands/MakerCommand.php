@@ -224,7 +224,7 @@ class MakerCommand extends Command
   */
   private function FillModelDatabase(string $model_location, string $table_name): bool
   {
-    $table_column = MyQuery::conn("COLUMNS", MyPDO::conn("INFORMATION_SCHEMA"))
+    $table_column = MyQuery::from("COLUMNS", MyPDO::conn("INFORMATION_SCHEMA"))
       ->select()
       ->equal("TABLE_SCHEMA", DB_NAME)
       ->equal("TABLE_NAME", $table_name)

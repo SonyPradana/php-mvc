@@ -17,6 +17,14 @@ class Update extends Execute implements ConditionInterface
     return $this->builder();
   }
 
+  public function values(array $values)
+  {
+    foreach ($values as $key => $value) {
+      $this->_binder = array($key, $value, true);
+    }
+    return $this;
+  }
+
   public function value(string $bind, string $value)
   {
     $this->_binder[] = array($bind, $value, true);
