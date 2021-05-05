@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Added
 - MyQuery -> update support add mulity values using single function
+- MyModel support costume join table
 
 ### Changed
 - MyQuery change function name from conn() to from()
