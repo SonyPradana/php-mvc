@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Added
 - MyQuery -> update support add mulity values using single function
-- MyModel support costume join table
+- MyModel support costume join table, singel result
 
 ### Changed
 - MyQuery change function name from conn() to from()
@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - MyQuery -> insert, remove var_dump() in production
 - Mymodel -> cant add value 0 (zero)
 - Mymodel -> remove where statment if no bind query
+- Fix MyModel prefix ambigus column name, support costume prefix
 
 ## [0.1.4] - 2021-04-23
 ### Added

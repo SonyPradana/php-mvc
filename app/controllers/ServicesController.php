@@ -22,7 +22,7 @@ class ServicesController extends Controller
   {
     $method = $_SERVER['REQUEST_METHOD'] ?? 'GET';
     $params = $_GET;
-    if ($method == 'PUT') {
+    if ($method == 'PUT' || $method == 'DELETE') {
       $body   = file_get_contents('php://input');
       $params = json_decode($body, true);
     } elseif ($method == 'POST') {

@@ -187,7 +187,9 @@ abstract class MyModel
         $id     = $val['id'] ?? '';
         $bind   = $param . $id;
 
-        $option   = $val['option'] ?? ["imperssion" => [":", ""], "operator"   => "="];
+        $option           = $val['option'] ?? ["imperssion" => [":", ""], "operator"   => "="];
+        $option['column'] = $val['column'] ?? '';
+
         $querys[] = $this->queryBuilder($param, $bind, $option);
       }
     }
@@ -198,11 +200,12 @@ abstract class MyModel
 
   protected function queryBuilder($key, $val, array $option = ["imperssion" => ["'%", "%'"], "operator" => "LIKE"])
   {
+    $column = $option['column'] != '' ? $option['column'] . '.' : '';
     $operator = $option["operator"];
     $sur = $option["imperssion"][0];
     $pre = $option["imperssion"][1];
     if (isset($val) && $val != '') {
-      return "($key $operator $sur$val$pre)";
+      return "($column$key $operator $sur$val$pre)";
     }
     return "";
   }
@@ -236,7 +239,20 @@ abstract class MyModel
   }
 
   /**
-   * menampilkan data dari hasil query yang ditentukan sebelumnya
+   * Menapilakan single data dari query
+   * @return array|bool False jika data tidak ditemukan
+   */
+  public function single()
+  {
+    if ($this->PDO == null) return [];
+    $this->PDO->query( $this->query() );
+    $this->bindingFilters();
+
+    return $this->PDO->single();
+  }
+
+  /**
+   * Menampilkan data dari hasil query yang ditentukan sebelumnya
    */
   public function result(): array
   {
@@ -248,7 +264,7 @@ abstract class MyModel
   }
 
   /**
-   * menmpilkan semua data yang tersedia
+   * Menmpilkan semua data yang tersedia
    */
   public function resultAll(): array
   {

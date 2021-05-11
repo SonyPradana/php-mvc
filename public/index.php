@@ -23,7 +23,7 @@ Route::get('/say/(:any)', function($text) {
 
 
 // also sopprt ap (json) format output
-Route::get('/API/(:any)/(:any)', function($unit, $action) {
+Route::match(['get', 'put', 'post', 'delete'], '/API/(:any)/(:any)', function($unit, $action) {
   return (new ServicesController())->index($unit, $action, 'v1.0');
 });
 
