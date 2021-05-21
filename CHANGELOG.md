@@ -8,9 +8,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - MyQuery -> update support add mulity values using single function
 - MyModel support costume join table, singel result
+- Router support group prefix
 
 ### Changed
 - MyQuery change function name from conn() to from()
+- Change class name from Route to Router
 
 ### Fixed
 - MyQuery -> insert, remove var_dump() in production
