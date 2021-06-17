@@ -3,14 +3,14 @@
 use System\Apps\Command;
 use System\Database\{MyPDO, MyQuery};
 
-class MakerCommand extends Command
+class MakeCommand extends Command
 {
 
   public static array $command = array(
     [
       "cmd"       => "make",
       "mode"      => "start",
-      "class"     => MakerCommand::class,
+      "class"     => MakeCommand::class,
       "fn"        => "switcher",
     ],
   );

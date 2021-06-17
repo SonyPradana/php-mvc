@@ -5,7 +5,7 @@ namespace System\Apps;
 use CronCommand;
 use HelpCommand;
 use Helper\String\Str;
-use MakerCommand;
+use MakeCommand;
 use ServeCommand;
 
 class CLI
@@ -22,7 +22,7 @@ class CLI
       // help command
       HelpCommand::$command,
       // make somthink command
-      MakerCommand::$command,
+      MakeCommand::$command,
       // server command
       ServeCommand::$command,
       // cron

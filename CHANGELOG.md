@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 - Help command now create by every single command child class
+- Change file from MakerCommand.php to MakeCommand.php
 
 ## [0.1.5] - 2021-05-21
 ### Added
