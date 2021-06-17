@@ -6,7 +6,10 @@ use PHPUnit\Framework\TestCase;
 
 final class BasicTest extends TestCase
 {
-  public function testFrameworkStrucktur(): void
+  /**
+   * @test
+   */
+  public function FrameworkStrucktur(): void
   {
     $this->assertFileExists('./bootstrap/init.php');
 
@@ -17,7 +20,10 @@ final class BasicTest extends TestCase
     $this->assertFileExists('./app/core/Command.php');
     $this->assertFileExists('./app/core/Config.php');
     $this->assertFileExists('./app/core/Controller.php');
+    $this->assertFileExists('./app/core/GlobalFuntion.php');
     $this->assertFileExists('./app/core/Router.php');
+    $this->assertFileExists('./app/core/RouterFactory.php');
+    $this->assertFileExists('./app/core/RouterProvider.php');
     $this->assertFileExists('./app/core/Service.php');
 
     $this->assertFileExists('./app/core/template/controller');
@@ -25,7 +31,8 @@ final class BasicTest extends TestCase
     $this->assertFileExists('./app/core/template/service');
     $this->assertFileExists('./app/core/template/view');
 
-    $this->assertFileExists('./app/library/System/Database/CrudInterface.php');
+    $this->assertFileExists('./app/library/System/Cron/Schadule.php');
+    $this->assertFileExists('./app/library/System/Cron/ScheduleTime.php');
     $this->assertFileExists('./app/library/System/Database/MyCRUD.php');
     $this->assertFileExists('./app/library/System/Database/MyModel.php');
     $this->assertFileExists('./app/library/System/Database/MyPDO.php');
@@ -35,13 +42,16 @@ final class BasicTest extends TestCase
 
     $this->assertFileExists('./.env.example');
     $this->assertFileExists('./CHANGELOG.md');
-    $this->assertFileExists('./CLI');
+    $this->assertFileExists('./cli');
     $this->assertFileExists('./composer.json');
     $this->assertFileExists('./package.json');
     $this->assertFileExists('./webpack.mix.js');
   }
 
-  public function testAssetStrucktur(): void
+  /**
+   * @test
+   */
+  public function AssetStrucktur(): void
   {
     // css
     $this->assertFileExists('./resources/css/');
