@@ -41,6 +41,18 @@ class Command
     echo $this->textGreen('Command') . "\n";
   }
 
+  /**
+   * @return string|array
+   *  Text or array of text to be echo
+   */
+  public function printHelp()
+  {
+   return array(
+     'option' => array(),
+     'argument' => array()
+   );
+  }
+
   protected function rules(array $rule, string $text, bool $reset = true): string
   {
     $toString = implode(";", $rule);

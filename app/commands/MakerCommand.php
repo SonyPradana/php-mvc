@@ -15,6 +15,23 @@ class MakerCommand extends Command
     ],
   );
 
+  public function printHelp()
+  {
+    return array(
+      'option' => array(
+        "\n\t" . $this->textGreen("make") . ":controller [controller_name]\t\tgenerate new controller and view",
+        "\n\t" . $this->textGreen("make") . ":view [view_name]\t\t\t\tgenerate new view",
+        "\n\t" . $this->textGreen("make") . ":service [services_name]\t\t\tgenerate new service",
+        "\n\t" . $this->textGreen("make") . ":model [model_name] " . $this->textDim("[argument]") . "\t\tgenerate new model",
+        "\n\t" . $this->textGreen("make") . ":models [models_name] " . $this->textDim("[argument]") . "\t\tgenerate new models",
+      ),
+      'argument' => array(
+        "\n\t" . $this->textDim("--table-name=[table_name]") . "\tget table column when creating model/models",
+      )
+    );
+
+  }
+
   public function switcher()
   {
     // get category command
@@ -23,7 +40,7 @@ class MakerCommand extends Command
     // get naming class
     if ($this->OPTION[0] == '') {
       echo "\tArgument name cant be null";
-      echo "\n\t>>\t" . $this->textGreen("php") . " simpus " . $this->textGreen("make:") . $makeAction[1] . $this->textRed(" not_null");
+      echo "\n\t>>\t" . $this->textGreen("php") . " cli " . $this->textGreen("make:") . $makeAction[1] . $this->textRed(" not_null");
       exit;
     }
 

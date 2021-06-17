@@ -8,4 +8,9 @@ class Str
   {
     return substr($in, 0, strlen($find)) == $find;
   }
+
+  public static function contains(string $needle, string $haystack)
+  {
+    return '' === $needle || false !== strpos($haystack, $needle);
+  }
 }

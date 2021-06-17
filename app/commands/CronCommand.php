@@ -15,6 +15,18 @@ class CronCommand extends Command
     ],
   );
 
+  public function printHelp()
+  {
+    return array(
+      'option' => array(
+        "\n\t" . $this->textGreen("cache") . ":info" . $this->tabs(5) . "Get cache information",
+        "\n\t" . $this->textGreen("cache") . ":clear" . $this->tabs(5) . "Clear all cache",
+        "\n\t" . $this->textGreen("cache") . ":clear [cache_prefix]" . $this->tabs(3) . "Clear cache with prefix items name",
+      ),
+      'argument' => array()
+    );
+  }
+
   public function switcher()
   {
     // get category command

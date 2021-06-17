@@ -14,6 +14,16 @@ class ServeCommand extends Command
     ],
   );
 
+  public function printHelp()
+  {
+    return array(
+      'option' => array(
+        "\n\t" . $this->textGreen("serve") . " [port_number] " . "\t\t\t\tserve server with port number (default 8080)",
+      ),
+      'argument' => array()
+    );
+  }
+
   public function Serve()
   {
     $port = $this->OPTION[0] ?? '8080';

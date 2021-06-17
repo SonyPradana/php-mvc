@@ -60,7 +60,7 @@ class CLI
 
     // if command not register
     echo "\e[31mCommad Not Found, run help command\e[0m";
-    echo "\n\e[33mPHP\e[0m simpus \e[2m--help\e[0m";
+    echo "\n\e[33mPHP\e[0m cli \e[2m--help\e[0m";
   }
 
   private function cekAlias(string $alias, string $match, string $mode): bool

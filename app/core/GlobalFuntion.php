@@ -1,5 +1,4 @@
 <?php
-
 if (! function_exists("dd")) {
   /**
    * Print prity value and close apilication
@@ -64,6 +63,23 @@ if (! function_exists("startsWith")) {
    */
   function startsWith(string $find, string $in): bool {
     return \Helper\String\Str::startWith($find, $in);
+  }
+}
+
+if (! function_exists("stringContains")) {
+  /**
+   * Cek text exis on text
+   *
+   * @param string $find
+   *  Text to find
+   * @param string $in
+   *  Resource to find
+   * @return bool
+   *  True if find text in text
+   */
+  function stringContains(string $find, string $in): bool
+  {
+    return \Helper\String\Str::contains($find, $in);
   }
 }
 
