@@ -48,6 +48,126 @@ if (! function_exists("base_path")) {
   }
 }
 
+if (! function_exists("model_path")) {
+
+  /**
+   * Get aplication model path, base on config file
+   *
+   * @param bool $include_basePath
+   *  True to add base path to result
+   * @return string
+   *  Application path folder
+   */
+  function model_path(bool $include_basePath = false): string {
+    return $include_basePath
+      ? (APP_FULLPATH['model'] ?? '')
+      : (APP_PATH['model'] ?? '');
+  }
+}
+
+if (! function_exists("view_path")) {
+
+  /**
+   * Get aplication view path, base on config file
+   *
+   * @param bool $include_basePath
+   *  True to add base path to result
+   * @return string
+   *  Application path folder
+   */
+  function view_path(bool $include_basePath = false): string {
+    return $include_basePath
+      ? (APP_FULLPATH['view'] ?? '')
+      : (APP_PATH['view'] ?? '');
+  }
+}
+
+if (! function_exists("controllers_path")) {
+
+  /**
+   * Get aplication controllers path, base on config file
+   *
+   * @param bool $include_basePath
+   *  True to add base path to result
+   * @return string
+   *  Application path folder
+   */
+  function controllers_path(bool $include_basePath = false): string {
+    return $include_basePath
+      ? (APP_FULLPATH['controllers'] ?? '')
+      : (APP_PATH['controllers'] ?? '');
+  }
+}
+
+if (! function_exists("services_path")) {
+
+  /**
+   * Get aplication services path, base on config file
+   *
+   * @param bool $include_basePath
+   *  True to add base path to result
+   * @return string
+   *  Application path folder
+   */
+  function services_path(bool $include_basePath = false): string {
+    return $include_basePath
+      ? (APP_FULLPATH['services'] ?? '')
+      : (APP_PATH['services'] ?? '');
+  }
+}
+
+if (! function_exists("component_path")) {
+
+  /**
+   * Get aplication component path, base on config file
+   *
+   * @param bool $include_basePath
+   *  True to add base path to result
+   * @return string
+   *  Application path folder
+   */
+  function component_path(bool $include_basePath = false): string {
+    return $include_basePath
+      ? (APP_FULLPATH['component'] ?? '')
+      : (APP_PATH['component'] ?? '');
+  }
+}
+
+if (! function_exists("commands_path")) {
+
+  /**
+   * Get aplication commands path, base on config file
+   *
+   * @param bool $include_basePath
+   *  True to add base path to result
+   * @return string
+   *  Application path folder
+   */
+  function commands_path(bool $include_basePath = false): string {
+    return $include_basePath
+      ? (APP_FULLPATH['commands'] ?? '')
+      : (APP_PATH['commands'] ?? '');
+  }
+}
+
+if (! function_exists("config_path")) {
+
+  /**
+   * Get aplication config path, base on config file
+   *
+   * @param bool $include_basePath
+   *  True to add base path to result
+   * @return string
+   *  Application path folder
+   */
+  function config_path(bool $include_basePath = false): string {
+    return $include_basePath
+      ? (APP_FULLPATH['config'] ?? '')
+      : (APP_PATH['config'] ?? '');
+  }
+}
+
+
 // string
 
 if (! function_exists("startsWith")) {
