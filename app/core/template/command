@@ -1,0 +1,30 @@
+#!/usr/bin/env php
+<?php
+
+use System\Console\Command;
+
+class __command__Command extends Command
+{
+
+  public static array $command = array(
+    [
+      "cmd"       => "__command__",
+      "mode"      => "full",
+      "class"     => __command__Command::class,
+      "fn"        => "println",
+    ],
+  );
+
+  public function printHelp()
+  {
+    return array(
+      'option' => array(),
+      'argument' => array()
+    );
+  }
+
+  public function println()
+  {
+    echo $this->textGreen("__command__");
+  }
+}

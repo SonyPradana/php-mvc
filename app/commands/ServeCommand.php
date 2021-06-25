@@ -1,6 +1,6 @@
 <?php
 
-use System\Apps\Command;
+use System\Console\Command;
 
 class ServeCommand extends Command
 {

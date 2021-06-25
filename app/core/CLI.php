@@ -18,17 +18,7 @@ class CLI
     $baseArgs = $arguments[1] ?? '--help';
 
     // load register command
-    self::$command = array_merge(
-      // help command
-      HelpCommand::$command,
-      // make somthink command
-      MakeCommand::$command,
-      // server command
-      ServeCommand::$command,
-      // cron
-      CronCommand::$command,
-      // more command here
-    );
+    self::$command = include(app_path('config', true) . "command.config.php");
 
     foreach (self::$command as $cmd) {
       // matching alias

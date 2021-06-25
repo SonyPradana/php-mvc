@@ -9,11 +9,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Global function
 - Better chain code in cron shedule
 - Add command cron:list to show all cron register
+- Add make:command to create command class
 
 ### Changed
 - Help command now create by every single command child class
 - Change file from MakerCommand.php to MakeCommand.php
 - Rename file from Schadule.php to Schedule.php
+- Change namespace from System\App to System\Console
+- Command registration now on command.config.php
 
 ## [0.1.5] - 2021-05-21
 ### Added

@@ -26,6 +26,8 @@ return array (
 
   'COMPONENT_PATH'  => '/resources/components/',
 
-  'COMMAND_PATH'  => '/app/commands/',
+  'COMMAND_PATH'    => '/app/commands/',
+
+  'CONFIG'          => '/app/config/',
 
 );

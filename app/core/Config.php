@@ -32,6 +32,7 @@ class Config
         'services'    => $config['SERVICES_PATH'],
         'component'   => $config['COMPONENT_PATH'],
         'commands'    => $config['COMMAND_PATH'],
+        'config'      => $config['CONFIG']
       ]);
 
       define('APP_FULLPATH', [
@@ -41,6 +42,7 @@ class Config
         'services'    => $config['BASEURL'] . $config['SERVICES_PATH'],
         'component'   => $config['BASEURL'] . $config['COMPONENT_PATH'],
         'commands'    => $config['BASEURL'] . $config['COMMAND_PATH'],
+        'config'      => $config['BASEURL'] . $config['CONFIG'],
       ]);
   }
 

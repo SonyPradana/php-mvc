@@ -1,6 +1,6 @@
 <?php
 
-use System\Apps\Command;
+use System\Console\Command;
 use System\Database\{MyPDO, MyQuery};
 
 class MakeCommand extends Command
@@ -24,6 +24,7 @@ class MakeCommand extends Command
         "\n\t" . $this->textGreen("make") . ":service [services_name]\t\t\tgenerate new service",
         "\n\t" . $this->textGreen("make") . ":model [model_name] " . $this->textDim("[argument]") . "\t\tgenerate new model",
         "\n\t" . $this->textGreen("make") . ":models [models_name] " . $this->textDim("[argument]") . "\t\tgenerate new models",
+        "\n\t" . $this->textGreen("make") . ":command [command_name] " . "\t\t\tgenerate new command",
       ),
       'argument' => array(
         "\n\t" . $this->textDim("--table-name=[table_name]") . "\tget table column when creating model/models",
@@ -68,6 +69,10 @@ class MakeCommand extends Command
 
       case 'models':
         $this->make_models();
+        break;
+
+      case 'command':
+        $this->make_commad();
         break;
 
       default:
@@ -225,10 +230,46 @@ class MakeCommand extends Command
     $get_template = str_replace("@" . $make_option['pattern'], ucfirst($argument),  $get_template);
     // replace patternt
     $get_template = str_replace($make_option['pattern'], $argument,  $get_template);
+    // remove helper comment
+    $get_template = preg_replace('/^.+\n/', '', $get_template);
     // saving
     $isCopied = file_put_contents(BASEURL . $make_option['save_location'] . $folder . $argument . $make_option['surfix'], $get_template);
 
     return $isCopied === false ? false : true;
+  }
+
+  public function make_commad()
+  {
+    echo $this->textYellow("Making command file...");
+    echo $this->textDim("\n...\n");
+
+    // main code
+    $success = $this->makeTemplate($this->OPTION[0], array(
+      'template_location' => '/app/core/template/command',
+      'save_location'     => app_path('commands'),
+      'pattern'           => '__command__',
+      'surfix'            => 'Command.php'
+    ));
+
+    // the result
+    if ($success) {
+      // add command config for calling new command
+      $geContent = file_get_contents(app_path('config', true) . 'command.config.php');
+      $geContent = str_replace(
+        "// more command here",
+
+        "// " . $this->OPTION[0] . "\n\t" .
+        $this->OPTION[0] . "Command::$"."command\n" .
+        "\t// more command here",
+
+        $geContent);
+
+      file_put_contents(app_path('config', true) . 'command.config.php', $geContent);
+
+      echo $this->textGreen("\nFinish created command file");
+    } else {
+      echo $this->textRed("\nFailed Create command file");
+    }
   }
 
   /**
