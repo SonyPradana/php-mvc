@@ -31,7 +31,7 @@ final class BasicTest extends TestCase
     $this->assertFileExists('./app/core/template/service');
     $this->assertFileExists('./app/core/template/view');
 
-    $this->assertFileExists('./app/library/System/Cron/Schadule.php');
+    $this->assertFileExists('./app/library/System/Cron/Schedule.php');
     $this->assertFileExists('./app/library/System/Cron/ScheduleTime.php');
     $this->assertFileExists('./app/library/System/Database/MyCRUD.php');
     $this->assertFileExists('./app/library/System/Database/MyModel.php');
