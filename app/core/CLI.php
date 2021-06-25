@@ -18,7 +18,7 @@ class CLI
     $baseArgs = $arguments[1] ?? '--help';
 
     // load register command
-    self::$command = include(app_path('config', true) . "command.config.php");
+    self::$command = include(config_path(true) . "command.config.php");
 
     foreach (self::$command as $cmd) {
       // matching alias

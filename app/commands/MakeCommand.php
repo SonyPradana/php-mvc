@@ -93,7 +93,7 @@ class MakeCommand extends Command
     // main code
     $success = $this->makeTemplate($this->OPTION[0], array (
       'template_location' => '/app/core/template/controller',
-      'save_location' => APP_PATH['controllers'],
+      'save_location' => controllers_path(),
       'pattern' => '__controller__',
       'surfix' => 'Controller.php'
     ));
@@ -114,7 +114,7 @@ class MakeCommand extends Command
     // main code
     $success = $this->makeTemplate($this->OPTION[0], array (
       'template_location' => '/app/core/template/view',
-      'save_location'     => APP_PATH['view'],
+      'save_location'     => view_path(),
       'pattern'           => '__view__',
       'surfix'            => '.template.php'
     ));
@@ -135,7 +135,7 @@ class MakeCommand extends Command
     // main code
     $success = $this->makeTemplate($this->OPTION[0], array(
       'template_location' => '/app/core/template/service',
-      'save_location'     => APP_PATH['services'],
+      'save_location'     => services_path(),
       'pattern'           => '__service__',
       'surfix'            => 'Service.php'
     ));
@@ -156,7 +156,7 @@ class MakeCommand extends Command
     // main code
     $success = $this->makeTemplate($this->OPTION[0],array(
       'template_location' => '/app/core/template/model',
-      'save_location'     => APP_PATH['model'],
+      'save_location'     => model_path(),
       'pattern'           => '__model__',
       'surfix'            => '.php'
     ), $this->OPTION[0] . '/');
@@ -185,7 +185,7 @@ class MakeCommand extends Command
     // main code
     $success = $this->makeTemplate($this->OPTION[0], array(
       'template_location' => '/app/core/template/models',
-      'save_location'     => APP_PATH['model'],
+      'save_location'     => model_path(),
       'pattern'           => '__models__',
       'surfix'            => 's.php'
     ), $this->OPTION[0] . '/');
@@ -246,7 +246,7 @@ class MakeCommand extends Command
     // main code
     $success = $this->makeTemplate($this->OPTION[0], array(
       'template_location' => '/app/core/template/command',
-      'save_location'     => app_path('commands'),
+      'save_location'     => commands_path(),
       'pattern'           => '__command__',
       'surfix'            => 'Command.php'
     ));
@@ -254,7 +254,7 @@ class MakeCommand extends Command
     // the result
     if ($success) {
       // add command config for calling new command
-      $geContent = file_get_contents(app_path('config', true) . 'command.config.php');
+      $geContent = file_get_contents(config_path(true) . 'command.config.php');
       $geContent = str_replace(
         "// more command here",
 
@@ -264,7 +264,7 @@ class MakeCommand extends Command
 
         $geContent);
 
-      file_put_contents(app_path('config', true) . 'command.config.php', $geContent);
+      file_put_contents(config_path(true) . 'command.config.php', $geContent);
 
       echo $this->textGreen("\nFinish created command file");
     } else {
