@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add global some function:
   - app_path, model_path, view_path, controllers_path, services_path, commands_path, cache_path, config_path, base_path
   - startsWith, dd, abort, api_abort, view
+  - now -> to manage timing
 - Better chain code in cron shedule
 - Add command cron:list to show all cron register
 - Add make:command to create command class
