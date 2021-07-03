@@ -20,7 +20,7 @@ class Insert extends Execute
   public function values(array $values)
   {
     foreach ($values as $key => $value) {
-      $this->_binder = array($key, $value, true);
+      $this->_binder[] = array($key, $value, true);
     }
     return $this;
   }
