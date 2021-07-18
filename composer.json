@@ -9,7 +9,9 @@
       "email": "sonypradana@gmail.com"
     }
   ],
-  "require": {},
+  "require": {
+    "sonypradana/core": "dev-master"
+  },
   "require-dev": {
     "phpunit/phpunit": "^9.5",
     "sonypradana/convertcode": "^0.9.0",

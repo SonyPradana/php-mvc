@@ -196,4 +196,3 @@ this repository will be maintans every thursday or friday (probely 😅), Open c
 ## Todo
 - Support Basic Auth
 - Support MiddleWare Router
-- Update able using composer

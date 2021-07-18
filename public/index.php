@@ -3,7 +3,7 @@
 //  call core apps
 require_once dirname(__DIR__) . '/vendor/autoload.php';
 
-use System\Apps\Router;
+use System\Router\Router;
 
 // sample add contoller
 Router::get('/', function() {
