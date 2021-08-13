@@ -5,7 +5,21 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Added
+- Add ```Request::class``` to handle request
+- Add ```Response::class``` to handle response
+- global funtion path add optional to add surfix path
+
+### Removed
+- Remove ```\Helper\Http\Request::class```
+- Remove ```\Helper\Http\Response::class```
+
+### Changed
+- ```Serice::class``` using ```Response::class``` for handle output
+- ```ServicesController::class``` using ```Response::class``` and ```Response::class``` for handle api request
+
 ## [0.2.0] - 2021-07-18
+### Changed
 - Split the repository, the framework repository (this repo) and the core code
 - Make this framework (core code) update able
 

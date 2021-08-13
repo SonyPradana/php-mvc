@@ -1,6 +1,5 @@
 <?php
 
-use Helper\Http\Respone;
 use System\Apps\Controller;
 
 /**
@@ -20,38 +19,27 @@ class ServicesController extends Controller
    */
   public function index($unit, $action, $version): void
   {
-    $method = $_SERVER['REQUEST_METHOD'] ?? 'GET';
-    $params = $_GET;
-    if ($method == 'PUT' || $method == 'DELETE') {
-      $body   = file_get_contents('php://input');
-      $params = json_decode($body, true);
-    } elseif ($method == 'POST') {
-      $params = $_POST;
-    }
 
-    if (! empty($_FILES)) {
-      $params['files'] = $_FILES;
-    }
+    $response = $this->getService(
+      $unit . 'Service',
+      $action,
+      request()
+        ->with(['x-version' => $version])
+        ->allIn()
+    );
 
-    // send method type
-    $params['x-method'] = $method;
-
-    // send version request
-    $params['x-version'] = $version;
-
-    $result = $this->getService( $unit . 'Service', $action, [$params]);
-
-    // get header and them remove header from result
-    $headers = $result['headers'] ?? [];
-    unset($result['headers']);
-
-    // insert defult header
-    array_push($headers, 'Content-Type: application/json');
-
-    // respone as json
-    Respone::print($result, 0, array (
-      'headers' => array_merge(Respone::headers(), $headers)
-    ));
+    response()
+      ->setContent($response)
+      ->setResponeCode($response['code'] ?? 200)
+      ->setHeaders($response['headers'] ?? [])
+      ->removeHeader([
+        'Expires',
+        'Pragma',
+        'X-Powered-By',
+        'Connection',
+        'Server',
+      ])
+      ->json();
   }
 
   /**

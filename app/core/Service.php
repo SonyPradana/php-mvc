@@ -3,7 +3,6 @@
 namespace System\Apps;
 
 use DefaultService;
-use Helper\Http\Respone;
 
 abstract class Service
 {
@@ -23,7 +22,7 @@ abstract class Service
   }
 
   /**
-   * error handel
+   * return error handel
    * prettier from error property
    *
    * @param int $error_code Error code (400, 403 or Services::CODE_NOT_FOUND)
@@ -72,11 +71,13 @@ abstract class Service
    */
   protected function errorHandler(int $error_code = 404): void
   {
-    $errRes     = $this->error($error_code);
-    $headers['headers']    = array_values($errRes['headers']);
-    $headers['headers'][]  = 'Content-Type: application/json';
+    $repone     = $this->error($error_code);
+    $headers[]  = array_values($repone['headers']);
+    $headers[]  = 'Content-Type: application/json';
 
-    unset($errRes['headers']);
-    Respone::print($errRes, 0, $headers, true);
+    response($repone, $error_code, $headers)
+      ->json()
+      ->close();
   }
+
 }
