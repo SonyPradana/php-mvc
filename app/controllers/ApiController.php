@@ -6,7 +6,7 @@ use System\Http\Response;
 
 class ApiController extends Controller
 {
-    public function index($unit, $action, $version)
+    public function index(string $unit, string $action, string $version): Response
     {
         $response = $this->getService($unit, $action, $version);
 
@@ -28,7 +28,10 @@ class ApiController extends Controller
           ->json();
     }
 
-    protected function getService($service_nama, $method_nama, $version): array
+    /**
+     * @return array<string, mixed>
+     */
+    protected function getService(string $service_nama, string $method_nama, string $version): array
     {
         $service_nama .= 'Service';
         $service_nama   = str_replace('-', '', $service_nama);

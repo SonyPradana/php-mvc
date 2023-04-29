@@ -8,7 +8,7 @@ class DefaultService
     /**
      * No Content.
      *
-     * @return array No Content
+     * @return array<string, mixed> No Content
      */
     public function code_204(): array
     {
@@ -25,7 +25,7 @@ class DefaultService
     /**
      * Bad Request.
      *
-     * @return array Bad Request
+     * @return array<string, mixed> Bad Request
      */
     public function code_400(): array
     {
@@ -42,7 +42,7 @@ class DefaultService
     /**
      * Unauthorized.
      *
-     * @return array Unauthorized
+     * @return array<string, mixed> Unauthorized
      */
     public function code_401(): array
     {
@@ -59,7 +59,7 @@ class DefaultService
     /**
      * Forbidden.
      *
-     * @return array Forbidden
+     * @return array<string, mixed> Forbidden
      */
     public function code_403(): array
     {
@@ -76,7 +76,7 @@ class DefaultService
     /**
      * Service Not Found.
      *
-     * @return array Service Not Found
+     * @return array<string, mixed> Service Not Found
      */
     public function code_404(): array
     {
@@ -93,7 +93,7 @@ class DefaultService
     /**
      * Method Not Allowed.
      *
-     * @return array Method Not Allowed
+     * @return array<string, mixed> Method Not Allowed
      */
     public function code_405(): array
     {

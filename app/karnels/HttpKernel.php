@@ -46,9 +46,20 @@ class HttpKernel extends Karnel
             // found
             fn ($callable, $param) => $this->app->call($callable, $param),
             // not found
-            fn ($path) => Controller::static()->view('pages/404', ['path' => $path]),
+            fn ($path) => (new Controller())->view(
+                'pages/404', [
+                    'path'    => $path,
+                    'headers' => ['status' => 404],
+                ]
+            ),
             // method not allowed
-            fn ($path, $method) => Controller::static()->view('pages/405', ['path' => $path, 'method' => $method])
+            fn ($path, $method) => (new Controller())->view(
+                'pages/405', [
+                    'path'    => $path,
+                    'method'  => $method,
+                    'headers' => ['status' => 405],
+                ]
+            )
         );
 
         $content = $this->call_middleware($content['callable'], $content['params'], $content['middleware']);

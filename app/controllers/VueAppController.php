@@ -2,22 +2,20 @@
 
 namespace App\Controllers;
 
+use System\Http\Response;
+
 class VueAppController extends Controller
 {
-    public function index()
+    public function index(): Response
     {
         $error = [];
 
         return $this->view('VueApp', [
-      'meta'          => [
-        'title'         => 'Vue Apps',
-        'discription'   => '',
-        'keywords'      => '',
-      ],
-      'contents' => [
-      ],
-      'error'   => $error,
-      'message' => [],
-    ]);
+          'title'         => 'Vue Apps',
+          'discription'   => '',
+          'keywords'      => '',
+          'error'         => $error,
+          'message'       => [],
+        ]);
     }
 }

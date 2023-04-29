@@ -9,7 +9,7 @@ final class BasicTest extends TestCase
   /**
    * @test
    */
-  public function it_true_is_true()
+  public function it_true_is_true(): void
   {
     $this->assertTrue(true);
   }

@@ -24,12 +24,12 @@ abstract class Service
      *
      * @param int $error_code Error code (400, 403 or Services::CODE_NOT_FOUND)
      *
-     * @return array Array error provider
+     * @return array<string, mixed> Array error provider
      */
     protected function error(int $error_code = 404): array
     {
         // to prevent parent::_construct() not declare
-        $this->error = null ?? new \DefaultService();
+        $this->error = new \DefaultService();
 
         // No Content
         if ($error_code === 204) {
@@ -71,6 +71,8 @@ abstract class Service
     protected function errorHandler(int $error_code = 404): void
     {
         $repone     = $this->error($error_code);
+        /** @var array<string, string> */
+        $headers    = [];
         $headers[]  = array_values($repone['headers']);
         $headers[]  = 'Content-Type: application/json';
 
