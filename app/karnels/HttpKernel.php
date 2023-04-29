@@ -23,13 +23,13 @@ class HttpKernel extends Karnel
         $dispatcher = new RouteDispatcher($request, Router::getRoutesRaw());
 
         $content = $dispatcher->run(
-        // found
-        fn ($callable, $param) => $this->app->call($callable, $param),
-        // not found
-        fn ($path) => '404',
-        // method not allowed
-        fn ($path, $method) => '405'
-    );
+            // found
+            fn ($callable, $param) => $this->app->call($callable, $param),
+            // not found
+            fn ($path) => '404',
+            // method not allowed
+            fn ($path, $method) => '405'
+        );
 
         $content = $this->call_middleware($content['callable'], $content['params'], $content['middleware']);
 

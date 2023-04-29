@@ -10,7 +10,7 @@
     }
   ],
   "require": {
-    "sonypradana/php-library": "^0.9",
+    "sonypradana/php-library": "^0.18",
     "vlucas/phpdotenv": "^5.2",
     "gumlet/php-image-resize": "^1.9"
   },

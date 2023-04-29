@@ -1,11 +1,13 @@
 <?php
 
 use System\Console\Command;
+use System\Console\Traits\CommandTrait;
 use System\Database\MyPDO;
 use System\Database\MyQuery;
 
 class MakeCommand extends Command
 {
+    use CommandTrait;
     public static array $command = [
     [
       'cmd'       => 'make',
@@ -49,35 +51,35 @@ class MakeCommand extends Command
 
         // find router
         switch ($makeAction[1]) {
-      case 'controller':
-        $this->make_controller();
-        $this->make_view();
-        break;
+            case 'controller':
+                $this->make_controller();
+                $this->make_view();
+                break;
 
-      case 'view':
-        $this->make_view();
-        break;
+            case 'view':
+                $this->make_view();
+                break;
 
-      case 'service':
-        $this->make_servises();
-        break;
+            case 'service':
+                $this->make_servises();
+                break;
 
-      case 'model':
-        $this->make_model();
-        break;
+            case 'model':
+                $this->make_model();
+                break;
 
-      case 'models':
-        $this->make_models();
-        break;
+            case 'models':
+                $this->make_models();
+                break;
 
-      case 'command':
-        $this->make_commad();
-        break;
+            case 'command':
+                $this->make_commad();
+                break;
 
-      default:
-        echo $this->textRed("\nArgumnet not register");
-        break;
-    }
+            default:
+                echo $this->textRed("\nArgumnet not register");
+                break;
+        }
 
         // end stopwatch
         $watch_end = round(microtime(true) - $watch_start, 3) * 1000;
@@ -164,8 +166,8 @@ class MakeCommand extends Command
         if (substr($this->OPTION[1], 0, 12) == '--table-name') {
             $table_name = explode('=', $this->OPTION[1])[1];
             $this->FillModelDatabase(
-        APP_FULLPATH['model'] . $this->OPTION[0] . '/' . $this->OPTION[0] . '.php',
-        $table_name);
+                APP_FULLPATH['model'] . $this->OPTION[0] . '/' . $this->OPTION[0] . '.php',
+                $table_name);
         }
 
         // the result
@@ -193,8 +195,8 @@ class MakeCommand extends Command
         if (substr($this->OPTION[1], 0, 12) == '--table-name') {
             $table_name = explode('=', $this->OPTION[1])[1];
             $this->FillModelsDatabase(
-        APP_FULLPATH['model'] . $this->OPTION[0] . '/' . $this->OPTION[0] . 's.php',
-        $table_name);
+                APP_FULLPATH['model'] . $this->OPTION[0] . '/' . $this->OPTION[0] . 's.php',
+                $table_name);
         }
 
         // the result
@@ -256,12 +258,12 @@ class MakeCommand extends Command
             // add command config for calling new command
             $geContent = file_get_contents(config_path(true) . 'command.config.php');
             $geContent = str_replace(
-        '// more command here',
+                '// more command here',
 
-        '// ' . $this->OPTION[0] . "\n\t" .
-        $this->OPTION[0] . 'Command::$' . "command\n" .
-        "\t// more command here",
-        $geContent);
+                '// ' . $this->OPTION[0] . "\n\t" .
+                $this->OPTION[0] . 'Command::$' . "command\n" .
+                "\t// more command here",
+                $geContent);
 
             file_put_contents(config_path(true) . 'command.config.php', $geContent);
 
@@ -340,9 +342,9 @@ class MakeCommand extends Command
     private function TemplateGetterModel(string $column_name): string
     {
         return
-      "\n\t" . "public function $column_name()" .
+      "\n\tpublic function $column_name()" .
       "\n\t" . '{' .
-      "\n\t\t" . 'return ' . '$' . "this->COLUMNS['$column_name'];" .
+      "\n\t\t" . 'return $' . "this->COLUMNS['$column_name'];" .
       "\n\t" . '}' .
       "\n";
     }
@@ -355,10 +357,10 @@ class MakeCommand extends Command
         $functionName = ucfirst($column_name);
 
         return
-      "\n\t" . "public function set$functionName(int " . '$' . 'val)' .
+      "\n\tpublic function set$functionName(int " . '$val)' .
       "\n\t" . '{' .
-      "\n\t\t" . '$' . "this->COLUMNS['$column_name'] = " . '$' . 'val;' .
-      "\n\t\t" . 'return ' . '$' . 'this;' .
+      "\n\t\t" . '$' . "this->COLUMNS['$column_name'] = " . '$val;' .
+      "\n\t\t" . 'return $this;' .
       "\n\t" . '}' .
       "\n";
     }

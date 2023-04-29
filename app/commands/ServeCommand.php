@@ -1,9 +1,14 @@
 <?php
 
 use System\Console\Command;
+use System\Console\Traits\CommandTrait;
+
+use function System\Console\style;
 
 class ServeCommand extends Command
 {
+    use CommandTrait;
+
     public static array $command = [
     [
       'cmd'       => 'serve',
@@ -29,15 +34,24 @@ class ServeCommand extends Command
         $port    = $port == '' ? '8080' : $port;
         $localIP = gethostbyname(gethostname());
 
-        $this->prints([
-      'Server runing add:',
-      "\n- Local:\t" . $this->textBlue("http://localhost:$port"),
-      "\n- Network:\t" . $this->textBlue("http://$localIP:$port"),
-
-      $this->textYellow("\n\nctrl+c to stop server"),
-      $this->textBlue("\n\nINFO"),
-      " server runing...\n",
-    ]);
+        style('')
+            ->push('Server runing add:')
+            ->new_lines()
+            ->push('- Local:')
+            ->tabs()
+            ->push("http://localhost:$port")->textBlue()
+            ->new_lines()
+            ->push('- Local:')
+            ->tabs()
+            ->push("http://$localIP:$port")->textBlue()
+            ->new_lines(2)
+            ->push('ctrl+c to stop server')->textYellow()
+            ->new_lines(2)
+            ->push('INFO')
+            ->new_lines()
+            ->push(' server runing...')
+            ->out()
+        ;
 
         shell_exec("php -S 127.0.0.1:$port -t public/");
     }

@@ -2,15 +2,18 @@
 
 use System\Apps\CLI;
 use System\Console\Command;
+use System\Console\Traits\CommandTrait;
 
 class HelpCommand extends Command
 {
+    use CommandTrait;
+
     public static array $command = [
     [
       'cmd'       => ['-h', '--help'],
       'mode'      => 'full',
       'class'     => self::class,
-      'fn'        => 'println',
+      'fn'        => 'main',
     ],
     [
       'cmd'       => ['-v', '--version'],
@@ -32,7 +35,7 @@ class HelpCommand extends Command
     ],
   ];
 
-    public function println()
+    public function main()
     {
         $has_visited      = [];
         $help_command     = [];
@@ -149,12 +152,12 @@ class HelpCommand extends Command
 
             if (is_array($result)) {
                 $this->prints(array_merge(
-          ['Avilable Option:'],
-          $result['option'] ?? $result,
-          ["\n\nAvilable Argument:"],
-          $result['argument'] ?? [],
-          ["\n\n"]
-        ));
+                    ['Avilable Option:'],
+                    $result['option'] ?? $result,
+                    ["\n\nAvilable Argument:"],
+                    $result['argument'] ?? [],
+                    ["\n\n"]
+                ));
 
                 return;
             }

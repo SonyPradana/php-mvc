@@ -1,8 +1,8 @@
 <?php
 
-namespace Application\Http;
-
+use System\Http\Response;
 use System\Router\Controller as BaseController;
+use System\View\Templator;
 use System\View\View;
 
 class Controller extends BaseController
@@ -14,9 +14,10 @@ class Controller extends BaseController
 
     public function view(string $view, array $portal = [])
     {
-        $view_path = view_path($view . '.template.php');
+        $t = new Templator(view_path(), cache_path());
+        $render = $t->render($view . '.template.php', $portal);
 
-        return View::render($view_path, $portal);
+        return (new Response($render));
     }
 
     public static function view_exists($view): bool

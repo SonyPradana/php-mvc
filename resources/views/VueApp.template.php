@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <?php include(APP_FULLPATH['component'] . '/meta/metatag.php') ?>
+  <?php //include(APP_FULLPATH['component'] . '/meta/metatag.php') ?>
 
   <link rel="stylesheet" href="/vue/css/app.css">
 </head>

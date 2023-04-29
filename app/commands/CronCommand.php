@@ -1,10 +1,13 @@
 <?php
 
 use System\Console\Command;
+use System\Console\Traits\CommandTrait;
 use System\Cron\Schedule;
 
 class CronCommand extends Command
 {
+    use CommandTrait;
+
     public static array $command = [
     [
       'cmd'       => 'cron',
@@ -35,49 +38,49 @@ class CronCommand extends Command
 
         // find router
         switch ($makeAction[1] ?? '') {
-      case '':
-        $this->scheduler($schedule = new Schedule());
-        $schedule->execute();
-        break;
-
-      case 'list':
-        echo "\n";
-        $this->scheduler($schedule = new Schedule());
-        foreach ($schedule->getPools() as $cron) {
-            echo '#  ';
-            if ($cron->isAnimusly()) {
-                echo $this->textDim($cron->getTimeName()), "\t";
-            } else {
-                echo $this->textGreen($cron->getTimeName()), "\t";
-            }
-
-            echo $this->textYellow($cron->getEventname()), "\n";
-        }
-        break;
-
-      case 'work':
-        echo $this->textBlue("\nSimulate Cron in terminal (every minute)");
-        echo $this->textGreen("\n\nCtrl+C to stop\n");
-
-        while (1) {
-            if (date('s') == 00) {
-                echo $this->textDim('Run cron at - ' . date('D, H i'));
-                echo "\n";
-
+            case '':
                 $this->scheduler($schedule = new Schedule());
                 $schedule->execute();
+                break;
 
-                sleep(60);
-            } else {
-                sleep(1);
-            }
+            case 'list':
+                echo "\n";
+                $this->scheduler($schedule = new Schedule());
+                foreach ($schedule->getPools() as $cron) {
+                    echo '#  ';
+                    if ($cron->isAnimusly()) {
+                        echo $this->textDim($cron->getTimeName()), "\t";
+                    } else {
+                        echo $this->textGreen($cron->getTimeName()), "\t";
+                    }
+
+                    echo $this->textYellow($cron->getEventname()), "\n";
+                }
+                break;
+
+            case 'work':
+                echo $this->textBlue("\nSimulate Cron in terminal (every minute)");
+                echo $this->textGreen("\n\nCtrl+C to stop\n");
+
+                while (1) {
+                    if (date('s') == 00) {
+                        echo $this->textDim('Run cron at - ' . date('D, H i'));
+                        echo "\n";
+
+                        $this->scheduler($schedule = new Schedule());
+                        $schedule->execute();
+
+                        sleep(60);
+                    } else {
+                        sleep(1);
+                    }
+                }
+                break;
+
+            default:
+                echo $this->textRed("\nArgumnet not register");
+                break;
         }
-        break;
-
-      default:
-        echo $this->textRed("\nArgumnet not register");
-        break;
-    }
 
         // end stopwatch
         $watch_end = round(microtime(true) - $watch_start, 3) * 1000;

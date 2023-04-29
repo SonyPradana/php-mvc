@@ -1,7 +1,5 @@
 <?php
 
-use System\Apps\Controller;
-
 /**
  * this controller use for call all api (servises)
  * this frist-layer and end-layer before user request,
@@ -21,12 +19,12 @@ class ServicesController extends Controller
     public function index($unit, $action, $version): void
     {
         $response = $this->getService(
-      $unit . 'Service',
-      $action,
-      request()
-        ->with(['x-version' => $version])
-        ->allIn()
-    );
+            $unit . 'Service',
+            $action,
+            request()
+              ->with(['x-version' => $version])
+              ->allIn()
+        );
 
         response()
       ->setContent($response)
