@@ -32,10 +32,10 @@
         ]
     }
   },
-  "scripts": {
+"scripts": {
     "lint": "php-cs-fixer fix -v",
     "test:lint": "php-cs-fixer fix -v --dry-run",
-    "test:unit": "phpunit",
+    "test:unit": "phpunit --testdox",
     "test": [
         "@test:lint",
         "@test:unit"
