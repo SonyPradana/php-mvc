@@ -1,6 +1,6 @@
 <?php
 
-namespace System\Apps;
+use System\Http\Response;
 
 abstract class Service
 {
@@ -74,7 +74,7 @@ abstract class Service
         $headers[]  = array_values($repone['headers']);
         $headers[]  = 'Content-Type: application/json';
 
-        response($repone, $error_code, $headers)
+        (new Response($repone, $error_code, $headers))
       ->json()
       ->close();
     }

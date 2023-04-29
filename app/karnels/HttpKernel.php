@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+namespace App\Karnels;
+
 use System\Container\Container;
 use System\Http\Request;
 use System\Http\Response;
@@ -62,6 +64,6 @@ class HttpKernel extends Karnel
             return new Response($content);
         }
 
-        throw new Exception('Content must return as respone|string|array');
+        throw new \Exception('Content must return as respone|string|array');
     }
 }

@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+namespace App\Karnels;
+
 use System\Container\Container;
 use System\Integrate\Console\Karnel;
 use System\Text\Str;
@@ -49,7 +51,7 @@ class ConsoleKernel extends Karnel
 
         // if command not register
         echo "\e[31mCommad Not Found, run help command\e[0m";
-        echo "\n\e[33mPHP\e[0m simpus \e[2m--help\e[0m";
+        echo "\n\e[33mPHP\e[0m Savanna \e[2m--help\e[0m";
 
         return $this->exit_code = 0;
     }

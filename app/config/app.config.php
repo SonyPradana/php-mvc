@@ -17,7 +17,7 @@ return [
   'SERVICE_PROVIDER'  => DIRECTORY_SEPARATOR . 'app' . DIRECTORY_SEPARATOR . 'providers' . DIRECTORY_SEPARATOR,
 
   'PROVIDERS' => [
-        AppServiceProvider::class,
-        RouteServiceProvider::class,
+        App\Providers\AppServiceProvider::class,
+        App\Providers\RouteServiceProvider::class,
   ],
 ];

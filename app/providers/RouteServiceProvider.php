@@ -5,6 +5,11 @@ declare(strict_types=1);
 use System\Integrate\ServiceProvider;
 use System\Router\Router;
 
+namespace App\Providers;
+
+use System\Integrate\ServiceProvider;
+use System\Router\Router;
+
 class RouteServiceProvider extends ServiceProvider
 {
     public function boot()

@@ -21,16 +21,14 @@
   },
   "autoload": {
     "psr-4": {
-        "Simpus\\Apps\\": "app/core/",
+        "App\\Karnels\\" : "app/karnels",
+        "App\\Providers\\" : "app/providers",
         "": [
             "app/commands/",
             "app/controllers/",
             "app/library/",
             "app/services/",
-            "app/middleware/",
-            "app/providers/",
-            "app/larnels/",
-            "app/karnels"
+            "app/middleware/"
         ]
     }
   },
