@@ -11,9 +11,26 @@ use System\Router\Router;
 
 class HttpKernel extends Karnel
 {
+    /** @var \Whoops\Run */
+    private $run;
+    /** @var \Whoops\Handler */
+    private $handler;
+
     public function __construct(Container $app)
     {
         parent::__construct($app);
+
+        if (app()->isDev()) {
+            /* @var \Whoops\Handler\PrettyPageHandler */
+            $this->handler = $this->app->make('error.PrettyPageHandler');
+            $this->handler->setPageTitle('php mvc');
+
+            /* @var \Whoops\Run */
+            $this->run = $app->make('error.handle');
+            $this->run
+              ->pushHandler($this->handler)
+              ->register();
+        }
     }
 
     public function handle(Request $request)
