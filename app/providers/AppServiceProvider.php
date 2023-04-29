@@ -3,7 +3,6 @@
 declare(strict_types=1);
 
 use System\Integrate\ServiceProvider;
-use System\Router\Router;
 
 class AppServiceProvider extends ServiceProvider
 {

@@ -6,7 +6,7 @@ class IndexController extends Controller
     {
         return $this->view('index', [
             'title' => 'Php is great',
-            'say' => 'hello, php enthusiastic!',
+            'say'   => 'hello, php enthusiastic!',
         ]);
     }
 }

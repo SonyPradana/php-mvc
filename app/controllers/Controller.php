@@ -3,7 +3,6 @@
 use System\Http\Response;
 use System\Router\Controller as BaseController;
 use System\View\Templator;
-use System\View\View;
 
 class Controller extends BaseController
 {
@@ -14,10 +13,10 @@ class Controller extends BaseController
 
     public function view(string $view, array $portal = [])
     {
-        $t = new Templator(view_path(), cache_path());
+        $t      = new Templator(view_path(), cache_path());
         $render = $t->render($view . '.template.php', $portal);
 
-        return (new Response($render));
+        return new Response($render);
     }
 
     public static function view_exists($view): bool
