@@ -23,12 +23,12 @@
     "psr-4": {
         "App\\Karnels\\" : "app/karnels",
         "App\\Providers\\" : "app/providers",
+        "App\\Commands\\" : "app/commands",
+        "App\\Controllers\\" : "app/controllers",
+        "App\\Middlewares\\" : "app/middlewares",
         "": [
-            "app/commands/",
-            "app/controllers/",
             "app/library/",
-            "app/services/",
-            "app/middleware/"
+            "app/services/"
         ]
     }
   },

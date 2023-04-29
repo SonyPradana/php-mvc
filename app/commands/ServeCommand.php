@@ -1,5 +1,7 @@
 <?php
 
+namespace App\Commands;
+
 use System\Console\Command;
 use System\Console\Traits\CommandTrait;
 
@@ -13,7 +15,7 @@ class ServeCommand extends Command
     [
       'cmd'       => 'serve',
       'mode'      => 'full',
-      'class'     => 'ServeCommand',
+      'class'     => ServeCommand::class,
       'fn'        => 'serve',
     ],
   ];

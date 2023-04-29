@@ -8,13 +8,30 @@ use System\Container\Container;
 use System\Integrate\Console\Karnel;
 use System\Text\Str;
 
+use function System\Console\style;
+
 class ConsoleKernel extends Karnel
 {
     public static $command = [];
 
+    /** @var \Whoops\Run */
+    private $run;
+
+    /** @var \Whoops\Handler */
+    private $handler;
+
     public function __construct(Container $app)
     {
         parent::__construct($app);
+
+        /* @var \Whoops\Handler\PlainTextHandler */
+        $this->handler = $this->app->make('error.PlainTextHandler');
+
+        /* @var \Whoops\Run */
+        $this->run = $app->make('error.handle');
+        $this->run
+          ->pushHandler($this->handler)
+          ->register();
     }
 
     public function handle($arguments)
@@ -38,10 +55,10 @@ class ConsoleKernel extends Karnel
                 $className    = $cmd['class'];
                 $functionName = $cmd['fn'];
 
-                if (file_exists(commands_path() . $className . '.php')) {
+                if (class_exists($className)) {
                     $service = new $className($arguments);
                     if (method_exists($service, $functionName)) {
-                        call_user_func([$service, $functionName]);
+                        $service->{$functionName}();
 
                         return $this->exit_code = $service->exit ?? 0;
                     }
@@ -50,8 +67,14 @@ class ConsoleKernel extends Karnel
         }
 
         // if command not register
-        echo "\e[31mCommad Not Found, run help command\e[0m";
-        echo "\n\e[33mPHP\e[0m Savanna \e[2m--help\e[0m";
+        style('Commad Not Found, run help command')->textRed()->new_lines(2)
+            ->push('> ')->textDim()
+            ->push('php ')->textYellow()
+            ->push('cli ')
+            ->push('--help')->textDim()
+            ->new_lines()
+            ->out()
+        ;
 
         return $this->exit_code = 0;
     }

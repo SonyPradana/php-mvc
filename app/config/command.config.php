@@ -2,12 +2,14 @@
 
 return array_merge(
     // help command
-    HelpCommand::$command,
+    App\Commands\HelpCommand::$command,
     // make somthink command
-    MakeCommand::$command,
+    App\Commands\MakeCommand::$command,
     // serve
-    ServeCommand::$command,
+    App\Commands\ServeCommand::$command,
     // cron
-    CronCommand::$command,
+    App\Commands\CronCommand::$command,
+    // route
+    App\Commands\RouteCommand::$command,
     // more command here
 );

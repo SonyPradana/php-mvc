@@ -1,6 +1,6 @@
 <?php
 
-use System\Apps\Controller;
+namespace App\Controllers;
 
 class VueAppController extends Controller
 {

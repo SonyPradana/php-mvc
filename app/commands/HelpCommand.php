@@ -1,92 +1,134 @@
 <?php
 
-use System\Apps\CLI;
+namespace App\Commands;
+
+use App\Karnels\ConsoleKernel;
 use System\Console\Command;
-use System\Console\Traits\CommandTrait;
+use System\Console\Style\Style;
+use System\Console\Traits\PrintHelpTrait;
+use System\Text\Str;
+
+use function System\Console\style;
 
 class HelpCommand extends Command
 {
-    use CommandTrait;
+    use PrintHelpTrait;
 
     public static array $command = [
-    [
-      'cmd'       => ['-h', '--help'],
-      'mode'      => 'full',
-      'class'     => self::class,
-      'fn'        => 'main',
-    ],
-    [
-      'cmd'       => ['-v', '--version'],
-      'mode'      => 'full',
-      'class'     => self::class,
-      'fn'        => 'versionCek',
-    ],
-    [
-      'cmd'       => '--list',
-      'mode'      => 'full',
-      'class'     => self::class,
-      'fn'        => 'commandList',
-    ],
-    [
-      'cmd'       => 'help',
-      'mode'      => 'full',
-      'class'     => self::class,
-      'fn'        => 'commandhelp',
-    ],
-  ];
+      [
+        'cmd'       => ['-h', '--help'],
+        'mode'      => 'full',
+        'class'     => self::class,
+        'fn'        => 'main',
+      ],
+      [
+        'cmd'       => ['-v', '--version'],
+        'mode'      => 'full',
+        'class'     => self::class,
+        'fn'        => 'versionCek',
+      ],
+      [
+        'cmd'       => '--list',
+        'mode'      => 'full',
+        'class'     => self::class,
+        'fn'        => 'commandList',
+      ],
+      [
+        'cmd'       => 'help',
+        'mode'      => 'full',
+        'class'     => self::class,
+        'fn'        => 'commandhelp',
+      ],
+    ];
 
+    /**
+     * Use for print --help.
+     */
     public function main()
     {
         $has_visited      = [];
-        $help_command     = [];
-        $argument_command = [];
+        $this->print_help = [
+          'margin-left'         => 8,
+          'column-1-min-lenght' => 24,
+        ];
+
         foreach (ConsoleKernel::$command as $commands) {
             if (!in_array($commands['class'], $has_visited)) {
                 $class_name    = $commands['class'];
                 $has_visited[] = $class_name;
 
-                $class_path = commands_path() . $class_name . '.php';
-                if (file_exists($class_path)) {
+                if (class_exists($class_name)) {
                     $class = new $class_name([]);
-                    $res   = call_user_func_array([$class, 'printHelp'], []) ?? [];
-                    if ($res['option'] != null) {
-                        $help_command[] = $res['option'];
+
+                    if (!method_exists($class, 'printHelp')) {
+                        continue;
                     }
-                    if ($res['argument'] != null) {
-                        $argument_command[] = $res['argument'];
+
+                    $res = call_user_func_array([$class, 'printHelp'], []);
+
+                    if (isset($res['commands']) && $res['commands'] != null) {
+                        foreach ($res['commands'] as $command => $desc) {
+                            $this->command_describes[$command] = $desc;
+                        }
+                    }
+
+                    if (isset($res['options']) && $res['options'] != null) {
+                        foreach ($res['options'] as $option => $desc) {
+                            $this->option_describes[$option] = $desc;
+                        }
+                    }
+
+                    if (isset($res['relation']) && $res['relation'] != null) {
+                        foreach ($res['relation'] as $option => $desc) {
+                            $this->command_relation[$option] = $desc;
+                        }
                     }
                 }
             }
         }
 
-        $this->prints([
-      'Welcome to php-mvc cli',
+        style('welcome to cli')->out();
 
-      "\n\nUsage:",
-      "\n\t" . $this->textGreen('php') . " cli [flag]\n",
-      "\t" . $this->textGreen('php') . ' cli [option] ' . $this->textDim('[argument]') . "\n",
+        style("\n\nUsage:")
 
-      "\nAvilable flag:",
-      "\n\t" . $this->textDim('--help') . "\t\t\tget all help command",
-      "\n\t" . $this->textDim('--list') . "\t\t\tget list of commands registered (class & function)",
-      "\n\t" . $this->textDim('--version') . "\t\tget version php-mvc cli",
-      "\n",
-    ]);
+          ->push("\n\t")
+          ->push('php')->textGreen()
+          ->push(' cli [flag]')
 
-        echo "\nAvilabe option:";
+          ->push("\n\t")
+          ->push('php')->textGreen()
+          ->push(' cli [command] ')
+          ->push('[option]')->textDim()
+          ->out()
+        ;
 
-        foreach ($help_command as $help) {
-            $this->prints($help);
-            echo "\n";
-        }
+        style("\nAvilable flag:")
 
-        echo "\nAvilable argument:";
+          ->push("\n\n\t")
+          ->push('--help')->textDim()
+          ->push("\t\t\t")
+          ->push('get all help commands')
+          ->push("\n\t")
 
-        foreach ($argument_command as $help) {
-            $this->prints($help);
-            echo "\n";
-        }
-        echo "\n";
+          ->push('--list')->textDim()
+          ->push("\t\t\t")
+          ->push('get list of commands registered (class & function)')
+          ->push("\n\t")
+
+          ->push('--version')->textDim()
+          ->push("\t\t")
+          ->push('get version cli')
+          ->new_lines()
+          ->out()
+        ;
+
+        style('Avilabe command:')->new_lines()->out();
+
+        $this->printCommands(new Style())->out();
+
+        style('Avilable options:')->new_lines()->out();
+
+        $this->printOptions(new Style())->out();
     }
 
     public function versionCek()
@@ -99,74 +141,87 @@ class HelpCommand extends Command
 
         $branchname = $explodedstring[2]; // get the one that is always the branch name
 
-        echo $this->textGreen('apps ') . 'version ' . $branchname;
-        echo $this->textGreen('cli ') . 'version ' . $_ENV['APP_CLI_VERSION'];
+        style('apps')->textLightGreen()->push(' version ')->push($branchname)->out(false);
+        style('cli')->textLightGreen()->push(' version ')->push($_ENV['APP_CLI_VERSION'])->out();
     }
 
     public function commandList()
     {
-        echo 'List of all command registered:';
-        $this->print_n(2);
+        style('List of all command registered:')->out();
 
-        foreach (CLI::$command as $commands) {
+        foreach (ConsoleKernel::$command as $commands) {
             // get command
             if (is_array($commands['cmd'])) {
-                echo $this->textBlue(implode(', ', $commands['cmd']));
+                style(implode(', ', $commands['cmd']))->textBlue()->out();
             } else {
-                echo $this->textBlue($commands['cmd']);
+                style($commands['cmd'])->textBlue()->out();
             }
 
-            $this->prints([
-        "\t" . $this->textGreen($commands['class']),
-        "\t" . $this->textDim($commands['fn']),
-        "\n",
-      ]);
+            style("\t")
+              ->push($commands['class'])->textGreen()
+              ->push("\t")->push($commands['fn'])->textDim()
+              ->out();
         }
     }
 
+    /**
+     * Show helper per command.
+     * eg: php cli help cron.
+     */
     public function commandHelp()
     {
-        if ($this->OPTION[0] === null) {
-            echo $this->textYellow("\nTo see help command, place provide command_name\n\n\t"),
-            $this->textDim("php cli help <comman_nama>\n"),
-            $this->textRed("\t\t\t^^^^^^^^^^^^^\n\n");
+        if (!isset($this->OPTION[0])) {
+            style("\nTo see help command, place provide command_name\n\n\t")
+                ->new_lines(2)
+                ->tabs()
+                ->textYellow()
+                ->push('php cli help <comman_nama>')
+                ->textDim()->new_lines()->tabs()
+                ->push('             ^^^^^^^^^^^^^')
+                ->textRed()
+                ->new_lines()
+                ->out()
+            ;
 
             return;
         }
 
         $className = $this->OPTION[0];
-        if (\System\Text\Str::contains(':', $className)) {
+        if (Str::contains(':', $className)) {
             $className = explode(':', $className);
             $className = $className[0];
         }
 
         $className .= 'Command';
         $className = ucfirst($className);
-        $classPath = commands_path() . $className . '.php';
+        $className = 'App\\Commands\\' . $className;
 
-        if (file_exists($classPath)) {
-            require_once $classPath;
+        if (class_exists($className)) {
             $class = new $className([]);
 
-            $result = call_user_func_array([$class, 'printHelp'], []) ?? '';
+            $res = call_user_func_array([$class, 'printHelp'], []) ?? '';
 
-            if (is_array($result)) {
-                $this->prints(array_merge(
-                    ['Avilable Option:'],
-                    $result['option'] ?? $result,
-                    ["\n\nAvilable Argument:"],
-                    $result['argument'] ?? [],
-                    ["\n\n"]
-                ));
-
-                return;
+            if (isset($res['commands']) && $res['commands'] != null) {
+                $this->command_describes = $res['commands'];
             }
 
-            echo $result;
+            if (isset($res['options']) && $res['options'] != null) {
+                $this->option_describes = $res['options'];
+            }
+
+            if (isset($res['relation']) && $res['relation'] != null) {
+                $this->command_relation = $res['relation'];
+            }
+
+            style('Avilabe command:')->new_lines()->out();
+            $this->printCommands(new Style())->out();
+
+            style('Avilable options:')->new_lines()->out();
+            $this->printOptions(new Style())->out();
 
             return;
         }
 
-        echo $this->textRed("\nHelp command not found\n\n");
+        style("\nHelp command not found\n")->out();
     }
 }

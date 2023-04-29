@@ -1,9 +1,12 @@
 <?php
 
+namespace App\Commands;
+
 use System\Console\Command;
 use System\Console\Traits\CommandTrait;
-use System\Database\MyPDO;
-use System\Database\MyQuery;
+use System\Support\Facades\DB;
+
+use function DI\env;
 
 class MakeCommand extends Command
 {
@@ -166,7 +169,7 @@ class MakeCommand extends Command
         if (substr($this->OPTION[1], 0, 12) == '--table-name') {
             $table_name = explode('=', $this->OPTION[1])[1];
             $this->FillModelDatabase(
-                APP_FULLPATH['model'] . $this->OPTION[0] . '/' . $this->OPTION[0] . '.php',
+                model_path() . $this->OPTION[0] . '/' . $this->OPTION[0] . '.php',
                 $table_name);
         }
 
@@ -195,7 +198,7 @@ class MakeCommand extends Command
         if (substr($this->OPTION[1], 0, 12) == '--table-name') {
             $table_name = explode('=', $this->OPTION[1])[1];
             $this->FillModelsDatabase(
-                APP_FULLPATH['model'] . $this->OPTION[0] . '/' . $this->OPTION[0] . 's.php',
+                model_path() . $this->OPTION[0] . '/' . $this->OPTION[0] . 's.php',
                 $table_name);
         }
 
@@ -219,15 +222,15 @@ class MakeCommand extends Command
     private function makeTemplate(string $argument, array $make_option, string $folder = ''): bool
     {
         $folder = ucfirst($folder);
-        if (file_exists(BASEURL . $make_option['save_location'] . $folder . $argument . $make_option['surfix'])) {
+        if (file_exists(base_path() . $make_option['save_location'] . $folder . $argument . $make_option['surfix'])) {
             echo $this->textDim('file alredy exis');
 
             return false;
-        } elseif (!file_exists(BASEURL . $make_option['save_location'] . $folder)) {
-            mkdir(BASEURL . $make_option['save_location'] . $folder);
+        } elseif (!file_exists(base_path() . $make_option['save_location'] . $folder)) {
+            mkdir(base_path() . $make_option['save_location'] . $folder);
         }
 
-        $get_template = file_get_contents(BASEURL . $make_option['template_location']);
+        $get_template = file_get_contents(base_path() . $make_option['template_location']);
         // frist replace ucfrist pattern by at @
         $get_template = str_replace('@' . $make_option['pattern'], ucfirst($argument), $get_template);
         // replace patternt
@@ -235,7 +238,7 @@ class MakeCommand extends Command
         // remove helper comment
         $get_template = preg_replace('/^.+\n/', '', $get_template);
         // saving
-        $isCopied = file_put_contents(BASEURL . $make_option['save_location'] . $folder . $argument . $make_option['surfix'], $get_template);
+        $isCopied = file_put_contents(base_path() . $make_option['save_location'] . $folder . $argument . $make_option['surfix'], $get_template);
 
         return $isCopied === false ? false : true;
     }
@@ -284,11 +287,11 @@ class MakeCommand extends Command
      */
     private function FillModelDatabase(string $model_location, string $table_name): bool
     {
-        $table_column = MyQuery::from('COLUMNS', MyPDO::conn('INFORMATION_SCHEMA'))
-      ->select()
-      ->equal('TABLE_SCHEMA', DB_NAME)
-      ->equal('TABLE_NAME', $table_name)
-      ->all() ?? [];
+        $table_column = DB::table('INFORMATION_SCHEMA')
+            ->select()
+            ->equal('TABLE_SCHEMA', env('DB_NAME'))
+            ->equal('TABLE_NAME', $table_name)
+            ->all() ?? [];
 
         $column_template = '';
         $getter_template = '';

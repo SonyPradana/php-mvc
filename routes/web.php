@@ -1,5 +1,6 @@
 <?php
 
+use App\Controllers\IndexController;
 use System\Router\Router;
 
 // sample add contoller
@@ -17,12 +18,6 @@ Router::get('/say/(:any)', function($text) {
 // Router::get('/(:text)', function() {
 //   return (new VueAppController)->index();
 // });
-
-
-// also sopprt ap (json) format output
-Router::any( '/API/(:any)/(:any)', function($unit, $action) {
-  return (new ServicesController())->index($unit, $action, 'v1.0');
-});
 
 // default path 404, 405
 Router::pathNotFound(function($path) {

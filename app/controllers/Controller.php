@@ -1,5 +1,7 @@
 <?php
 
+namespace App\Controllers;
+
 use System\Http\Response;
 use System\Router\Controller as BaseController;
 use System\View\Templator;
