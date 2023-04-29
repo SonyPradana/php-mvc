@@ -18,11 +18,3 @@ Router::get('/say/(:any)', function($text) {
 // Router::get('/(:text)', function() {
 //   return (new VueAppController)->index();
 // });
-
-// default path 404, 405
-Router::pathNotFound(function($path) {
-  echo "page not found -\n $path";
-});
-Router::methodNotAllowed(function($path, $method) {
-  echo "method not allow \n $path with $method";
-});

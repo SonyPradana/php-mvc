@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Karnels;
 
+use App\Controllers\Controller;
 use System\Container\Container;
 use System\Http\Request;
 use System\Http\Response;
@@ -45,9 +46,9 @@ class HttpKernel extends Karnel
             // found
             fn ($callable, $param) => $this->app->call($callable, $param),
             // not found
-            fn ($path) => '404',
+            fn ($path) => Controller::static()->view('pages/404', ['path' => $path]),
             // method not allowed
-            fn ($path, $method) => '405'
+            fn ($path, $method) => Controller::static()->view('pages/405', ['path' => $path, 'method' => $method])
         );
 
         $content = $this->call_middleware($content['callable'], $content['params'], $content['middleware']);
