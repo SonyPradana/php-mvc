@@ -5,4 +5,4 @@ npm install
 npm run dev
 
 # builit cli
-php CLI --help
+php cli --help

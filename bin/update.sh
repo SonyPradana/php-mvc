@@ -1,6 +1,7 @@
-composer install
-npm install
+# update dependecy
+composer update
+npm update
 npm run dev
 
 # builit cli
-php CLI --help
+php cli --help
