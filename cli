@@ -1,8 +1,14 @@
 #!/usr/bin/env php
 <?php
-define("APP_START", microtime(true));
 
 require_once './vendor/autoload.php';
 
 // call CLI
-$new_cli = new \System\Apps\CLI($argv);
+$app = require_once __DIR__ . '/bootstrap/init.php';
+
+$out = $app->make(System\Integrate\Console\Karnel::class);
+
+$handle = $out->handle($argv);
+
+exit($handle);
+

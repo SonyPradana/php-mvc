@@ -5,37 +5,36 @@ use System\Cron\Schedule;
 
 class CronCommand extends Command
 {
-
-  public static array $command = array(
+    public static array $command = [
     [
-      "cmd"       => "cron",
-      "mode"      => "start",
-      "class"     => self::class,
-      "fn"        => "switcher",
+      'cmd'       => 'cron',
+      'mode'      => 'start',
+      'class'     => self::class,
+      'fn'        => 'switcher',
     ],
-  );
+  ];
 
-  public function printHelp()
-  {
-    return array(
-      'option' => array(
-        "\n\t" . $this->textGreen("cron") . $this->tabs(6) . "Run cron job (all shadule)",
-        "\n\t" . $this->textGreen("cron") . ":work" . $this->tabs(5) . "Run virtual cron job in terminal",
-      ),
-      'argument' => array()
-    );
-  }
+    public function printHelp()
+    {
+        return [
+      'option' => [
+        "\n\t" . $this->textGreen('cron') . $this->tabs(6) . 'Run cron job (all shadule)',
+        "\n\t" . $this->textGreen('cron') . ':work' . $this->tabs(5) . 'Run virtual cron job in terminal',
+      ],
+      'argument' => [],
+    ];
+    }
 
-  public function switcher()
-  {
-    // get category command
-    $makeAction = explode(':', $this->CMD);
+    public function switcher()
+    {
+        // get category command
+        $makeAction = explode(':', $this->CMD);
 
-    // stopwatch
-    $watch_start = microtime(true);
+        // stopwatch
+        $watch_start = microtime(true);
 
-    // find router
-    switch ($makeAction[1] ?? '') {
+        // find router
+        switch ($makeAction[1] ?? '') {
       case '':
         $this->scheduler($schedule = new Schedule());
         $schedule->execute();
@@ -45,14 +44,14 @@ class CronCommand extends Command
         echo "\n";
         $this->scheduler($schedule = new Schedule());
         foreach ($schedule->getPools() as $cron) {
-          echo "#  ";
-          if ($cron->isAnimusly()) {
-            echo $this->textDim($cron->getTimeName()), "\t";
-          } else {
-            echo $this->textGreen($cron->getTimeName()), "\t";
-          }
+            echo '#  ';
+            if ($cron->isAnimusly()) {
+                echo $this->textDim($cron->getTimeName()), "\t";
+            } else {
+                echo $this->textGreen($cron->getTimeName()), "\t";
+            }
 
-          echo $this->textYellow($cron->getEventname()), "\n";
+            echo $this->textYellow($cron->getEventname()), "\n";
         }
         break;
 
@@ -61,17 +60,17 @@ class CronCommand extends Command
         echo $this->textGreen("\n\nCtrl+C to stop\n");
 
         while (1) {
-          if (date('s') == 00) {
-            echo $this->textDim("Run cron at - ". date("D, H i"));
-            echo "\n";
+            if (date('s') == 00) {
+                echo $this->textDim('Run cron at - ' . date('D, H i'));
+                echo "\n";
 
-            $this->scheduler($schedule = new Schedule());
-            $schedule->execute();
+                $this->scheduler($schedule = new Schedule());
+                $schedule->execute();
 
-            sleep(60);
-          } else {
-            sleep(1);
-          }
+                sleep(60);
+            } else {
+                sleep(1);
+            }
         }
         break;
 
@@ -80,33 +79,36 @@ class CronCommand extends Command
         break;
     }
 
-    // end stopwatch
-    $watch_end = round(microtime(true) - $watch_start, 3) * 1000;
-    echo "\nDone in " . $this->textYellow($watch_end ."ms\n");
-  }
+        // end stopwatch
+        $watch_end = round(microtime(true) - $watch_start, 3) * 1000;
+        echo "\nDone in " . $this->textYellow($watch_end . "ms\n");
+    }
 
-  public function scheduler(Schedule $schadule): void
-  {
-    $schadule->call(function() {
-      echo "Its Cron Job Schaduller, run every 10 minute\n";
-      return;
-    })
-    ->eventName("Run cron every 10")
+    public function scheduler(Schedule $schadule): void
+    {
+        $schadule->call(function () {
+            echo "Its Cron Job Schaduller, run every 10 minute\n";
+
+            return;
+        })
+    ->eventName('Run cron every 10')
     ->everyTenMinute();
 
-    $schadule->call(function() {
-      echo "Its Cron Job Schaduller, run every hour\n";
-      return;
-    })
-    ->eventName("Run only 1 per hour")
+        $schadule->call(function () {
+            echo "Its Cron Job Schaduller, run every hour\n";
+
+            return;
+        })
+    ->eventName('Run only 1 per hour')
     ->hourly();
 
-    $schadule->call(function() {
-      echo date("D, d M Y H:i:s"), "\n";
-      return;
-    })
+        $schadule->call(function () {
+            echo date('D, d M Y H:i:s'), "\n";
+
+            return;
+        })
     ->animusly()
-    ->eventName("cron is works")
+    ->eventName('cron is works')
     ->justInTime();
-  }
+    }
 }

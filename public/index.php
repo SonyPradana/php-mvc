@@ -1,38 +1,29 @@
 <?php
 
-//  call core apps
-require_once dirname(__DIR__) . '/vendor/autoload.php';
-
+use System\Http\RequestFactory;
 use System\Router\Router;
 
-// sample add contoller
-Router::get('/', function() {
-  return (new IndexController())->index();
-});
+require_once dirname(__DIR__) . '/vendor/autoload.php';
 
-// register router
-Router::get('/say/(:any)', function($text) {
-  echo "say $text";
-});
+/**
+ * Load Application instan.
+ *
+ * @var System\Integrate\Applicationn
+ */
+$app = require_once dirname(__DIR__) . '/bootstrap/init.php';
 
-// vue apps router - optional
-// if you use vue-router (sub path) forget register router here
-// Router::get('/(:text)', function() {
-//   return (new VueAppController)->index();
-// });
+/**
+ * Declare http karnel.
+ *
+ * @var System\Integrate\Http\Karnel
+ */
+$respone = $app->make(System\Integrate\Http\Karnel::class);
 
-
-// also sopprt ap (json) format output
-Router::any( '/API/(:any)/(:any)', function($unit, $action) {
-  return (new ServicesController())->index($unit, $action, 'v1.0');
-});
-
-// default path 404, 405
-Router::pathNotFound(function($path) {
-  echo "page not found -\n $path";
-});
-Router::methodNotAllowed(function($path, $method) {
-  echo "method not allow \n $path with $method";
-});
-
-Router::run('/');
+/**
+ * Handle Respone from httpkarnel
+ *
+ * @var System\Http\Response
+ */
+$respone->handle(
+  $request = (new RequestFactory())->getFromGloball()
+)->send();

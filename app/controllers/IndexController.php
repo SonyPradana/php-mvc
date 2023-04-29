@@ -1,15 +1,15 @@
 <?php
 
-use System\Apps\Controller;
+use Application\Http\Controller;
 
 class IndexController extends Controller
 {
-  public function index()
-  {
-    return $this->view('index', array (
-      'contents' => array (
-        'say' => 'hello, php enthusiastic'
-      )
-    ));
-  }
+    public function index()
+    {
+        return $this->view('index', [
+            'contents' => [
+                'say' => 'hello, php enthusiastic!',
+            ],
+        ]);
+    }
 }

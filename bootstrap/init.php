@@ -1,15 +1,17 @@
 <?php
-use System\Apps\Config;
 
-// Autoloading
-require_once dirname(__DIR__) . '/bootstrap/autoload.php';
+Dotenv\Dotenv::createImmutable(dirname(__DIR__))->load();
 
-// Core
-require_once dirname(__DIR__) . '/app/core/Config.php';
-require_once dirname(__DIR__) . '/app/core/Controller.php';
-require_once dirname(__DIR__) . '/app/core/CLI.php';
-require_once dirname(__DIR__) . '/app/core/Service.php';
-require_once dirname(__DIR__) . '/app/core/GlobalFuntion.php';
+$app = new System\Integrate\Application(dirname(__DIR__));
 
-// Declare Config Class
-return (new Config());
+$app->set(
+    System\Integrate\Http\Karnel::class,
+    fn() => new HttpKernel($app)
+);
+
+$app->set(
+    System\Integrate\Console\Karnel::class,
+    fn () => new ConsoleKernel($app)
+);
+
+return $app;

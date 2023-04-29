@@ -4,35 +4,34 @@ use System\Console\Command;
 
 class ServeCommand extends Command
 {
-
-  public static array $command = array(
+    public static array $command = [
     [
-      "cmd"       => "serve",
-      "mode"      => "full",
-      "class"     => "ServeCommand",
-      "fn"        => "serve",
+      'cmd'       => 'serve',
+      'mode'      => 'full',
+      'class'     => 'ServeCommand',
+      'fn'        => 'serve',
     ],
-  );
+  ];
 
-  public function printHelp()
-  {
-    return array(
-      'option' => array(
-        "\n\t" . $this->textGreen("serve") . " [port_number] " . "\t\t\t\tserve server with port number (default 8080)",
-      ),
-      'argument' => array()
-    );
-  }
+    public function printHelp()
+    {
+        return [
+      'option' => [
+        "\n\t" . $this->textGreen('serve') . ' [port_number] ' . "\t\t\t\tserve server with port number (default 8080)",
+      ],
+      'argument' => [],
+    ];
+    }
 
-  public function Serve()
-  {
-    $port = $this->OPTION[0] ?? '8080';
-    $port = $port == '' ? '8080' :$port;
-    $localIP = getHostByName(getHostName());
+    public function Serve()
+    {
+        $port    = $this->OPTION[0] ?? '8080';
+        $port    = $port == '' ? '8080' : $port;
+        $localIP = gethostbyname(gethostname());
 
-    $this->prints([
-      "Server runing add:",
-      "\n- Local:\t" .   $this->textBlue("http://localhost:$port"),
+        $this->prints([
+      'Server runing add:',
+      "\n- Local:\t" . $this->textBlue("http://localhost:$port"),
       "\n- Network:\t" . $this->textBlue("http://$localIP:$port"),
 
       $this->textYellow("\n\nctrl+c to stop server"),
@@ -40,6 +39,6 @@ class ServeCommand extends Command
       " server runing...\n",
     ]);
 
-    shell_exec("php -S 127.0.0.1:$port -t public/");
-  }
+        shell_exec("php -S 127.0.0.1:$port -t public/");
+    }
 }
