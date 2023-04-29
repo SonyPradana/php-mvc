@@ -1,0 +1,19 @@
+#!/usr/bin/env php
+<?php 
+
+namespace Model\@__models__;
+
+use System\Database\MyModel;
+use System\Database\MyPDO;
+
+class __models__s extends MyModel
+{
+    /**
+     * @param MyPDO $PDO DataBase class Dependency Injection
+     */
+    public function __construct(MyPDO $PDO = null)
+    {
+      $this->_TABELS[]  = '__table__';
+      $this->PDO = $PDO ?? new MyPDO();
+    }    
+}
