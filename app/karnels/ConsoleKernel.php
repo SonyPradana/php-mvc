@@ -6,9 +6,7 @@ namespace App\Karnels;
 
 use System\Container\Container;
 use System\Integrate\Console\Karnel;
-use System\Text\Str;
-
-use function System\Console\style;
+use System\Integrate\ValueObjects\CommadMap;
 
 class ConsoleKernel extends Karnel
 {
@@ -34,55 +32,17 @@ class ConsoleKernel extends Karnel
           ->register();
     }
 
-    public function handle($arguments)
+    /** {@inheritDoc} */
+    protected function commands()
     {
-        // handle commad empty
-        $baseArgs = $arguments[1] ?? '--help';
+        $commands = static::$command = include config_path() . 'command.config.php';
 
-        // load register command
-        self::$command = include config_path() . 'command.config.php';
-
-        foreach (self::$command ?? [] as $cmd) {
-            // matching alias
-            $use = $cmd['cmd'];
-
-            $found = is_array($use)
-              ? collection($use)->some(fn ($alias) => $this->alias($baseArgs, $alias, $cmd['mode']))
-              : $this->alias($baseArgs, $use, $cmd['mode'])
-            ;
-
-            if ($found) {
-                $className    = $cmd['class'];
-                $functionName = $cmd['fn'];
-
-                if (class_exists($className)) {
-                    $service = new $className($arguments);
-                    if (method_exists($service, $functionName)) {
-                        $service->{$functionName}();
-
-                        return $this->exit_code = $service->exit ?? 0;
-                    }
-                }
-            }
+        /** @var CommandMap[] */
+        $maps = [];
+        foreach ($commands as $command) {
+            $maps[] = new CommadMap($command);
         }
 
-        // if command not register
-        style('Commad Not Found, run help command')->textRed()->new_lines(2)
-            ->push('> ')->textDim()
-            ->push('php ')->textYellow()
-            ->push('cli ')
-            ->push('--help')->textDim()
-            ->new_lines()
-            ->out()
-        ;
-
-        return $this->exit_code = 0;
-    }
-
-    private function alias($argument, $alias, $mode): bool
-    {
-        return 'full' === $mode
-          ? $argument === $alias
-          : Str::startsWith($argument, $alias);
+        return $maps;
     }
 }
