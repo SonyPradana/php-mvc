@@ -3,12 +3,18 @@
 namespace App\Commands;
 
 use System\Console\Command;
-use System\Console\Traits\CommandTrait;
+use System\Console\Style\Alert;
+use System\Console\Style\Style;
+use System\Console\Traits\PrintHelpTrait;
 use System\Router\Router;
+use System\Text\Str;
+
+use function System\Console\style;
 
 class RouteCommand extends Command
 {
-    use CommandTrait;
+    // use CommandTrait;
+    use PrintHelpTrait;
 
     /** @var array */
     public static $command = [
@@ -16,7 +22,7 @@ class RouteCommand extends Command
         'cmd'       => 'route:list',
         'mode'      => 'full',
         'class'     => RouteCommand::class,
-        'fn'        => 'println',
+        'fn'        => 'main',
       ],
     ];
 
@@ -24,74 +30,69 @@ class RouteCommand extends Command
     {
         return [
           'commands'  => [
-            'route:list'                  => 'Get route list information',
+            'route:list' => 'Get route list information',
           ],
           'options'   => [],
           'relation'  => [],
         ];
     }
 
-    public function println()
+    public function main()
     {
-        require_once base_path('/routes/web.php');
-        require_once base_path('/routes/api.php');
-
-        $line_max  = 0;
-        $printable = [];
-        $all       = ['get', 'head', 'post', 'put', 'patch', 'delete', 'options'];
+        $print = new Style();
+        $print->tap(Alert::render()->ok('route list'));
         foreach (Router::getRoutes() as $key => $route) {
-            $methods = [];
-            foreach ($route['method'] as $method) {
-                $methods[] = $this->coloringMethod($method);
-            }
-            $method = implode($this->textDim('|'), $methods);
-            $method = $all == $route['method']
-              ? $this->coloringMethod('ANY')
-              : $method;
-            $count  = 16 - strlen($method);
-            $method = $count > 0
-              ? $method . str_repeat(' ', $count)
-              : $method;
+            $method = $this->methodToStye($route['method']);
+            $name   = style($route['name'])->textWhite();
+            $length = $method->length() + $name->length();
 
-            $name       = $route['name'];
-            $expression = $route['expression'];
-
-            $printable[$key]['method']     = $method;
-            $printable[$key]['name']       = $name;
-            $printable[$key]['expression'] = $expression;
-
-            $count    = strlen($name);
-            $line_max = $count > $line_max ? $count : $line_max;
+            $print
+              ->tap($method)
+              ->push(' ')
+              ->tap($name)
+              ->repeat('.', 80 - $length)->textDim()
+              ->push(' ')
+              ->push(Str::limit($route['expression'], 30))
+              ->new_lines()
+            ;
         }
-
-        $mask = '%-10.100s %.20s' . $this->textDim('%-30.60s %.70s') . $this->newLine();
-        foreach ($printable as $line) {
-            echo sprintf(
-                $mask,
-                $line['method'],
-                $line['name'],
-                str_repeat('.', 40 + ($line_max - strlen($line['name']))),
-                $line['expression']
-            );
-        }
+        $print->out();
     }
 
-    private function coloringMethod(string $method)
+    private function methodToStye($methods): Style
+    {
+        if (is_array($methods)) {
+            $group  = new Style();
+            $length = count($methods);
+            for ($i=0; $i < $length; $i++) {
+                $group->tap($this->coloringMethod($methods[$i]));
+                if ($i < $length - 1) {
+                    $group->push('|')->textDim();
+                }
+            }
+
+            return $group;
+        }
+
+        return $this->coloringMethod($methods);
+    }
+
+    private function coloringMethod(string $method): Style
     {
         $method = strtoupper($method);
 
         if ($method === 'GET') {
-            return $this->textBlue($method);
+            return (new Style($method))->textBlue();
         }
 
         if ($method === 'POST' || $method === 'PUT') {
-            return $this->textYellow($method);
+            return (new Style($method))->textYellow();
         }
 
         if ($method === 'DELETE') {
-            return $this->textRed($method);
+            return (new Style($method))->textRed();
         }
 
-        return $this->textDim($method);
+        return (new Style($method))->textDim();
     }
 }

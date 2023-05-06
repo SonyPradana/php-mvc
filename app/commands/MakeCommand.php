@@ -12,16 +12,36 @@ class MakeCommand extends Command
 {
     use CommandTrait;
     public static array $command = [
-    [
-      'cmd'       => 'make',
-      'mode'      => 'start',
-      'class'     => MakeCommand::class,
-      'fn'        => 'switcher',
-    ],
-  ];
+        [
+            'cmd'       => 'make',
+            'mode'      => 'start',
+            'class'     => MakeCommand::class,
+            'fn'        => 'switcher',
+        ],
+    ];
 
     public function printHelp()
     {
+        return [
+            'commands'  => [
+                'make:controller' => 'Generate new controller and view',
+                'make:view'       => 'Generate new view',
+                'make:service'    => 'Generate new service',
+                'make:model'      => 'Generate new model',
+                'make:command'    => 'Generate new command',
+            ],
+            'options'   => [
+                '--table-name' => 'Set table column when creating model/models.',
+            ],
+            'relation'  => [
+                'make:controller' => ['[controller_name]'],
+                'make:view'       => ['[view_name]'],
+                'make:service'    => ['[service_name]'],
+                'make:model'      => ['[model_name]', '--table-name'],
+                'make:command'    => ['[command_name]'],
+            ],
+        ];
+
         return [
       'option' => [
         "\n\t" . $this->textGreen('make') . ":controller [controller_name]\t\tgenerate new controller and view",

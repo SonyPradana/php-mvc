@@ -9,6 +9,7 @@ use System\Console\Traits\PrintHelpTrait;
 use System\Text\Str;
 
 use function System\Console\style;
+use function System\Console\warn;
 
 class HelpCommand extends Command
 {
@@ -20,12 +21,6 @@ class HelpCommand extends Command
         'mode'      => 'full',
         'class'     => self::class,
         'fn'        => 'main',
-      ],
-      [
-        'cmd'       => ['-v', '--version'],
-        'mode'      => 'full',
-        'class'     => self::class,
-        'fn'        => 'versionCek',
       ],
       [
         'cmd'       => '--list',
@@ -41,6 +36,12 @@ class HelpCommand extends Command
       ],
     ];
 
+    private $banner =
+'   _____ ____ _ _   __ ____ _ ____   ____   ____ _
+  / ___// __ `/| | / // __ `// __ \ / __ \ / __ `/
+ (__  )/ /_/ / | |/ // /_/ // / / // / / // /_/ /
+/____/ \__,_/  |___/ \__,_//_/ /_//_/ /_/ \__,_/  ';
+
     /**
      * Use for print --help.
      */
@@ -49,7 +50,7 @@ class HelpCommand extends Command
         $has_visited      = [];
         $this->print_help = [
           'margin-left'         => 8,
-          'column-1-min-lenght' => 24,
+          'column-1-min-lenght' => 16,
         ];
 
         foreach (ConsoleKernel::$command as $commands) {
@@ -64,7 +65,7 @@ class HelpCommand extends Command
                         continue;
                     }
 
-                    $res = call_user_func_array([$class, 'printHelp'], []);
+                    $res = app()->call([$class, 'printHelp']) ?? [];
 
                     if (isset($res['commands']) && $res['commands'] != null) {
                         foreach ($res['commands'] as $command => $desc) {
@@ -87,62 +88,40 @@ class HelpCommand extends Command
             }
         }
 
-        style('welcome to cli')->out();
+        $printer = new Style();
+        $printer->push($this->banner)->textGreen()->new_lines();
+        $printer->push('savanna cli tools');
+        $printer
+            ->new_lines(2)
+            ->push('Usage:')
+            ->new_lines(2)->tabs()
+            ->push('php')->textGreen()
+            ->push(' savanna [flag]')
+            ->new_lines()->tabs()
+            ->push('php')->textGreen()
+            ->push(' savanna [command] ')
+            ->push('[option]')->textDim()
+            ->new_lines(2)
 
-        style("\n\nUsage:")
-
-          ->push("\n\t")
-          ->push('php')->textGreen()
-          ->push(' cli [flag]')
-
-          ->push("\n\t")
-          ->push('php')->textGreen()
-          ->push(' cli [command] ')
-          ->push('[option]')->textDim()
-          ->out()
+            ->push('Avilable flag:')
+            ->new_lines(2)->tabs()
+            ->push('--help')->textDim()
+            ->tabs(3)
+            ->push('get all help commands')
+            ->new_lines()->tabs()
+            ->push('--list')->textDim()
+            ->tabs(3)
+            ->push('get list of commands registered (class & function)')
+            ->new_lines(2)
         ;
 
-        style("\nAvilable flag:")
+        $printer->push('Avilabe command:')->new_lines(2);
+        $printer = $this->printCommands($printer)->new_lines();
 
-          ->push("\n\n\t")
-          ->push('--help')->textDim()
-          ->push("\t\t\t")
-          ->push('get all help commands')
-          ->push("\n\t")
+        $printer->push('Avilabe options:')->new_lines();
+        $printer = $this->printOptions($printer);
 
-          ->push('--list')->textDim()
-          ->push("\t\t\t")
-          ->push('get list of commands registered (class & function)')
-          ->push("\n\t")
-
-          ->push('--version')->textDim()
-          ->push("\t\t")
-          ->push('get version cli')
-          ->new_lines()
-          ->out()
-        ;
-
-        style('Avilabe command:')->new_lines()->out();
-
-        $this->printCommands(new Style())->out();
-
-        style('Avilable options:')->new_lines()->out();
-
-        $this->printOptions(new Style())->out();
-    }
-
-    public function versionCek()
-    {
-        $stringfromfile = file('.git/HEAD', FILE_USE_INCLUDE_PATH);
-
-        $firstLine = $stringfromfile[0]; // get the string from the array
-
-        $explodedstring = explode('/', $firstLine, 3); // seperate out by the "/" in the string
-
-        $branchname = $explodedstring[2]; // get the one that is always the branch name
-
-        style('apps')->textLightGreen()->push(' version ')->push($branchname)->out(false);
-        style('cli')->textLightGreen()->push(' version ')->push($_ENV['APP_CLI_VERSION'])->out();
+        $printer->out();
     }
 
     public function commandList()
@@ -164,64 +143,57 @@ class HelpCommand extends Command
         }
     }
 
-    /**
-     * Show helper per command.
-     * eg: php cli help cron.
-     */
-    public function commandHelp()
-    {
-        if (!isset($this->OPTION[0])) {
-            style("\nTo see help command, place provide command_name\n\n\t")
-                ->new_lines(2)
-                ->tabs()
-                ->textYellow()
-                ->push('php cli help <comman_nama>')
-                ->textDim()->new_lines()->tabs()
-                ->push('             ^^^^^^^^^^^^^')
-                ->textRed()
-                ->new_lines()
-                ->out()
-            ;
+   public function commandHelp()
+   {
+       if (!isset($this->OPTION[0])) {
+           style("\nTo see help command, place provide command_name")
+               ->new_lines(2)->tabs()
+               ->textYellow()
+               ->push('php savanna help <comman_nama>')->textDim()
+               ->new_lines()->tabs()
+               ->push('                  ^^^^^^^^^^^')->textRed()
+               ->out()
+           ;
 
-            return;
-        }
+           return;
+       }
 
-        $className = $this->OPTION[0];
-        if (Str::contains(':', $className)) {
-            $className = explode(':', $className);
-            $className = $className[0];
-        }
+       $className = $this->OPTION[0];
+       if (Str::contains(':', $className)) {
+           $className = explode(':', $className);
+           $className = $className[0];
+       }
 
-        $className .= 'Command';
-        $className = ucfirst($className);
-        $className = 'App\\Commands\\' . $className;
+       $className .= 'Command';
+       $className = ucfirst($className);
+       $className = 'App\\Commands\\' . $className;
 
-        if (class_exists($className)) {
-            $class = new $className([]);
+       if (class_exists($className)) {
+           $class = new $className([]);
 
-            $res = call_user_func_array([$class, 'printHelp'], []) ?? '';
+           $res = app()->call([$class, 'printHelp']) ?? [];
 
-            if (isset($res['commands']) && $res['commands'] != null) {
-                $this->command_describes = $res['commands'];
-            }
+           if (isset($res['commands']) && $res['commands'] != null) {
+               $this->command_describes = $res['commands'];
+           }
 
-            if (isset($res['options']) && $res['options'] != null) {
-                $this->option_describes = $res['options'];
-            }
+           if (isset($res['options']) && $res['options'] != null) {
+               $this->option_describes = $res['options'];
+           }
 
-            if (isset($res['relation']) && $res['relation'] != null) {
-                $this->command_relation = $res['relation'];
-            }
+           if (isset($res['relation']) && $res['relation'] != null) {
+               $this->command_relation = $res['relation'];
+           }
 
-            style('Avilabe command:')->new_lines()->out();
-            $this->printCommands(new Style())->out();
+           style('Avilabe command:')->new_lines()->out();
+           $this->printCommands(new Style())->out();
 
-            style('Avilable options:')->new_lines()->out();
-            $this->printOptions(new Style())->out();
+           style('Avilable options:')->new_lines()->out();
+           $this->printOptions(new Style())->out();
 
-            return;
-        }
+           return;
+       }
 
-        style("\nHelp command not found\n")->out();
-    }
+       warn('Help command not found')->out(false);
+   }
 }

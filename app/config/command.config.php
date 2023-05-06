@@ -11,5 +11,7 @@ return array_merge(
     App\Commands\CronCommand::$command,
     // route
     App\Commands\RouteCommand::$command,
+    // migration
+    App\Commands\MigrationCommand::$command,
     // more command here
 );
