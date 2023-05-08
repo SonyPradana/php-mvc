@@ -8,6 +8,7 @@ use System\Console\Style\Style;
 use System\Console\Traits\PrintHelpTrait;
 use System\Text\Str;
 
+use function System\Console\info;
 use function System\Console\style;
 use function System\Console\warn;
 
@@ -21,20 +22,31 @@ class HelpCommand extends Command
         'mode'      => 'full',
         'class'     => self::class,
         'fn'        => 'main',
-      ],
-      [
+      ], [
         'cmd'       => '--list',
         'mode'      => 'full',
         'class'     => self::class,
         'fn'        => 'commandList',
-      ],
-      [
+      ], [
         'cmd'       => 'help',
         'mode'      => 'full',
         'class'     => self::class,
         'fn'        => 'commandhelp',
       ],
     ];
+
+    public function printHelp()
+    {
+        return [
+            'commands'  => [
+                'help' => 'Get help for avilable command',
+            ],
+            'options'   => [],
+            'relation'  => [
+                'help' => ['[command_name]'],
+            ],
+        ];
+    }
 
     private $banner =
 '   _____ ____ _ _   __ ____ _ ____   ____   ____ _
@@ -89,17 +101,16 @@ class HelpCommand extends Command
         }
 
         $printer = new Style();
-        $printer->push($this->banner)->textGreen()->new_lines();
-        $printer->push('savanna cli tools');
+        $printer->push($this->banner)->textGreen();
         $printer
             ->new_lines(2)
             ->push('Usage:')
             ->new_lines(2)->tabs()
             ->push('php')->textGreen()
-            ->push(' savanna [flag]')
+            ->push(' cli [flag]')
             ->new_lines()->tabs()
             ->push('php')->textGreen()
-            ->push(' savanna [command] ')
+            ->push(' cli [command] ')
             ->push('[option]')->textDim()
             ->new_lines(2)
 
@@ -107,11 +118,11 @@ class HelpCommand extends Command
             ->new_lines(2)->tabs()
             ->push('--help')->textDim()
             ->tabs(3)
-            ->push('get all help commands')
+            ->push('Get all help commands')
             ->new_lines()->tabs()
             ->push('--list')->textDim()
             ->tabs(3)
-            ->push('get list of commands registered (class & function)')
+            ->push('Get list of commands registered (class & function)')
             ->new_lines(2)
         ;
 
@@ -146,12 +157,12 @@ class HelpCommand extends Command
    public function commandHelp()
    {
        if (!isset($this->OPTION[0])) {
-           style("\nTo see help command, place provide command_name")
-               ->new_lines(2)->tabs()
+           style('')
+                ->tap(info('To see help command, place provide command_name'))
                ->textYellow()
-               ->push('php savanna help <comman_nama>')->textDim()
-               ->new_lines()->tabs()
-               ->push('                  ^^^^^^^^^^^')->textRed()
+               ->push('php cli help <command_nama>')->textDim()
+               ->new_lines()
+               ->push('              ^^^^^^^^^^^^')->textRed()
                ->out()
            ;
 
@@ -194,6 +205,6 @@ class HelpCommand extends Command
            return;
        }
 
-       warn('Help command not found')->out(false);
+       warn("Help for `{$this->OPTION[0]}` command not found")->out(false);
    }
 }

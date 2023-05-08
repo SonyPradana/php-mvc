@@ -26,10 +26,12 @@ class ServeCommand extends Command
     {
         return [
             'commands'  => [
-                'serve' => 'serve server with port number (default 8080)',
+                'serve' => 'Serve server with port number (default 8080)',
             ],
             'options'   => [],
-            'relation'  => [],
+            'relation'  => [
+                'serve' => ['[port]'],
+            ],
         ];
     }
 

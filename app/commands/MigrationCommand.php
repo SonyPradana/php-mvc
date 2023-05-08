@@ -38,9 +38,11 @@ class MigrationCommand extends Command
           ],
           'options'   => [
             '--dry-run' => 'Excute migration but olny get query  output.',
+            '--create'  => 'Create datase if not exist',
           ],
           'relation'  => [
-            'migrate' => ['--dry-run'],
+            'migrate'  => ['[migration_name]', '--dry-run'],
+            'database' => ['--create'],
           ],
         ];
     }
@@ -63,8 +65,8 @@ class MigrationCommand extends Command
         foreach ($migrate as $key => $val) {
             $schema = require_once end($val);
 
-            if ($this->dryrun) {
-                $print->push($schema->__toString())->textDim()->new_lines();
+            if ($this->option('dry-run')) {
+                $print->push($schema->__toString())->textDim()->new_lines(2);
                 continue;
             }
 

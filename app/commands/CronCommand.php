@@ -36,7 +36,7 @@ class CronCommand extends Command
         return [
           'commands'  => [
             'cron'      => 'Run cron job (all shadule)',
-            'cron:work' => 'Run virtual cron job in terminal',
+            'cron:work' => 'Run virtual cron job in terminal (ansync)',
             'cron:list' => 'Get list of shadule',
           ],
           'options'   => [],

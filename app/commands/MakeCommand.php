@@ -41,20 +41,6 @@ class MakeCommand extends Command
                 'make:command'    => ['[command_name]'],
             ],
         ];
-
-        return [
-      'option' => [
-        "\n\t" . $this->textGreen('make') . ":controller [controller_name]\t\tgenerate new controller and view",
-        "\n\t" . $this->textGreen('make') . ":view [view_name]\t\t\t\tgenerate new view",
-        "\n\t" . $this->textGreen('make') . ":service [services_name]\t\t\tgenerate new service",
-        "\n\t" . $this->textGreen('make') . ':model [model_name] ' . $this->textDim('[argument]') . "\t\tgenerate new model",
-        "\n\t" . $this->textGreen('make') . ':models [models_name] ' . $this->textDim('[argument]') . "\t\tgenerate new models",
-        "\n\t" . $this->textGreen('make') . ':command [command_name] ' . "\t\t\tgenerate new command",
-      ],
-      'argument' => [
-        "\n\t" . $this->textDim('--table-name=[table_name]') . "\tget table column when creating model/models",
-      ],
-    ];
     }
 
     public function switcher()
