@@ -8,7 +8,7 @@ class IndexController extends Controller
 {
     public function index(): Response
     {
-        return $this->view('index', [
+        return view('index', [
             'title' => 'Php is great',
             'say'   => 'hello, php enthusiastic!',
         ]);

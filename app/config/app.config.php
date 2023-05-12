@@ -20,5 +20,6 @@ return [
         App\Providers\AppServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         App\Providers\DatabaseServiceProvider::class,
+        App\Providers\ViewServiceProvider::class,
   ],
 ];
