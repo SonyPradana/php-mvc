@@ -5,11 +5,14 @@ namespace App\Commands;
 use System\Console\Command;
 use System\Console\Style\Style;
 use System\Console\Traits\PrintHelpTrait;
+use System\Support\Facades\PDO;
 use System\Support\Facades\Schema;
 
 use function System\Console\fail;
 use function System\Console\info;
 use function System\Console\ok;
+use function System\Console\style;
+use function System\Console\warn;
 
 class MigrationCommand extends Command
 {
@@ -22,10 +25,20 @@ class MigrationCommand extends Command
         'class'     => self::class,
         'fn'        => 'main',
       ], [
-        'cmd'       => 'database',
+        'cmd'       => 'database:create',
         'mode'      => 'full',
         'class'     => self::class,
-        'fn'        => 'database',
+        'fn'        => 'databaseCreate',
+      ], [
+        'cmd'       => 'database:drop',
+        'mode'      => 'full',
+        'class'     => self::class,
+        'fn'        => 'databaseDrop',
+      ], [
+        'cmd'       => 'database:show',
+        'mode'      => 'full',
+        'class'     => self::class,
+        'fn'        => 'databaseShow',
       ],
     ];
 
@@ -33,18 +46,23 @@ class MigrationCommand extends Command
     {
         return [
           'commands'  => [
-            'migrate'      => 'Run migration',
-            'database'     => 'Create databese',
+            'migrate'         => 'Run migration',
+            'database:create' => 'Create databese',
+            'database:drop'   => 'Drop databese',
+            'database:show'   => 'Show databese',
           ],
           'options'   => [
             '--dry-run' => 'Excute migration but olny get query  output.',
-            '--create'  => 'Create datase if not exist',
           ],
           'relation'  => [
             'migrate'  => ['[migration_name]', '--dry-run'],
-            'database' => ['--create'],
           ],
         ];
+    }
+
+    private function DbName(): string
+    {
+        return app()->get('dsn.sql')['database_name'];
     }
 
     public function main()
@@ -89,20 +107,67 @@ class MigrationCommand extends Command
         $print->out(false);
     }
 
-    public function database(): void
+    public function databaseCreate(): void
     {
-        if ($this->create) {
-            info('creating database')->out(false);
+        $db_name = $this->DbName();
+        info("creating database `{$db_name}`")->out(false);
 
-            $success = Schema::create()->database('savanna')->ifNotExists()->execute();
+        $success = Schema::create()->database($db_name)->ifNotExists()->execute();
 
-            if ($success) {
-                ok('success create database savanna')->out(false);
+        if ($success) {
+            ok("success create database `{$db_name}`")->out(false);
 
-                return;
-            }
+            return;
+        }
 
-            fail('cant create database savanna')->out(false);
+        fail("cant created database `{$db_name}`")->out(false);
+    }
+
+    public function databaseDrop()
+    {
+        $db_name = $this->DbName();
+        info("try to drop database `{$db_name}`")->out(false);
+
+        $success = Schema::drop()->database($db_name)->ifExists(true)->execute();
+
+        if ($success) {
+            ok("success drop database `{$db_name}`")->out(false);
+
+            return;
+        }
+
+        fail("cant drop database `{$db_name}`")->out(false);
+    }
+
+    public function databaseShow()
+    {
+        $db_name = $this->DbName();
+        info('showing database')->out(false);
+
+        $tables = PDO::instance()
+        ->query('SHOW DATABASES')
+            ->query('
+                SELECT table_name, create_time
+                FROM information_schema.tables
+                WHERE table_schema = :db_name')
+            ->bind(':db_name', $db_name)
+            ->resultset();
+
+        if (0 === count($tables)) {
+            warn('table is empty try to run migration')->out();
+
+            return 2;
+        }
+
+        foreach ($tables as $table) {
+            $name   = $table['table_name'];
+            $time   = $table['create_time'];
+            $lenght = strlen($name) + strlen($time);
+
+            style($name)->textDim()
+                ->repeat('.', 60 - $lenght)->textDim()
+                ->push($time)
+                ->out();
         }
     }
 }
