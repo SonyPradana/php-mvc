@@ -2,6 +2,7 @@
 
 namespace App\Commands;
 
+use App\Commands\Cron\Log;
 use React\EventLoop\Loop;
 use System\Console\Command;
 use System\Console\Style\Style;
@@ -48,7 +49,7 @@ class CronCommand extends Command
     {
         $watch_start = microtime(true);
 
-        $this->scheduler($schedule = new Schedule());
+        $this->scheduler($schedule = new Schedule(now()->timestamp, new Log()));
         $schedule->execute();
 
         $watch_end = round(microtime(true) - $watch_start, 3) * 1000;
@@ -62,7 +63,7 @@ class CronCommand extends Command
         $watch_start = microtime(true);
         $print       = new Style("\n");
 
-        $this->scheduler($schedule = new Schedule());
+        $this->scheduler($schedule = new Schedule(now()->timestamp, new Log()));
         $info = [];
         $max  = 0;
         foreach ($schedule->getPools() as $cron) {
@@ -111,7 +112,7 @@ class CronCommand extends Command
 
             $watch_start = microtime(true);
 
-            $this->scheduler($schedule = new Schedule());
+            $this->scheduler($schedule = new Schedule(now()->timestamp, new Log()));
             $schedule->execute();
 
             $watch_end = round(microtime(true) - $watch_start, 3) * 1000;
