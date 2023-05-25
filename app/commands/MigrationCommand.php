@@ -2,6 +2,7 @@
 
 namespace App\Commands;
 
+use System\Collection\Collection;
 use System\Console\Command;
 use System\Console\Style\Style;
 use System\Console\Traits\PrintHelpTrait;
@@ -26,6 +27,11 @@ class MigrationCommand extends Command
         'class'     => self::class,
         'fn'        => 'main',
       ], [
+        'cmd'       => 'migrate:reset',
+        'mode'      => 'full',
+        'class'     => self::class,
+        'fn'        => 'reset',
+      ], [
         'cmd'       => 'database:create',
         'mode'      => 'full',
         'class'     => self::class,
@@ -47,19 +53,21 @@ class MigrationCommand extends Command
     {
         return [
           'commands'  => [
-            'migrate'         => 'Run migration',
-            'database:create' => 'Create databese',
-            'database:drop'   => 'Drop databese',
-            'database:show'   => 'Show databese',
+            'migrate'               => 'Run migration (up)',
+            'migrate:reset'         => 'Rolling back migrations (down)',
+            'database:create'       => 'Create databese',
+            'database:drop'         => 'Drop databese',
+            'database:show'         => 'Show databese',
           ],
           'options'   => [
-            '--dry-run' => 'Excute migration but olny get query  output.',
+            '--dry-run' => 'Excute migration but olny get query output.',
             '--force'   => 'Force runing migration/databe query in production',
           ],
           'relation'  => [
-            'migrate'          => ['[migration_name]', '--dry-run', '--force'],
-            'database:create'  => ['--force'],
-            'database:drop'    => ['--force'],
+            'migrate'                => ['--dry-run', '--force'],
+            'migrate:reset'          => ['--dry-run', '--force'],
+            'database:create'        => ['--force'],
+            'database:drop'          => ['--force'],
           ],
         ];
     }
@@ -81,49 +89,104 @@ class MigrationCommand extends Command
         ]);
     }
 
+    public function baseMigrate(): Collection
+    {
+        $dir     = base_path('/database/migration/');
+        $migrate = new Collection([]);
+        foreach (new \DirectoryIterator($dir) as $file) {
+            if ($file->isDot() | $file->isDir()) {
+                continue;
+            }
+            $migrate->set($file->getFilename(), $dir . $file->getFilename());
+        }
+
+        return $migrate;
+    }
+
     public function main()
     {
         if (false === $this->runInDev()) {
             return;
         }
-        $print   = new Style("\n");
-        $dir     = base_path('/database/migration/');
-        $migrate = [];
-        foreach (new \DirectoryIterator($dir) as $file) {
-            if ($file->isDot() | $file->isDir()) {
-                continue;
-            }
+        $print   = new Style();
+        $migrate = $this->baseMigrate();
 
-            $vertion           = explode('_', $file->getBasename());
-            $group             = end($vertion);
-            $migrate[$group][] = $dir . $file->getFilename();
-        }
+        $print->tap(info('Running migrartion'));
 
-        foreach ($migrate as $key => $val) {
-            $schema = require_once end($val);
+        foreach ($migrate->sort() as $key => $val) {
+            $schema = require_once $val;
+            $up     = new Collection($schema['up'] ?? []);
 
             if ($this->option('dry-run')) {
-                $print->push($schema->__toString())->textDim()->new_lines(2);
+                $up->each(function ($item) use ($print) {
+                    $print->push($item->__toString())->textDim()->new_lines(2);
+                });
                 continue;
             }
 
-            $print->push($key)->textDim()->tabs(2);
+            $print->push($key)->textDim();
+            $print->repeat('.', 60 - strlen($key))->textDim();
 
             try {
-                $success = $schema->execute();
+                $success = $up->every(fn ($item) => $item->execute());
             } catch (\Throwable $th) {
                 $success = false;
                 fail($th->getMessage())->out(false);
             }
 
-            $print->push('done')->textRed();
             if ($success) {
-                $print->textGreen();
+                $print->push('DONE')->textGreen()->new_lines();
+                continue;
             }
-            $print->new_lines();
+
+            $print->push('FAIL')->textRed()->new_lines();
         }
 
-        $print->out(false);
+        $print->out();
+    }
+
+    public function reset(): int
+    {
+        if (false === $this->runInDev()) {
+            return 2;
+        }
+        $print   = new Style();
+        $migrate = $this->baseMigrate();
+
+        $print->tap(info('Rolling back migrations'));
+
+        foreach ($migrate->sortDesc() as $key => $val) {
+            $schema = require_once $val;
+            $down   = new Collection($schema['down'] ?? []);
+
+            if ($this->option('dry-run')) {
+                $down->each(function ($item) use ($print) {
+                    $print->push($item->__toString())->textDim()->new_lines(2);
+                });
+                continue;
+            }
+
+            $print->push($key)->textDim();
+            $print->repeat('.', 60 - strlen($key))->textDim();
+
+            try {
+                $success = $down->every(fn ($item) => $item->execute());
+            } catch (\Throwable $th) {
+                $success = false;
+                fail($th->getMessage())->out(false);
+            }
+
+            if ($success) {
+                $print->push('DONE')->textGreen()->new_lines();
+                continue;
+            }
+
+            $print->push('FAIL')->textRed()->new_lines();
+        }
+
+        $print->out();
+
+        return 0;
     }
 
     public function databaseCreate(): int
