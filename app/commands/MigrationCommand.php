@@ -4,6 +4,7 @@ namespace App\Commands;
 
 use System\Collection\Collection;
 use System\Console\Command;
+use System\Console\Prompt;
 use System\Console\Style\Style;
 use System\Console\Traits\PrintHelpTrait;
 use System\Support\Facades\PDO;
@@ -12,7 +13,6 @@ use System\Support\Facades\Schema;
 use function System\Console\fail;
 use function System\Console\info;
 use function System\Console\ok;
-use function System\Console\option;
 use function System\Console\style;
 use function System\Console\warn;
 
@@ -83,10 +83,33 @@ class MigrationCommand extends Command
             return true;
         }
 
-        return option(style('Runing migration/datbase in production?')->textRed(), [
+        /* @var bool */
+        return (new Prompt(style('Runing migration/database in production?')->textRed(), [
+                'yes' => fn () => true,
+                'no'  => fn () => false,
+            ]))
+            ->selection([
+                style('yes')->textDim(),
+                ' no',
+            ])
+            ->option();
+    }
+
+    /**
+     * @param string|Style $message
+     */
+    private function confirmation($message): bool
+    {
+        /* @var bool */
+        return (new Prompt($message, [
             'yes' => fn () => true,
             'no'  => fn () => false,
-        ]);
+        ]))
+        ->selection([
+            style('yes')->textDim(),
+            ' no',
+        ])
+        ->option();
     }
 
     public function baseMigrate(): Collection
@@ -192,18 +215,9 @@ class MigrationCommand extends Command
     public function databaseCreate(): int
     {
         $db_name = $this->DbName();
+        $message = style("Do you want to create database `{$db_name}`?")->textBlue();
 
-        if (!$this->runInDev()) {
-            return 2;
-        }
-
-        /** @var bool */
-        $continue = option(style("Do you want to create database `{$db_name}`?")->textBlue(), [
-            'yes' => fn () => true,
-            'no'  => fn () => false,
-        ]);
-
-        if (false === $continue) {
+        if (!$this->runInDev() || !$this->confirmation($message)) {
             return 2;
         }
 
@@ -224,19 +238,10 @@ class MigrationCommand extends Command
 
     public function databaseDrop(): int
     {
-        if (!$this->runInDev()) {
-            return 2;
-        }
-
         $db_name = $this->DbName();
+        $message = style("Do you want to drop database `{$db_name}`?")->textRed();
 
-        /** @var bool */
-        $continue = option(style("Do you want to drop database `{$db_name}`")->textRed(), [
-            'yes' => fn () => true,
-            'no'  => fn () => false,
-        ]);
-
-        if (false === $continue) {
+        if (!$this->runInDev() || !$this->confirmation($message)) {
             return 2;
         }
 
