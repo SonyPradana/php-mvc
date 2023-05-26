@@ -32,17 +32,17 @@ class MigrationCommand extends Command
         'class'     => self::class,
         'fn'        => 'reset',
       ], [
-        'cmd'       => 'database:create',
+        'cmd'       => ['database:create', 'db:create'],
         'mode'      => 'full',
         'class'     => self::class,
         'fn'        => 'databaseCreate',
       ], [
-        'cmd'       => 'database:drop',
+        'cmd'       => ['database:drop', 'db:drop'],
         'mode'      => 'full',
         'class'     => self::class,
         'fn'        => 'databaseDrop',
       ], [
-        'cmd'       => 'database:show',
+        'cmd'       => ['database:show', 'db:show'],
         'mode'      => 'full',
         'class'     => self::class,
         'fn'        => 'databaseShow',
