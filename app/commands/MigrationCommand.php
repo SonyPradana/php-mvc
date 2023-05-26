@@ -32,6 +32,11 @@ class MigrationCommand extends Command
         'class'     => self::class,
         'fn'        => 'reset',
       ], [
+        'cmd'       => 'migrate:rollback',
+        'mode'      => 'full',
+        'class'     => self::class,
+        'fn'        => 'rollback',
+      ], [
         'cmd'       => ['database:create', 'db:create'],
         'mode'      => 'full',
         'class'     => self::class,
@@ -176,7 +181,7 @@ class MigrationCommand extends Command
         $print   = new Style();
         $migrate = $this->baseMigrate();
 
-        $print->tap(info('Rolling back migrations'));
+        $print->tap(info('Rolling back all migrations'));
 
         foreach ($migrate->sortDesc() as $key => $val) {
             $schema = require_once $val;
@@ -210,6 +215,52 @@ class MigrationCommand extends Command
         $print->out();
 
         return 0;
+    }
+
+    public function rollback(): int
+    {
+        if (false === $this->runInDev()) {
+            return 2;
+        }
+        $print   = new Style();
+        $migrate = $this->baseMigrate()->sortDesc();
+        $first   = array_key_first($migrate->toArray());
+        $item    = $migrate->first();
+
+        $print->tap(info('Rolling back migrations'));
+
+        $schema = require_once $item;
+        $down   = new Collection($schema['down'] ?? []);
+
+        if ($this->option('dry-run')) {
+            $down->each(function ($item) use ($print) {
+                $print->push($item->__toString())->textDim()->new_lines(2);
+            });
+        }
+
+        $print->push($first)->textDim();
+        $print->repeat('.', 60 - strlen($first))->textDim();
+
+        try {
+            $success = $down->every(fn ($item) => $item->execute());
+        } catch (\Throwable $th) {
+            $success = false;
+            fail($th->getMessage())->out(false);
+        }
+
+        if ($success) {
+            $print->push('DONE')->textGreen()
+                ->new_lines()
+                ->out();
+
+            return 0;
+        }
+
+        $print->push('FAIL')->textRed()
+            ->new_lines()
+            ->out();
+
+        return 1;
     }
 
     public function databaseCreate(): int
