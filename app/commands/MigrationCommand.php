@@ -27,6 +27,11 @@ class MigrationCommand extends Command
         'class'     => self::class,
         'fn'        => 'main',
       ], [
+        'cmd'       => 'migrate:refresh',
+        'mode'      => 'full',
+        'class'     => self::class,
+        'fn'        => 'refresh',
+      ], [
         'cmd'       => 'migrate:reset',
         'mode'      => 'full',
         'class'     => self::class,
@@ -58,21 +63,25 @@ class MigrationCommand extends Command
     {
         return [
           'commands'  => [
-            'migrate'               => 'Run migration (up)',
-            'migrate:reset'         => 'Rolling back migrations (down)',
-            'database:create'       => 'Create databese',
-            'database:drop'         => 'Drop databese',
-            'database:show'         => 'Show databese',
+            'migrate'                  => 'Run migration (up)',
+            'migrate:refresh'          => 'Drop database and run migrations',
+            'migrate:reset'            => 'Rolling back all migrations (down)',
+            'migrate:rollback'         => 'Rolling back last migrations (down)',
+            'database:create'          => 'Create databese',
+            'database:drop'            => 'Drop databese',
+            'database:show'            => 'Show databese table',
           ],
           'options'   => [
             '--dry-run' => 'Excute migration but olny get query output.',
             '--force'   => 'Force runing migration/databe query in production',
           ],
           'relation'  => [
-            'migrate'                => ['--dry-run', '--force'],
-            'migrate:reset'          => ['--dry-run', '--force'],
-            'database:create'        => ['--force'],
-            'database:drop'          => ['--force'],
+            'migrate'                   => ['--dry-run', '--force'],
+            'migrate:refresh'           => ['--dry-run', '--force'],
+            'migrate:reset'             => ['--dry-run', '--force'],
+            'migrate:rollback'          => ['--dry-run', '--force'],
+            'database:create'           => ['--force'],
+            'database:drop'             => ['--force'],
           ],
         ];
     }
@@ -92,7 +101,7 @@ class MigrationCommand extends Command
         return (new Prompt(style('Runing migration/database in production?')->textRed(), [
                 'yes' => fn () => true,
                 'no'  => fn () => false,
-            ]))
+            ], 'no'))
             ->selection([
                 style('yes')->textDim(),
                 ' no',
@@ -109,7 +118,7 @@ class MigrationCommand extends Command
         return (new Prompt($message, [
             'yes' => fn () => true,
             'no'  => fn () => false,
-        ]))
+        ], 'no'))
         ->selection([
             style('yes')->textDim(),
             ' no',
@@ -171,6 +180,57 @@ class MigrationCommand extends Command
         }
 
         $print->out();
+    }
+
+    public function refresh(): int
+    {
+        // drop and recreate database
+        if ($drop = $this->databaseDrop() > 0) {
+            return $drop;
+        }
+        if ($create = $this->databaseCreate(true) > 0) {
+            return $create;
+        }
+
+        // run migration
+
+        $print   = new Style();
+        $migrate = $this->baseMigrate();
+
+        $print->tap(info('Running migrartion'));
+
+        foreach ($migrate->sort() as $key => $val) {
+            $schema = require_once $val;
+            $up     = new Collection($schema['up'] ?? []);
+
+            if ($this->option('dry-run')) {
+                $up->each(function ($item) use ($print) {
+                    $print->push($item->__toString())->textDim()->new_lines(2);
+                });
+                continue;
+            }
+
+            $print->push($key)->textDim();
+            $print->repeat('.', 60 - strlen($key))->textDim();
+
+            try {
+                $success = $up->every(fn ($item) => $item->execute());
+            } catch (\Throwable $th) {
+                $success = false;
+                fail($th->getMessage())->out(false);
+            }
+
+            if ($success) {
+                $print->push('DONE')->textGreen()->new_lines();
+                continue;
+            }
+
+            $print->push('FAIL')->textRed()->new_lines();
+        }
+
+        $print->out();
+
+        return 0;
     }
 
     public function reset(): int
@@ -263,12 +323,12 @@ class MigrationCommand extends Command
         return 1;
     }
 
-    public function databaseCreate(): int
+    public function databaseCreate(bool $silent=false): int
     {
         $db_name = $this->DbName();
         $message = style("Do you want to create database `{$db_name}`?")->textBlue();
 
-        if (!$this->runInDev() || !$this->confirmation($message)) {
+        if (false === $silent && (!$this->runInDev() || !$this->confirmation($message))) {
             return 2;
         }
 
@@ -287,12 +347,12 @@ class MigrationCommand extends Command
         return 1;
     }
 
-    public function databaseDrop(): int
+    public function databaseDrop(bool $silent = false): int
     {
         $db_name = $this->DbName();
         $message = style("Do you want to drop database `{$db_name}`?")->textRed();
 
-        if (!$this->runInDev() || !$this->confirmation($message)) {
+        if (false === $silent && (!$this->runInDev() || !$this->confirmation($message))) {
             return 2;
         }
 
