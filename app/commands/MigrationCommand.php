@@ -27,15 +27,20 @@ class MigrationCommand extends Command
         'class'     => self::class,
         'fn'        => 'main',
       ], [
-        'cmd'       => 'migrate:refresh',
+        'cmd'       => 'migrate:fresh',
         'mode'      => 'full',
         'class'     => self::class,
-        'fn'        => 'refresh',
+        'fn'        => 'fresh',
       ], [
         'cmd'       => 'migrate:reset',
         'mode'      => 'full',
         'class'     => self::class,
         'fn'        => 'reset',
+      ], [
+        'cmd'       => 'migrate:refresh',
+        'mode'      => 'full',
+        'class'     => self::class,
+        'fn'        => 'refresh',
       ], [
         'cmd'       => 'migrate:rollback',
         'mode'      => 'full',
@@ -64,8 +69,9 @@ class MigrationCommand extends Command
         return [
           'commands'  => [
             'migrate'                  => 'Run migration (up)',
-            'migrate:refresh'          => 'Drop database and run migrations',
+            'migrate:fresh'            => 'Drop database and run migrations',
             'migrate:reset'            => 'Rolling back all migrations (down)',
+            'migrate:refresh'          => 'Rolling back and run migration all',
             'migrate:rollback'         => 'Rolling back last migrations (down)',
             'database:create'          => 'Create databese',
             'database:drop'            => 'Drop databese',
@@ -77,8 +83,9 @@ class MigrationCommand extends Command
           ],
           'relation'  => [
             'migrate'                   => ['--dry-run', '--force'],
-            'migrate:refresh'           => ['--dry-run', '--force'],
+            'migrate:fresh'             => ['--dry-run', '--force'],
             'migrate:reset'             => ['--dry-run', '--force'],
+            'migrate:refresh'           => ['--dry-run', '--force'],
             'migrate:rollback'          => ['--dry-run', '--force'],
             'database:create'           => ['--force'],
             'database:drop'             => ['--force'],
@@ -142,9 +149,15 @@ class MigrationCommand extends Command
 
     public function main()
     {
-        if (false === $this->runInDev()) {
-            return;
+        $this->migration();
+    }
+
+    public function migration(bool $silent = false): int
+    {
+        if (false === $this->runInDev() && false === $silent) {
+            return 2;
         }
+
         $print   = new Style();
         $migrate = $this->baseMigrate();
 
@@ -180,9 +193,11 @@ class MigrationCommand extends Command
         }
 
         $print->out();
+
+        return 0;
     }
 
-    public function refresh(): int
+    public function fresh(): int
     {
         // drop and recreate database
         if ($drop = $this->databaseDrop() > 0) {
@@ -233,9 +248,9 @@ class MigrationCommand extends Command
         return 0;
     }
 
-    public function reset(): int
+    public function reset(bool $silent = false): int
     {
-        if (false === $this->runInDev()) {
+        if (false === $this->runInDev() && false === $silent) {
             return 2;
         }
         $print   = new Style();
@@ -273,6 +288,22 @@ class MigrationCommand extends Command
         }
 
         $print->out();
+
+        return 0;
+    }
+
+    public function refresh(): int
+    {
+        if (false === $this->runInDev()) {
+            return 2;
+        }
+
+        if ($reset = $this->reset(true) > 0) {
+            return $reset;
+        }
+        if ($migration = $this->migration(true) > 0) {
+            return $migration;
+        }
 
         return 0;
     }
