@@ -24,8 +24,8 @@
         <div class="text-md">Build your costume API url is ready</div>
       </div>
       <div class="p-2 rounded-md shadow-lg border-gray-700 bg-gray-50">
-        <div class="text-lg font-semibold">Support tailwind and Vue </div>
-        <div class="text-md">This page creat using tailwind css. Of course vue application is optional if you wont</div>
+        <div class="text-lg font-semibold">Support tailwind </div>
+        <div class="text-md">This page creat using tailwind css.</div>
       </div>
     </div>
 </div>

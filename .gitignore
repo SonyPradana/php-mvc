@@ -7,3 +7,6 @@ yarn.lock
 composer.lock
 .php-cs-fixer.cache
 .phpunit.result.cache
+/.phpunit.cache
+/public/build
+/public/hot
