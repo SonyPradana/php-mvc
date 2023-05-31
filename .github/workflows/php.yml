@@ -5,37 +5,32 @@ on:
   pull_request:
 
 jobs:
-  build:
+  tests:
+    runs-on: ubuntu-latest
 
-    runs-on: ubuntu-20.04
+    strategy:
+      fail-fast: true
+      matrix:
+        php: [7.4, 8.0]
+
+    name: PHP ${{ matrix.php }}
 
     steps:
-    - uses: actions/checkout@v2
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-    - name: Validate composer.json and composer.lock
-      run: composer validate
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: libxml, mbstring, zip, pcntl
+          coverage: none
 
-    - name: Cache Composer packages
-      id: composer-cache
-      uses: actions/cache@v2
-      with:
-        path: vendor
-        key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
-        restore-keys: |
-          ${{ runner.os }}-php-
+      - name: Install Composer dependencies
+        run: composer install --prefer-dist --no-interaction --no-progress
 
-    - name: Install dependencies
-      if: steps.composer-cache.outputs.cache-hit != 'true'
-      run: composer install --prefer-dist --no-progress --no-suggest
+      - name: Copy environment file
+        run: cp .env.example .env
 
-    - name: copy file
-      uses: canastro/copy-file-action@master
-      with:
-        source: ".env.example"
-        target: ".env"
-
-    - name: reload autoload
-      run: composer dump-autoload
-
-    - name: Run test suite
-      run: composer test:unit
+      - name: Execute tests
+        run: vendor/bin/phpunit
