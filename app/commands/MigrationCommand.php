@@ -161,7 +161,7 @@ class MigrationCommand extends Command
         $print   = new Style();
         $migrate = $this->baseMigrate();
 
-        $print->tap(info('Running migrartion'));
+        $print->tap(info('Running migration'));
 
         foreach ($migrate->sort() as $key => $val) {
             $schema = require_once $val;
@@ -212,7 +212,7 @@ class MigrationCommand extends Command
         $print   = new Style();
         $migrate = $this->baseMigrate();
 
-        $print->tap(info('Running migrartion'));
+        $print->tap(info('Running migration'));
 
         foreach ($migrate->sort() as $key => $val) {
             $schema = require_once $val;
@@ -253,12 +253,48 @@ class MigrationCommand extends Command
         if (false === $this->runInDev() && false === $silent) {
             return 2;
         }
+        info('Rolling back all migrations')->out(false);
+        $rollback = $this->rollbacks(null);
+
+        return $rollback;
+    }
+
+    public function refresh(): int
+    {
+        if (false === $this->runInDev()) {
+            return 2;
+        }
+
+        if ($reset = $this->reset(true) > 0) {
+            return $reset;
+        }
+        if ($migration = $this->migration(true) > 0) {
+            return $migration;
+        }
+
+        return 0;
+    }
+
+    public function rollback(): int
+    {
+        $take = $this->take ?? 1;
+        if ($this->take) {
+            info("Rolling back {$take} migrations")->out(false);
+        }
+
+        return $this->rollbacks($take);
+    }
+
+    public function rollbacks(?int $take): int
+    {
         $print   = new Style();
         $migrate = $this->baseMigrate();
 
-        $print->tap(info('Rolling back all migrations'));
+        if (null === $take) {
+            $take = $migrate->lenght();
+        }
 
-        foreach ($migrate->sortDesc() as $key => $val) {
+        foreach ($migrate->sortDesc()->take($take) as $key => $val) {
             $schema = require_once $val;
             $down   = new Collection($schema['down'] ?? []);
 
@@ -290,68 +326,6 @@ class MigrationCommand extends Command
         $print->out();
 
         return 0;
-    }
-
-    public function refresh(): int
-    {
-        if (false === $this->runInDev()) {
-            return 2;
-        }
-
-        if ($reset = $this->reset(true) > 0) {
-            return $reset;
-        }
-        if ($migration = $this->migration(true) > 0) {
-            return $migration;
-        }
-
-        return 0;
-    }
-
-    public function rollback(): int
-    {
-        if (false === $this->runInDev()) {
-            return 2;
-        }
-        $print   = new Style();
-        $migrate = $this->baseMigrate()->sortDesc();
-        $first   = array_key_first($migrate->toArray());
-        $item    = $migrate->first();
-
-        $print->tap(info('Rolling back migrations'));
-
-        $schema = require_once $item;
-        $down   = new Collection($schema['down'] ?? []);
-
-        if ($this->option('dry-run')) {
-            $down->each(function ($item) use ($print) {
-                $print->push($item->__toString())->textDim()->new_lines(2);
-            });
-        }
-
-        $print->push($first)->textDim();
-        $print->repeat('.', 60 - strlen($first))->textDim();
-
-        try {
-            $success = $down->every(fn ($item) => $item->execute());
-        } catch (\Throwable $th) {
-            $success = false;
-            fail($th->getMessage())->out(false);
-        }
-
-        if ($success) {
-            $print->push('DONE')->textGreen()
-                ->new_lines()
-                ->out();
-
-            return 0;
-        }
-
-        $print->push('FAIL')->textRed()
-            ->new_lines()
-            ->out();
-
-        return 1;
     }
 
     public function databaseCreate(bool $silent=false): int
