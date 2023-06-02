@@ -7,6 +7,7 @@ use System\Console\Command;
 use System\Console\Prompt;
 use System\Console\Style\Style;
 use System\Console\Traits\PrintHelpTrait;
+use System\Database\MyQuery;
 use System\Support\Facades\PDO;
 use System\Support\Facades\Schema;
 
@@ -376,15 +377,19 @@ class MigrationCommand extends Command
         return 1;
     }
 
-    public function databaseShow()
+    public function databaseShow(): int
     {
+        if ($this->option('table-name')) {
+            return $this->tableShow($this->option('table-name', null));
+        }
+
         $db_name = $this->DbName();
         info('showing database')->out(false);
 
         $tables = PDO::instance()
         ->query('SHOW DATABASES')
             ->query('
-                SELECT table_name, create_time
+                SELECT table_name, create_time, ROUND((DATA_LENGTH + INDEX_LENGTH) / 1024 / 1024) AS `size`
                 FROM information_schema.tables
                 WHERE table_schema = :db_name')
             ->bind(':db_name', $db_name)
@@ -399,12 +404,47 @@ class MigrationCommand extends Command
         foreach ($tables as $table) {
             $name   = $table['table_name'];
             $time   = $table['create_time'];
-            $lenght = strlen($name) + strlen($time);
+            $size   = $table['size'];
+            $lenght = strlen($name) + strlen($time) + strlen($size);
 
-            style($name)->textDim()
+            style($name)
+                ->push(' ' . $size . ' Mb ')->textDim()
                 ->repeat('.', 60 - $lenght)->textDim()
-                ->push($time)
+                ->push(' ' . $time)
                 ->out();
         }
+
+        return 0;
+    }
+
+    public function tableShow(string $table): int
+    {
+        $table = (new MyQuery(PDO::instance()))->table($table)->info();
+        $print = new Style("\n");
+
+        $print->push('column')->textYellow()->bold()->resetDecorate()->new_lines();
+        foreach ($table as $column) {
+            $will_print = [];
+
+            if ($column['IS_NULLABLE'] === 'YES') {
+                $will_print[] = 'nullable';
+            }
+            if ($column['COLUMN_KEY'] === 'PRI') {
+                $will_print[] = 'primary';
+            }
+
+            $info   = implode(', ', $will_print);
+            $lenght = strlen($column['COLUMN_NAME']) + strlen($column['COLUMN_TYPE']) + strlen($info);
+
+            $print->push($column['COLUMN_NAME'])->bold()->resetDecorate();
+            $print->push(' ' . $info . ' ')->textDim();
+            $print->repeat('.', 60 - $lenght)->textDim();
+            $print->push(' ' . $column['COLUMN_TYPE']);
+            $print->new_lines();
+        }
+
+        $print->out();
+
+        return 0;
     }
 }
