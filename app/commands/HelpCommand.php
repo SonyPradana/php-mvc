@@ -154,57 +154,57 @@ class HelpCommand extends Command
         }
     }
 
-   public function commandHelp()
-   {
-       if (!isset($this->OPTION[0])) {
-           style('')
-                ->tap(info('To see help command, place provide command_name'))
-               ->textYellow()
-               ->push('php cli help <command_nama>')->textDim()
-               ->new_lines()
-               ->push('              ^^^^^^^^^^^^')->textRed()
-               ->out()
-           ;
+    public function commandHelp()
+    {
+        if (!isset($this->OPTION[0])) {
+            style('')
+                 ->tap(info('To see help command, place provide command_name'))
+                ->textYellow()
+                ->push('php cli help <command_nama>')->textDim()
+                ->new_lines()
+                ->push('              ^^^^^^^^^^^^')->textRed()
+                ->out()
+            ;
 
-           return;
-       }
+            return;
+        }
 
-       $className = $this->OPTION[0];
-       if (Str::contains(':', $className)) {
-           $className = explode(':', $className);
-           $className = $className[0];
-       }
+        $className = $this->OPTION[0];
+        if (Str::contains(':', $className)) {
+            $className = explode(':', $className);
+            $className = $className[0];
+        }
 
-       $className .= 'Command';
-       $className = ucfirst($className);
-       $className = 'App\\Commands\\' . $className;
+        $className .= 'Command';
+        $className = ucfirst($className);
+        $className = 'App\\Commands\\' . $className;
 
-       if (class_exists($className)) {
-           $class = new $className([]);
+        if (class_exists($className)) {
+            $class = new $className([]);
 
-           $res = app()->call([$class, 'printHelp']) ?? [];
+            $res = app()->call([$class, 'printHelp']) ?? [];
 
-           if (isset($res['commands']) && $res['commands'] != null) {
-               $this->command_describes = $res['commands'];
-           }
+            if (isset($res['commands']) && $res['commands'] != null) {
+                $this->command_describes = $res['commands'];
+            }
 
-           if (isset($res['options']) && $res['options'] != null) {
-               $this->option_describes = $res['options'];
-           }
+            if (isset($res['options']) && $res['options'] != null) {
+                $this->option_describes = $res['options'];
+            }
 
-           if (isset($res['relation']) && $res['relation'] != null) {
-               $this->command_relation = $res['relation'];
-           }
+            if (isset($res['relation']) && $res['relation'] != null) {
+                $this->command_relation = $res['relation'];
+            }
 
-           style('Avilabe command:')->new_lines()->out();
-           $this->printCommands(new Style())->out();
+            style('Avilabe command:')->new_lines()->out();
+            $this->printCommands(new Style())->out();
 
-           style('Avilable options:')->new_lines()->out();
-           $this->printOptions(new Style())->out();
+            style('Avilable options:')->new_lines()->out();
+            $this->printOptions(new Style())->out();
 
-           return;
-       }
+            return;
+        }
 
-       warn("Help for `{$this->OPTION[0]}` command not found")->out(false);
-   }
+        warn("Help for `{$this->OPTION[0]}` command not found")->out(false);
+    }
 }

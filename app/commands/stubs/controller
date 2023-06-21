@@ -1,20 +1,18 @@
 #!/usr/bin/env php
 <?php
 
-use Apps\Controller;
+declare(strict_types=1);
+
+namespace App\Controllers;
+
+use System\Http\Response;
 
 class __controller__Controller extends Controller
 {
-  public function index()
-  {
-    $error =[];
-
-    return $this->view('__controller__', [
-      "title"         => "Documnet Title",
-      "discription"   => "",
-      "keywords"      => "",
-      'error'         => $error,
-      "message"       => []
-    ]);
-  }
+    public function index(): Response
+    {
+        return view('__controller__', [
+            "title" => "Documnet Title",
+        ]);
+    }
 }

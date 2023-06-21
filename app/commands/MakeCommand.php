@@ -7,16 +7,26 @@ use System\Console\Traits\CommandTrait;
 use System\Support\Facades\DB;
 
 use function DI\env;
+use function System\Console\fail;
+use function System\Console\info;
+use function System\Console\ok;
+use function System\Console\warn;
 
 class MakeCommand extends Command
 {
     use CommandTrait;
     public static array $command = [
         [
-            'cmd'       => 'make',
-            'mode'      => 'start',
+            'cmd'       => 'make:controller',
+            'mode'      => 'full',
             'class'     => MakeCommand::class,
-            'fn'        => 'switcher',
+            'fn'        => 'make_controller',
+        ],
+        [
+            'cmd'       => 'make:view',
+            'mode'      => 'full',
+            'class'     => MakeCommand::class,
+            'fn'        => 'make_view',
         ],
     ];
 
@@ -24,7 +34,7 @@ class MakeCommand extends Command
     {
         return [
             'commands'  => [
-                'make:controller' => 'Generate new controller and view',
+                'make:controller' => 'Generate new controller',
                 'make:view'       => 'Generate new view',
                 'make:service'    => 'Generate new service',
                 'make:model'      => 'Generate new model',
@@ -43,98 +53,48 @@ class MakeCommand extends Command
         ];
     }
 
-    public function switcher()
+    public function make_controller(): int
     {
-        // get category command
-        $makeAction = explode(':', $this->CMD);
+        info('Making controller file...')->out(false);
 
-        // get naming class
-        if ($this->OPTION[0] == '') {
-            echo "\tArgument name cant be null";
-            echo "\n\t>>\t" . $this->textGreen('php') . ' cli ' . $this->textGreen('make:') . $makeAction[1] . $this->textRed(' not_null');
-            exit;
+        $success = $this->makeTemplate($this->OPTION[0], [
+            'template_location' => commands_path() . 'stubs/controller',
+            'save_location'     => controllers_path(),
+            'pattern'           => '__controller__',
+            'surfix'            => 'Controller.php',
+        ]);
+
+        if ($success) {
+            ok('Finish created controller')->out();
+
+            return 0;
         }
 
-        // stopwatch
-        $watch_start = microtime(true);
+        fail('Failed Create controller')->out();
 
-        // find router
-        switch ($makeAction[1]) {
-            case 'controller':
-                $this->make_controller();
-                $this->make_view();
-                break;
-
-            case 'view':
-                $this->make_view();
-                break;
-
-            case 'service':
-                $this->make_servises();
-                break;
-
-            case 'model':
-                $this->make_model();
-                break;
-
-            case 'models':
-                $this->make_models();
-                break;
-
-            case 'command':
-                $this->make_commad();
-                break;
-
-            default:
-                echo $this->textRed("\nArgumnet not register");
-                break;
-        }
-
-        // end stopwatch
-        $watch_end = round(microtime(true) - $watch_start, 3) * 1000;
-        echo "\nDone in " . $this->textYellow($watch_end . "ms\n");
+        return 1;
     }
 
-    public function make_controller()
+    public function make_view(): int
     {
-        echo $this->textYellow('Making controller file...');
-        echo $this->textDim("\n...\n");
+        info('Making view file...')->out(false);
 
-        // main code
         $success = $this->makeTemplate($this->OPTION[0], [
-      'template_location' => '/app/core/template/controller',
-      'save_location'     => controllers_path(),
-      'pattern'           => '__controller__',
-      'surfix'            => 'Controller.php',
-    ]);
+            'template_location' => commands_path() . 'stubs/view',
+            'save_location'     => view_path(),
+            'pattern'           => '__view__',
+            'surfix'            => '.template.php',
+        ]);
 
-        // the result
         if ($success) {
-            echo $this->textGreen("\nFinish created controller\n");
-        } else {
-            echo $this->textRed("\nFailed Create controller\n");
+            ok('Finish created view file')->out();
+
+            return 0;
         }
-    }
 
-    public function make_view()
-    {
-        echo $this->textYellow('Making view file...');
-        echo $this->textDim("\n...\n");
+        fail('Failed Create view file')->out();
 
-        // main code
-        $success = $this->makeTemplate($this->OPTION[0], [
-      'template_location' => '/app/core/template/view',
-      'save_location'     => view_path(),
-      'pattern'           => '__view__',
-      'surfix'            => '.template.php',
-    ]);
-
-        // the result
-        if ($success) {
-            echo $this->textGreen("\nFinish created view file\n");
-        } else {
-            echo $this->textRed("\nFailed Create view file\n");
-        }
+        return 1;
     }
 
     public function make_servises()
@@ -228,23 +188,17 @@ class MakeCommand extends Command
     private function makeTemplate(string $argument, array $make_option, string $folder = ''): bool
     {
         $folder = ucfirst($folder);
-        if (file_exists(base_path() . $make_option['save_location'] . $folder . $argument . $make_option['surfix'])) {
-            echo $this->textDim('file alredy exis');
+        if (file_exists($file_name = $make_option['save_location'] . $folder . $argument . $make_option['surfix'])) {
+            warn('File already exist')->out(false);
 
             return false;
-        } elseif (!file_exists(base_path() . $make_option['save_location'] . $folder)) {
-            mkdir(base_path() . $make_option['save_location'] . $folder);
         }
 
-        $get_template = file_get_contents(base_path() . $make_option['template_location']);
-        // frist replace ucfrist pattern by at @
+        $get_template = file_get_contents($make_option['template_location']);
         $get_template = str_replace('@' . $make_option['pattern'], ucfirst($argument), $get_template);
-        // replace patternt
         $get_template = str_replace($make_option['pattern'], $argument, $get_template);
-        // remove helper comment
         $get_template = preg_replace('/^.+\n/', '', $get_template);
-        // saving
-        $isCopied = file_put_contents(base_path() . $make_option['save_location'] . $folder . $argument . $make_option['surfix'], $get_template);
+        $isCopied     = file_put_contents($file_name, $get_template);
 
         return $isCopied === false ? false : true;
     }
