@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 
-use System\Apps\Service;
+declare(strict_types=1);
 
 class __service__Service extends Service
 {
@@ -14,10 +14,5 @@ class __service__Service extends Service
           'headers' => ['HTTP/1.1 200 Oke']
         ];
     }
-
-  public function Test_404(array $request): array
-  {
-    return $this->error(404);
-  }
 }
 

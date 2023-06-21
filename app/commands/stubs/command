@@ -1,10 +1,18 @@
 #!/usr/bin/env php
 <?php
 
-use App\Commands;
+declare(strict_types=1);
+
+namespace App\Commands;
+
+use System\Console\Command;
+use System\Console\Traits\PrinterTrait;
+use function System\Console\style;
 
 class __command__Command extends Command
 {
+    use PrinterTrait;
+
     public static array $command = [
       [
         "cmd"       => "__command__",
@@ -18,13 +26,13 @@ class __command__Command extends Command
       {
           return [
             'commands' => [],
-            'options'   => [],
-            'relation'  => [],
+            'options'  => [],
+            'relation' => [],
           ];
       }
 
     public function main()
     {
-      echo $this->textGreen("__command__");
+        style("__command__")->out(false);
     }
 }

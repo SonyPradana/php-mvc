@@ -21,12 +21,31 @@ class MakeCommand extends Command
             'mode'      => 'full',
             'class'     => MakeCommand::class,
             'fn'        => 'make_controller',
-        ],
-        [
+        ], [
             'cmd'       => 'make:view',
             'mode'      => 'full',
             'class'     => MakeCommand::class,
             'fn'        => 'make_view',
+        ], [
+            'cmd'       => 'make:services',
+            'mode'      => 'full',
+            'class'     => MakeCommand::class,
+            'fn'        => 'make_services',
+        ], [
+            'cmd'       => 'make:model',
+            'mode'      => 'full',
+            'class'     => MakeCommand::class,
+            'fn'        => 'make_model',
+        ], [
+            'cmd'       => 'make:models',
+            'mode'      => 'full',
+            'class'     => MakeCommand::class,
+            'fn'        => 'make_models',
+        ], [
+            'cmd'       => 'make:command',
+            'mode'      => 'full',
+            'class'     => MakeCommand::class,
+            'fn'        => 'make_command',
         ],
     ];
 
@@ -97,83 +116,88 @@ class MakeCommand extends Command
         return 1;
     }
 
-    public function make_servises()
+    public function make_services(): int
     {
-        echo $this->textYellow('Making service file...');
-        echo $this->textDim("\n...\n");
+        info('Making service file...')->out(false);
 
-        // main code
         $success = $this->makeTemplate($this->OPTION[0], [
-      'template_location' => '/app/core/template/service',
-      'save_location'     => services_path(),
-      'pattern'           => '__service__',
-      'surfix'            => 'Service.php',
-    ]);
+            'template_location' => commands_path() . 'stubs/service',
+            'save_location'     => services_path(),
+            'pattern'           => '__service__',
+            'surfix'            => 'Service.php',
+        ]);
 
-        // the result
         if ($success) {
-            echo $this->textGreen("\nFinish created services file");
-        } else {
-            echo $this->textRed("\nFailed Create services file");
+            ok('Finish created services file')->out();
+
+            return 0;
         }
+
+        fail('Failed Create services file')->out();
+
+        return 1;
     }
 
-    public function make_model()
+    public function make_model(): int
     {
-        echo $this->textYellow('Making model file...');
-        echo $this->textDim("\n...\n");
+        info('Making model file...')->out(false);
 
-        // main code
         $success = $this->makeTemplate($this->OPTION[0], [
-      'template_location' => '/app/core/template/model',
-      'save_location'     => model_path(),
-      'pattern'           => '__model__',
-      'surfix'            => '.php',
-    ], $this->OPTION[0] . '/');
+            'template_location' => commands_path() . 'stubs/model',
+            'save_location'     => model_path(),
+            'pattern'           => '__model__',
+            'surfix'            => '.php',
+        ], $this->OPTION[0] . '/');
 
-        // fill table name
-        if (substr($this->OPTION[1], 0, 12) == '--table-name') {
-            $table_name = explode('=', $this->OPTION[1])[1];
-            $this->FillModelDatabase(
-                model_path() . $this->OPTION[0] . '/' . $this->OPTION[0] . '.php',
-                $table_name);
+        if ($this->option('table-name', false)) {
+            $table_name = $this->option('table-name');
+            // $this->FillModelDatabase(
+            //     model_path() . $this->OPTION[0] . '/' . $this->OPTION[0] . '.php',
+            //     $table_name
+            // );
         }
 
-        // the result
         if ($success) {
-            echo $this->textGreen("\nFinish created model file");
-        } else {
-            echo $this->textRed("\nFailed Create model file");
+            ok('Finish created model file')->out();
+
+            return 0;
         }
+
+        fail('Failed Create model file')->out();
+
+        return 1;
     }
 
-    public function make_models()
+    public function make_models(): int
     {
-        echo $this->textYellow('Making models file...');
-        echo $this->textDim("\n...\n");
+        info('Making models file...')->out(false);
 
-        // main code
-        $success = $this->makeTemplate($this->OPTION[0], [
-      'template_location' => '/app/core/template/models',
-      'save_location'     => model_path(),
-      'pattern'           => '__models__',
-      'surfix'            => 's.php',
-    ], $this->OPTION[0] . '/');
+        $name = $this->OPTION[0];
 
-        // fill table name
-        if (substr($this->OPTION[1], 0, 12) == '--table-name') {
-            $table_name = explode('=', $this->OPTION[1])[1];
+        $success = $this->makeTemplate($name, [
+            'template_location' => commands_path() . 'stubs/models',
+            'save_location'     => model_path(),
+            'pattern'           => '__models__',
+            'surfix'            => 's.php',
+        ], $name . '/');
+
+        if ($this->option('table-name', false)) {
+            $table_name = $this->option('table-name');
             $this->FillModelsDatabase(
-                model_path() . $this->OPTION[0] . '/' . $this->OPTION[0] . 's.php',
-                $table_name);
+                model_path() . ucfirst($name) . '/' . $name . 's.php',
+                $table_name
+            );
         }
 
-        // the result
         if ($success) {
-            echo $this->textGreen("\nFinish created models file");
-        } else {
-            echo $this->textRed("\nFailed Create models file");
+            ok('Finish created models file')->out();
+
+            return 0;
         }
+
+        fail('Failed Create model file')->out();
+
+        return 1;
     }
 
     /**
@@ -194,6 +218,10 @@ class MakeCommand extends Command
             return false;
         }
 
+        if ('' !== $folder && !is_dir($make_option['save_location'] . $folder)) {
+            mkdir($make_option['save_location'] . $folder);
+        }
+
         $get_template = file_get_contents($make_option['template_location']);
         $get_template = str_replace('@' . $make_option['pattern'], ucfirst($argument), $get_template);
         $get_template = str_replace($make_option['pattern'], $argument, $get_template);
@@ -203,37 +231,35 @@ class MakeCommand extends Command
         return $isCopied === false ? false : true;
     }
 
-    public function make_commad()
+    public function make_command()
     {
-        echo $this->textYellow('Making command file...');
-        echo $this->textDim("\n...\n");
+        info('Making command file...')->out(false);
+        $name    = $this->OPTION[0];
+        $success = $this->makeTemplate($name, [
+            'template_location' => commands_path() . 'stubs/command',
+            'save_location'     => commands_path(),
+            'pattern'           => '__command__',
+            'surfix'            => 'Command.php',
+        ]);
 
-        // main code
-        $success = $this->makeTemplate($this->OPTION[0], [
-      'template_location' => '/app/core/template/command',
-      'save_location'     => commands_path(),
-      'pattern'           => '__command__',
-      'surfix'            => 'Command.php',
-    ]);
-
-        // the result
         if ($success) {
-            // add command config for calling new command
-            $geContent = file_get_contents(config_path(true) . 'command.config.php');
+            $geContent = file_get_contents(config_path() . 'command.config.php');
             $geContent = str_replace(
                 '// more command here',
+                "// {$name} \n\t" . 'App\\Commands\\' . $name . 'Command::$' . "command\n\t// more command here",
+                $geContent
+            );
 
-                '// ' . $this->OPTION[0] . "\n\t" .
-                $this->OPTION[0] . 'Command::$' . "command\n" .
-                "\t// more command here",
-                $geContent);
+            file_put_contents(config_path() . 'command.config.php', $geContent);
 
-            file_put_contents(config_path(true) . 'command.config.php', $geContent);
+            ok('Finish created command file')->out();
 
-            echo $this->textGreen("\nFinish created command file");
-        } else {
-            echo $this->textRed("\nFailed Create command file");
+            return 0;
         }
+
+        fail("\nFailed Create command file")->out();
+
+        return 1;
     }
 
     /**
@@ -290,6 +316,8 @@ class MakeCommand extends Command
      */
     private function FillModelsDatabase(string $model_location, string $table_name)
     {
+        info($model_location)->out();
+        info($table_name)->out();
         $getContent = file_get_contents($model_location);
         $getContent = str_replace('__table__', $table_name, $getContent);
         $isCopied   = file_put_contents($model_location, $getContent);
