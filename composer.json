@@ -12,12 +12,12 @@
   "require": {
     "php": "^7.4 || ^8.0",
     "sonypradana/php-library": "0.x-dev",
-    "vlucas/phpdotenv": "^5.2",
+    "vlucas/phpdotenv": "^5.5",
     "react/event-loop": "^1.4"
   },
   "require-dev": {
     "phpunit/phpunit": "^9.6",
-    "friendsofphp/php-cs-fixer": "^3.17",
+    "friendsofphp/php-cs-fixer": "^3.18",
     "filp/whoops": "^2.15",
     "phpstan/phpstan": "^1.10"
   },
