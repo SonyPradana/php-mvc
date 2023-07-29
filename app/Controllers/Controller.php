@@ -11,7 +11,7 @@ class Controller extends BaseController
     /**
      * @param array<string, mixed> $portal
      */
-    public function view(string $view, array $portal = []): Response
+    public static function renderView(string $view, array $portal = []): Response
     {
         $headers = $portal['headers'] ?? [];
         $status  = $portal['headers']['status'] ?? 200;
@@ -22,7 +22,7 @@ class Controller extends BaseController
         return new Response($render, $status, $headers);
     }
 
-    public static function view_exists(string $view): bool
+    public static function viewExists(string $view): bool
     {
         return file_exists(view_path() . $view . '.template.php');
     }
