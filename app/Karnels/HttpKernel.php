@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Karnels;
 
-use App\Controllers\Controller;
 use System\Container\Container;
 use System\Integrate\Http\Karnel;
 use System\Router\RouteDispatcher;
@@ -42,20 +41,16 @@ class HttpKernel extends Karnel
             // found
             fn ($callable, $param) => $this->app->call($callable, $param),
             // not found
-            fn ($path) => (new Controller())->view(
-                'pages/404', [
-                    'path'    => $path,
-                    'headers' => ['status' => 404],
-                ]
-            ),
+            fn ($path) => view('pages/404', [
+                'path'    => $path,
+                'headers' => ['status' => 404],
+            ]),
             // method not allowed
-            fn ($path, $method) => (new Controller())->view(
-                'pages/405', [
-                    'path'    => $path,
-                    'method'  => $method,
-                    'headers' => ['status' => 405],
-                ]
-            )
+            fn ($path, $method) => view('pages/405', [
+                'path'    => $path,
+                'method'  => $method,
+                'headers' => ['status' => 405],
+            ])
         );
 
         return [

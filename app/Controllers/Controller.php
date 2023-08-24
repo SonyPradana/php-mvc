@@ -4,7 +4,6 @@ namespace App\Controllers;
 
 use System\Http\Response;
 use System\Router\Controller as BaseController;
-use System\View\Templator;
 
 class Controller extends BaseController
 {
@@ -13,13 +12,7 @@ class Controller extends BaseController
      */
     public static function renderView(string $view, array $portal = []): Response
     {
-        $headers = $portal['headers'] ?? [];
-        $status  = $portal['headers']['status'] ?? 200;
-        $data    = array_filter($portal, fn ($key) => $key !== 'headers', ARRAY_FILTER_USE_KEY);
-        $t       = new Templator(view_path(), cache_path());
-        $render  = $t->render($view . '.template.php', $data);
-
-        return new Response($render, $status, $headers);
+        return view($view, $portal);
     }
 
     public static function viewExists(string $view): bool
