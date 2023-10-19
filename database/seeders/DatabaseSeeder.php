@@ -4,7 +4,7 @@ namespace Database\Seeders;
 
 use System\Database\Seeder\Seeder;
 
-class Users extends Seeder
+class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
