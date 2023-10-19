@@ -10,9 +10,9 @@ return [
             $column('pwd')->varChar(500);
 
             $column->primaryKey('user');
-        })
+        }),
     ],
     'down' => [
         Schema::drop()->table('users'),
-    ]
+    ],
 ];

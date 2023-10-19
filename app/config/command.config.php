@@ -7,5 +7,6 @@ return array_merge(
     System\Integrate\Console\ServeCommand::$command,
     System\Integrate\Console\RouteCommand::$command,
     System\Integrate\Console\MigrationCommand::$command,
+    System\Integrate\Console\SeedCommand::$command,
     // more command here
 );

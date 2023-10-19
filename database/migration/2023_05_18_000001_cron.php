@@ -1,6 +1,5 @@
 <?php
 
-use System\Database\MySchema;
 use System\Database\MySchema\Table\Create;
 use System\Support\Facades\Schema;
 
@@ -13,9 +12,9 @@ return [
             $column('date_create')->int(15);
 
             $column->primaryKey('id');
-        })
+        }),
     ],
     'down' => [
         Schema::drop()->table('cron'),
-    ]
+    ],
 ];
