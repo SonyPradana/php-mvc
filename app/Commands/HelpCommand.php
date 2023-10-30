@@ -10,19 +10,13 @@ class HelpCommand extends ConsoleHelpCommand
     public static array $command = [
         [
           'cmd'       => ['-h', '--help'],
-          'mode'      => 'full',
-          'class'     => self::class,
-          'fn'        => 'main',
+          'fn'        => [self::class, 'main'],
         ], [
           'cmd'       => '--list',
-          'mode'      => 'full',
-          'class'     => self::class,
-          'fn'        => 'commandList',
+          'fn'        => [self::class, 'commandList'],
         ], [
           'cmd'       => 'help',
-          'mode'      => 'full',
-          'class'     => self::class,
-          'fn'        => 'commandhelp',
+          'fn'        => [self::class, 'commandhelp'],
         ],
     ];
 

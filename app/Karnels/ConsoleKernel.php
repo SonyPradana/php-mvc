@@ -6,7 +6,7 @@ namespace App\Karnels;
 
 use System\Container\Container;
 use System\Integrate\Console\Karnel;
-use System\Integrate\ValueObjects\CommadMap;
+use System\Integrate\ValueObjects\CommandMap;
 
 class ConsoleKernel extends Karnel
 {
@@ -40,7 +40,7 @@ class ConsoleKernel extends Karnel
         /** @var CommandMap[] */
         $maps = [];
         foreach ($commands as $command) {
-            $maps[] = new CommadMap($command);
+            $maps[] = new CommandMap($command);
         }
 
         return $maps;

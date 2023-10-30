@@ -19,20 +19,14 @@ class CronCommand extends ConsoleCronCommand
 
     public static array $command = [
         [
-            'cmd'       => 'cron',
-            'mode'      => 'full',
-            'class'     => self::class,
-            'fn'        => 'main',
+            'pattern'       => 'cron',
+            'fn'            => [self::class, 'main'],
         ], [
-            'cmd'       => 'cron:list',
-            'mode'      => 'full',
-            'class'     => self::class,
-            'fn'        => 'list',
+            'pattern'       => 'cron:list',
+            'fn'            => [self::class, 'list'],
         ], [
-            'cmd'       => 'cron:work',
-            'mode'      => 'full',
-            'class'     => self::class,
-            'fn'        => 'work',
+            'pattern'       => 'cron:work',
+            'fn'            => [self::class, 'work'],
         ],
     ];
 
@@ -41,7 +35,7 @@ class CronCommand extends ConsoleCronCommand
         $print = new Style("\n");
         $print
             ->push('Simulate Cron in terminal (every minute)')->textBlue()
-            ->new_lines(2)
+            ->newLines(2)
             ->push('type ctrl+c to stop')->textGreen()->underline()
             ->out();
 
