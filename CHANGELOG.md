@@ -5,6 +5,41 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [1.0.0-beta.5] - 2023-10-30
+### Changed
+- Change class name of `CommandMap`.
+- Refactor command mapper to newst pattern.
+
+## [1.0.0-beta.4] - 2023-10-19
+### Fixed
+- Fixed typo class name.
+
+## [1.0.0-beta.3] - 2023-08-24
+### Added
+- Added seed command integration.
+### Fixed
+- Fixed depreceted render view instead using view
+
+## [1.0.0-beta.2] - 2023-08-15
+### Fixed
+- Migration path not same with migration folder.
+
+## [1.0.0-beta.1] - 2023-08-14
+### Added
+- Added `flip/whoops` for handle error message.
+- Added Database Provider.
+- Supported integrate commands (php-mvc).
+
+### Changed
+- New autoload strategy.
+- Updated stub file.
+- Used parent Karnel (extends).
+- Used `view` to render template (costumize).
+- Log cron command using costume interface.
+- Using new statregy to run miggration command.
+- Used `vite` as frontend developement.
+
 ## [0.2.1] - 2021-08-13
 ### Added
 - Add ```Request::class``` to handle request
