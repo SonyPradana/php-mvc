@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.0-beta.6] - 2023-12-14
+### Added
+- Added `ViewCommand::class` for clear and compile templator files.
+
 ## [1.0.0-beta.5] - 2023-10-30
 ### Changed
 - Change class name of `CommandMap`.
