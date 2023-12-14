@@ -8,5 +8,6 @@ return array_merge(
     System\Integrate\Console\RouteCommand::$command,
     System\Integrate\Console\MigrationCommand::$command,
     System\Integrate\Console\SeedCommand::$command,
+    System\Integrate\Console\ViewCommand::$command,
     // more command here
 );
