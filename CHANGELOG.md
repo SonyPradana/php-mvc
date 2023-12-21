@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.0-beta.7] - 2023-12-21
+### Changed
+- Update Vite vertion 5.
+- Change default env file for applicaation and database name.
+
 ## [1.0.0-beta.6] - 2023-12-14
 ### Added
 - Added `ViewCommand::class` for clear and compile templator files.
