@@ -14,7 +14,7 @@ class ViewServiceProvider extends ServiceProvider
     public function boot()
     {
         $resource_component = [
-            'vite' => new Vite($this->app->public_path(), 'build/'),
+            'vite' => new Vite($this->app->public_path(), '/build/'),
         ];
         $this->app->set(
             'view.response',
@@ -24,6 +24,6 @@ class ViewServiceProvider extends ServiceProvider
                         ->render("{$view}.template.php", array_merge($data, $resource_component))
                 )
         );
-        $this->app->set('vite.gets', fn () => new Vite($this->app->public_path(), 'build/'));
+        $this->app->set('vite.gets', fn () => new Vite($this->app->public_path(), '/build/'));
     }
 }
