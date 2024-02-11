@@ -25,23 +25,23 @@ class DatabaseServiceProvider extends ServiceProvider
         $this->app->set('dsn.sql', $sql_dsn);
 
         $this->app->set(
-            \System\Database\MyPDO::class,
+            MyPDO::class,
             fn () => new MyPDO($sql_dsn)
         );
 
         $this->app->set(
-            \System\Database\MySchema\MyPDO::class,
-            fn () => new \System\Database\MySchema\MyPDO($sql_dsn)
+            MySchema\MyPDO::class,
+            fn () => new MySchema\MyPDO($sql_dsn)
         );
 
         $this->app->set(
             'MyQuery',
-            fn () => new MyQuery($this->app->get(\System\Database\MyPDO::class))
+            fn () => new MyQuery($this->app->get(MyPDO::class))
         );
 
         $this->app->set(
             'MySchema',
-            fn () => new MySchema($this->app->get(\System\Database\MySchema\MyPDO::class))
+            fn () => new MySchema($this->app->get(MySchema\MyPDO::class))
         );
 
         // register facede

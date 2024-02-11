@@ -11,11 +11,11 @@ abstract class Service
     public const CODE_NOT_FOUND            = 404;
     public const CODE_METHOD_NOT_ALLOWED   = 405;
 
-    protected \DefaultService $error;
+    protected DefaultService $error;
 
     public function __construct()
     {
-        $this->error = new \DefaultService();
+        $this->error = new DefaultService();
     }
 
     /**
@@ -29,7 +29,7 @@ abstract class Service
     protected function error(int $error_code = 404): array
     {
         // to prevent parent::_construct() not declare
-        $this->error = new \DefaultService();
+        $this->error = new DefaultService();
 
         // No Content
         if ($error_code === 204) {

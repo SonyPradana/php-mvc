@@ -10,7 +10,7 @@ use System\Support\Facades\PDO;
 
 class Users extends MyModel
 {
-    public function __construct(MyPDO $pdo = null)
+    public function __construct(?MyPDO $pdo = null)
     {
         $this->_TABELS[]  = 'users';
         $this->PDO        = $pdo ?? PDO::instance();
