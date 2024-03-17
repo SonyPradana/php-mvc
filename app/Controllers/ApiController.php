@@ -8,24 +8,23 @@ class ApiController extends Controller
 {
     public function index(string $unit, string $action, string $version): Response
     {
-        $response = $this->getService($unit, $action, $version);
+        $api = $this->getService($unit, $action, $version);
 
-        $status = $response['code'] ?? 200;
-        $header = $response['headers'] ?? [];
-        unset($response['headers']);
+        $status   = array_key_exists('code', $api) ? (int) $api['code'] : 200;
+        $header   = array_key_exists('headers', $api) ? $api['headers'] : [];
+        $response = new Response($api, $status);
+        unset($api['headers']);
 
-        return (new Response())
-          ->setContent($response)
-          ->setResponeCode($status)
-          ->setHeaders($header)
-          ->removeHeader([
-            'Expires',
-            'Pragma',
-            'X-Powered-By',
-            'Connection',
-            'Server',
-          ])
-          ->json();
+        $response
+            ->headers
+            ->add($header)
+            ->remove('Expires')
+            ->remove('Pragma')
+            ->remove('X-Powered-By')
+            ->remove('Connection')
+            ->remove('Server');
+
+        return $response->json();
     }
 
     /**
