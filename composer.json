@@ -31,6 +31,11 @@
         ]
     }
   },
+  "autoload-dev": {
+    "psr-4": {
+        "Tests\\": "tests"
+    }
+  },
 "scripts": {
     "lint": "php-cs-fixer fix -v",
     "test:lint": "php-cs-fixer fix -v --dry-run",

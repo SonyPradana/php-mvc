@@ -1,16 +1,15 @@
 <?php
 
-namespace System\Tests;
-
-use PHPUnit\Framework\TestCase;
+namespace Tests;
 
 final class BasicTest extends TestCase
 {
-  /**
-   * @test
-   */
-  public function it_true_is_true(): void
-  {
-    $this->assertTrue(true);
-  }
+    /**
+     * @test
+     */
+    public function it_can_see_welcome_page(): void
+    {
+        $response = $this->get('/');
+        $response->assertOk();
+    }
 }
