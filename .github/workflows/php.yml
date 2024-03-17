@@ -13,24 +13,40 @@ jobs:
       matrix:
         php: [7.4, 8.0]
 
-    name: PHP ${{ matrix.php }}
+    name: PHP ${{ matrix.php }} on MariaDB 10
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php }}
-          extensions: libxml, mbstring, zip, pcntl
+          extensions: dom, curl, libxml, mbstring, zip, pcntl
+          tools: composer:v2
           coverage: none
 
-      - name: Install Composer dependencies
-        run: composer install --prefer-dist --no-interaction --no-progress
+      - name: Install dependencies
+        uses: nick-fields/retry@v2
+        with:
+          timeout_minutes: 5
+          max_attempts: 5
+          command: composer update --prefer-stable --prefer-dist --no-interaction --no-progress
 
       - name: Copy environment file
         run: cp .env.example .env
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Install Node.js Dependencies
+        run: npm install
+
+      - name: Build Vite Project
+        run: npm run build
 
       - name: Execute tests
         run: vendor/bin/phpunit
