@@ -6,6 +6,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.0-beta.10] - 2023-03-17
+### Changed
+- Changed `Model` insted of `MyModel` and `MyCrud`.
+- Changed `ApiController` repalce api was deprecated (`Response::header`).
+- Changed test strategy, use integrate test case.
+
+## [1.0.0-beta.9] - 2023-02-11
+### Changed
+- Changed template use latest templator syntax (required dolar sighn).
+
+## [1.0.0-beta.8] - 2023-01-24
+### Fixed
+- Fixed build path (vite) start with '/'.
+
+### Changed
+- Changed use non develop version (sonyprdana/php-library).
+
 ## [1.0.0-beta.7] - 2023-12-21
 ### Changed
 - Update Vite vertion 5.
