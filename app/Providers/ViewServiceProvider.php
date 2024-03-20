@@ -13,17 +13,19 @@ class ViewServiceProvider extends ServiceProvider
 {
     public function boot()
     {
-        $resource_component = [
-            'vite' => new Vite($this->app->public_path(), '/build/'),
+        $global_template_var = [
+            'vite_has_manifest' => file_exists($this->app->public_path() . '/build/manifest.json'),
         ];
+
         $this->app->set(
             'view.response',
             fn () => fn (string $view, array $data = []): Response => (new Response())
                 ->setContent(
                     (new Templator(view_path(), cache_path()))
-                        ->render("{$view}.template.php", array_merge($data, $resource_component))
+                        ->render("{$view}.template.php", array_merge($data, $global_template_var))
                 )
         );
+
         $this->app->set('vite.gets', fn () => new Vite($this->app->public_path(), '/build/'));
     }
 }
