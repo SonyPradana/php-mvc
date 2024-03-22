@@ -1,7 +1,8 @@
 <?php
 
-use System\Http\RequestFactory;
-use System\Router\Router;
+if (file_exists($maintenance = dirname(__DIR__) . '/storage/app/maintenance.php')) {
+    require $maintenance;
+}
 
 require_once dirname(__DIR__) . '/vendor/autoload.php';
 
@@ -25,5 +26,5 @@ $respone = $app->make(System\Integrate\Http\Karnel::class);
  * @var System\Http\Response
  */
 $respone->handle(
-  $request = (new RequestFactory())->getFromGloball()
+  $request = (new System\Http\RequestFactory())->getFromGloball()
 )->send();
