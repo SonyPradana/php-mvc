@@ -1,8 +1,6 @@
 {% extend('base/base.template.php') %}
 
-{% section('title') %}
-405 | Page not found
-{% endsection %}
+{% section('title', '405 | Page not found') %}
 
 {% section('content') %}
 <div class="flex items-center justify-center w-screen h-screen bg-gray-50 dark:bg-gray-800">
