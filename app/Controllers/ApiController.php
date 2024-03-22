@@ -12,8 +12,8 @@ class ApiController extends Controller
 
         $status   = array_key_exists('code', $api) ? (int) $api['code'] : 200;
         $header   = array_key_exists('headers', $api) ? $api['headers'] : [];
-        $response = new Response($api, $status);
         unset($api['headers']);
+        $response = new Response($api, $status);
 
         $response
             ->headers
@@ -33,8 +33,8 @@ class ApiController extends Controller
     protected function getService(string $service_nama, string $method_nama, string $version): array
     {
         $service_nama .= 'Service';
-        $service_nama   = str_replace('-', '', $service_nama);
-        $method_nama    = str_replace('-', '_', $method_nama);
+        $service_nama = str_replace('-', '', $service_nama);
+        $method_nama  = str_replace('-', '_', $method_nama);
 
         if (file_exists(services_path($service_nama . '.php'))) {
             $service = new $service_nama();
