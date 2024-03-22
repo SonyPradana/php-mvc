@@ -16,10 +16,10 @@ class DatabaseServiceProvider extends ServiceProvider
     {
         $configs = $this->app->get('config');
         $sql_dsn = [
-          'host'           => $configs['DB_HOST'],
-          'user'           => $configs['DB_USER'],
-          'password'       => $configs['DB_PASS'],
-          'database_name'  => $configs['DB_NAME'],
+            'host'           => $configs['DB_HOST'],
+            'user'           => $configs['DB_USER'],
+            'password'       => $configs['DB_PASS'],
+            'database_name'  => $configs['DB_NAME'],
         ];
 
         $this->app->set('dsn.sql', $sql_dsn);

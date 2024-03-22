@@ -3,7 +3,7 @@
 return [
     'BASEURL'           => $_ENV['BASEURL'] ?? 'http://localhost',
     'time_zone'         => 'Asia/Jakarta',
-    'APP_KEY'           => '',
+    'APP_KEY'           => $_ENV['APP_KEY'] ?? '',
     'ENVIRONMENT'       => $_ENV['ENVIRONMENT'] ?? 'dev',
 
     'MODEL_PATH'            => DIRECTORY_SEPARATOR . 'app' . DIRECTORY_SEPARATOR . 'Models' . DIRECTORY_SEPARATOR,

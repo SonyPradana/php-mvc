@@ -45,25 +45,25 @@ class ApiController extends Controller
 
             // method not found
             return [
-              'status'  => 'Bad Request',
-              'code'    => 400,
-              'error'   => [
-                'server'  => 'Bad Request',
-                'leyer'   => 1,
-              ],
-              'headers' => ['HTTP/1.1 400 Bad Request'],
+                'status'  => 'Bad Request',
+                'code'    => 400,
+                'error'   => [
+                    'server'  => 'Bad Request',
+                    'leyer'   => 1,
+                ],
+                'headers' => ['HTTP/1.1 400 Bad Request'],
             ];
         }
 
         // page not found
         return [
-          'status'  => 'Service Not Found',
-          'code'    => 404,
-          'error'   => [
-            'server'  => 'Service Not Found',
-            'leyer'   => 1,
-          ],
-          'headers' => ['HTTP/1.1 404 Service Not Found'],
+            'status'  => 'Service Not Found',
+            'code'    => 404,
+            'error'   => [
+                'server'  => 'Service Not Found',
+                'leyer'   => 1,
+            ],
+            'headers' => ['HTTP/1.1 404 Service Not Found'],
         ];
     }
 }
