@@ -6,6 +6,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.0] - 2023-03-23
+### Changed
+- Changed welcome page (support darkmode).
+- Changed clean `Services::class`.
+- Changed `Storage` folder structur include default application page.
+
+### Removed
+- Removed unuse js file
+
+### Fixed
+- Still showing header information in json data when sending api service.
+
+### Added
+- Added 503 error page.
+- Added maintenance mode detection.
+
 ## [1.0.0-beta.10] - 2023-03-17
 ### Changed
 - Changed `Model` insted of `MyModel` and `MyCrud`.
