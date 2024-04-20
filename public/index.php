@@ -18,13 +18,13 @@ $app = require_once dirname(__DIR__) . '/bootstrap/init.php';
  *
  * @var System\Integrate\Http\Karnel
  */
-$respone = $app->make(System\Integrate\Http\Karnel::class);
+$karnel = $app->make(System\Integrate\Http\Karnel::class);
 
 /**
  * Handle Respone from httpkarnel
- *
- * @var System\Http\Response
  */
-$respone->handle(
-  $request = (new System\Http\RequestFactory())->getFromGloball()
+$response = $karnel->handle(
+    $request = (new System\Http\RequestFactory())->getFromGloball()
 )->send();
+
+$karnel->terminate($request, $response);
