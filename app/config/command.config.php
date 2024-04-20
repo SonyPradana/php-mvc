@@ -9,5 +9,6 @@ return array_merge(
     System\Integrate\Console\MigrationCommand::$command,
     System\Integrate\Console\SeedCommand::$command,
     System\Integrate\Console\ViewCommand::$command,
+    System\Integrate\Console\MaintenanceCommand::$command,
     // more command here
 );
