@@ -20,17 +20,20 @@ class HttpKernel extends Karnel
     {
         parent::__construct($app);
 
+        /* @var \Whoops\Handler\CallbackHandler */
+        $http_handler = $this->app->make('error.CallbackHandler');
+        /* @var \Whoops\Run */
+        $this->run = $app->make('error.handle');
+
         if (app()->isDev()) {
             /* @var \Whoops\Handler\PrettyPageHandler */
             $this->handler = $this->app->make('error.PrettyPageHandler');
             $this->handler->setPageTitle('php mvc');
-
-            /* @var \Whoops\Run */
-            $this->run = $app->make('error.handle');
-            $this->run
-              ->pushHandler($this->handler)
-              ->register();
+            $this->run->pushHandler($this->handler);
         }
+
+        $this->run->pushHandler($http_handler);
+        $this->run->register();
     }
 
     protected function dispatcher($request): array
