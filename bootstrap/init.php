@@ -1,5 +1,6 @@
 <?php
 
+use App\Exceptions\Handler;
 use App\Karnels\ConsoleKernel;
 use App\Karnels\HttpKernel;
 
@@ -15,6 +16,11 @@ $app->set(
 $app->set(
     System\Integrate\Console\Karnel::class,
     fn () => new ConsoleKernel($app)
+);
+
+$app->set(
+    System\Integrate\Exceptions\Handler::class,
+    fn () => new Handler($app)
 );
 
 return $app;
