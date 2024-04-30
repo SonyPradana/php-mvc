@@ -82,3 +82,18 @@ Favico
 Resource view
 -----
 * Added more default pages (400, 401,403, 429, 500).
+
+ViewServiceProvider
+-----
+* Added `view.instace` to container
+```diff
++$this->app->set('view.instance', fn () => new Templator(view_path(), cache_path()));
+
+$this->app->set(
+    'view.response',
++    fn () => fn (string $view, array $data = []): Response =>
++        (new Response())->setContent(
++            $this->app->make('view.instance')->render("{$view}.template.php", array_merge($data, $global_template_var))
+        )
+);
+```
