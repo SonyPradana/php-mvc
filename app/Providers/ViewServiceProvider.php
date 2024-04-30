@@ -17,12 +17,13 @@ class ViewServiceProvider extends ServiceProvider
             'vite_has_manifest' => file_exists($this->app->public_path() . '/build/manifest.json'),
         ];
 
+        $this->app->set('view.instance', fn () => new Templator(view_path(), cache_path()));
+
         $this->app->set(
             'view.response',
-            fn () => fn (string $view, array $data = []): Response => (new Response())
-                ->setContent(
-                    (new Templator(view_path(), cache_path()))
-                        ->render("{$view}.template.php", array_merge($data, $global_template_var))
+            fn () => fn (string $view, array $data = []): Response =>
+                (new Response())->setContent(
+                    $this->app->make('view.instance')->render("{$view}.template.php", array_merge($data, $global_template_var))
                 )
         );
 
