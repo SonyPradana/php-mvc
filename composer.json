@@ -11,7 +11,7 @@
   ],
   "require": {
     "php": "^7.4 || ^8.0",
-    "sonypradana/php-library": "^0.31",
+    "sonypradana/php-library": "dev-master",
     "vlucas/phpdotenv": "^5.6",
     "react/event-loop": "^1.5"
   },
