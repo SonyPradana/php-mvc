@@ -14,8 +14,21 @@ class ViewServiceProvider extends ServiceProvider
 {
     public function boot()
     {
+        $this->registerViteResolver();
+        $this->registerViewResolver();
+    }
+
+    protected function registerViteResolver(): void
+    {
+        $this->app->set('vite.gets', fn (): Vite => new Vite($this->app->public_path(), '/build/'));
+        $this->app->set('vite.location', fn (): string => $this->app->public_path() . '/build/manifest.json');
+        $this->app->set('vite.hasManifest', fn (): bool => file_exists($this->app->get('vite.location')));
+    }
+
+    protected function registerViewResolver(): void
+    {
         $global_template_var = [
-            'vite_has_manifest' => file_exists($this->app->public_path() . '/build/manifest.json'),
+            'vite_has_manifest' => $this->app->get('vite.hasManifest'),
         ];
         $extensions = $this->app->get('config')['VIEW_EXTENSIONS'] ?? [];
 
@@ -27,6 +40,5 @@ class ViewServiceProvider extends ServiceProvider
                 $this->app->get('view.instance')->render($view, array_merge($data, $global_template_var))
             )
         );
-        $this->app->set('vite.gets', fn () => new Vite($this->app->public_path(), '/build/'));
     }
 }
