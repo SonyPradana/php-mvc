@@ -8,9 +8,11 @@ class ApiController extends Controller
 {
     public function index(string $unit, string $action, string $version): Response
     {
+        /** @var array<string, int|string|array<string, string>> */
         $api = $this->getService($unit, $action, $version);
 
         $status   = array_key_exists('code', $api) ? (int) $api['code'] : 200;
+        /** @var array<string, string> */
         $header   = array_key_exists('headers', $api) ? $api['headers'] : [];
         unset($api['headers']);
         $response = new Response($api, $status);
@@ -39,8 +41,10 @@ class ApiController extends Controller
         if (file_exists(services_path($service_nama . '.php'))) {
             $service = new $service_nama();
             if (method_exists($service, $method_nama)) {
-                // call target services
-                return app()->call([$service, $method_nama], ['version' => $version]);
+                /** @var array<string, mixed> Call target services */
+                $result_wrap = app()->call([$service, $method_nama], ['version' => $version]);
+
+                return $result_wrap;
             }
 
             // method not found
