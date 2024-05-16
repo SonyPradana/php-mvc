@@ -1,6 +1,8 @@
 <?php
 
-namespace Tests;
+namespace Tests\Feature;
+
+use Tests\TestCase;
 
 final class BasicTest extends TestCase
 {
@@ -10,6 +12,7 @@ final class BasicTest extends TestCase
     public function it_can_see_welcome_page(): void
     {
         $response = $this->get('/');
+
         $response->assertOk();
     }
 }
