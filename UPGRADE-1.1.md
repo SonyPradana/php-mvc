@@ -2,6 +2,8 @@ UPGRADE FROM 1.0 to 1.1
 
 php-mvc 1.1 improve application lifecycle.
 
+> php-library version 0.33 now end support for php 7.4. If you strill using php 7.4 use php-library 0.32.x, this version still accept bug and security update (small feature for improving performance).
+
 Karnel
 -----
 
@@ -65,15 +67,44 @@ Resource view
 
 ViewServiceProvider
 -----
-* Added `view.instace` to container
+* Added `view.instace`, `TemplatorFinder::class`, `vite.location`, `vite.hasManifest` to container
 ```diff
-+$this->app->set('view.instance', fn () => new Templator(view_path(), cache_path()));
++public function boot()
++    {
++        $this->registerViteResolver();
++        $this->registerViewResolver();
++    }
++
++    protected function registerViteResolver(): void
++    {
++        $this->app->set('vite.gets', fn (): Vite => new Vite($this->app->public_path(), '/build/'));
++        $this->app->set('vite.location', fn (): string => $this->app->public_path() . '/build/manifest.json');
++        $this->app->set('vite.hasManifest', fn (): bool => file_exists($this->app->get('vite.location')));
++    }
++
++    protected function registerViewResolver(): void
++    {
++        $global_template_var = [
++            'vite_has_manifest' => $this->app->get('vite.hasManifest'),
++        ];
++        $extensions = $this->app->get('config')['VIEW_EXTENSIONS'] ?? [];
++
++        $this->app->set(TemplatorFinder::class, fn () => new TemplatorFinder(view_paths(), $extensions));
++        $this->app->set('view.instance', fn () => new Templator($this->app->get(TemplatorFinder::class), compiled_view_path()));
++        $this->app->set(
++            'view.response',
++            fn () => fn (string $view, array $data = []): Response => new Response(
++                $this->app->get('view.instance')->render($view, array_merge($data, $global_template_var))
++            )
++        );
++    }
+```
 
-$this->app->set(
-    'view.response',
-+    fn () => fn (string $view, array $data = []): Response =>
-+        (new Response())->setContent(
-+            $this->app->make('view.instance')->render("{$view}.template.php", array_merge($data, $global_template_var))
-        )
-);
+Restructur Tests Folder
+-----
+```bash
+php-mvc/
+└── tests/
+    └── Feature/
+    └── Unit/
 ```

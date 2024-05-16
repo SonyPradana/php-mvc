@@ -6,7 +6,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [1.0.0] - 2023-03-23
+## [1.1.0-beta.2] - 2024-03-23
+### Added
+- Added view file config.
+
+### Changed
+- Changed `ViewServiceProvider::class` behavior container register, added `TemplatorFinder::class` container, and add vite manifest asset checks (#14).
+
+## [1.1.0-beta.1] - 2024-03-23
+### Added
+- Added Terminate function in application bootstrap.
+- Added support maintenance mode using Commands.
+- Added `Handler::class` for resive error report.
+- Added More error page 400, 401, 403, 429, 500.
+
+## [1.0.0] - 2024-03-23
 ### Changed
 - Changed welcome page (support darkmode).
 - Changed clean `Services::class`.
@@ -22,17 +36,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added 503 error page.
 - Added maintenance mode detection.
 
-## [1.0.0-beta.10] - 2023-03-17
+## [1.0.0-beta.10] - 2024-03-17
 ### Changed
 - Changed `Model` insted of `MyModel` and `MyCrud`.
 - Changed `ApiController` repalce api was deprecated (`Response::header`).
 - Changed test strategy, use integrate test case.
 
-## [1.0.0-beta.9] - 2023-02-11
+## [1.0.0-beta.9] - 2024-02-11
 ### Changed
 - Changed template use latest templator syntax (required dolar sighn).
 
-## [1.0.0-beta.8] - 2023-01-24
+## [1.0.0-beta.8] - 2024-01-24
 ### Fixed
 - Fixed build path (vite) start with '/'.
 
