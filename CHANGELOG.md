@@ -6,14 +6,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [1.1.0-beta.2] - 2024-03-23
+## [1.1.0] - 2024-05-22
+### Added
+- added mail config.
+
+## [1.1.0-beta.2] - 2024-05-16
 ### Added
 - Added view file config.
 
 ### Changed
 - Changed `ViewServiceProvider::class` behavior container register, added `TemplatorFinder::class` container, and add vite manifest asset checks (#14).
 
-## [1.1.0-beta.1] - 2024-03-23
+## [1.1.0-beta.1] - 2024-04-30
 ### Added
 - Added Terminate function in application bootstrap.
 - Added support maintenance mode using Commands.

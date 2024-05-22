@@ -4,7 +4,7 @@ php-mvc 1.1 improve application lifecycle.
 
 > php-library version 0.33 now end support for php 7.4. If you strill using php 7.4 use php-library 0.32.x, this version still accept bug and security update (small feature for improving performance).
 
-Karnel
+Bootstrap
 -----
 
 * Added application terminate to bootstrap.
@@ -102,9 +102,38 @@ ViewServiceProvider
 
 Restructur Tests Folder
 -----
+* restructur tests folder
 ```bash
 php-mvc/
 └── tests/
     └── Feature/
     └── Unit/
+```
+
+Mail Config
+-----
+* add mail config
+```env
+# .env
+MAIL_DRIVER=smtp
+MAIL_HOST=127.0.0.1
+MAIL_PORT=2525
+MAIL_USERNAME=null
+MAIL_PASSWORD=null
+MAIL_ENCRYPTION=null
+MAIL_FROM_ADDRESS="mail@domainname.com"
+```
+```php
+// app\config\mail.config.php
+<?php
+
+return [
+    'MAIL_DRIVER'       => $_ENV['MAIL_DRIVER'] ?? 'smtp',
+    'MAIL_HOST'         => $_ENV['MAIL_HOST'] ?? '127.0.0.1',
+    'MAIL_PORT'         => $_ENV['MAIL_PORT'] ?? 2525,
+    'MAIL_USERNAME'     => $_ENV['MAIL_USERNAME'] ?? null,
+    'MAIL_PASSWORD'     => $_ENV['MAIL_PASSWORD'] ?? null,
+    'MAIL_ENCRYPTION'   => $_ENV['MAIL_ENCRYPTION'] ?? null,
+    'MAIL_FROM_ADDRESS' => $_ENV['MAIL_FROM_ADDRESS'] ?? 'email@domainname.com',
+];
 ```
