@@ -10,8 +10,8 @@
     }
   ],
   "require": {
-    "php": "^7.4 || ^8.0",
-    "sonypradana/php-library": "^0.32",
+    "php": "^8.0",
+    "sonypradana/php-library": "dev-dev",
     "vlucas/phpdotenv": "^5.6",
     "react/event-loop": "^1.5"
   },
