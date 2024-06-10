@@ -6,7 +6,6 @@ namespace App\Karnels;
 
 use System\Integrate\Application;
 use System\Integrate\Console\Karnel;
-use System\Integrate\ValueObjects\CommandMap;
 
 class ConsoleKernel extends Karnel
 {
