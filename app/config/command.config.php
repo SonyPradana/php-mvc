@@ -14,5 +14,5 @@ return [
         System\Integrate\Console\ConfigCommand::$command,
         System\Integrate\Console\PackageDiscoveryCommand::$command,
         // more command here
-    ]
+    ],
 ];
