@@ -12,5 +12,7 @@ return [
         System\Integrate\Console\ViewCommand::$command,
         System\Integrate\Console\MaintenanceCommand::$command,
         System\Integrate\Console\ConfigCommand::$command,
+        System\Integrate\Console\PackageDiscoveryCommand::$command,
+        // more command here
     ]
 ];

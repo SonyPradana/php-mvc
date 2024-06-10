@@ -46,8 +46,11 @@
         "@test:types",
         "@test:unit"
     ],
+    "post-autoload-dump": [
+        "@php cli package:discovery"
+    ],
     "post-root-package-install": [
-      "@php -r \"file_exists('.env') || copy('.env.example', '.env');\""
+        "@php -r \"file_exists('.env') || copy('.env.example', '.env');\""
     ]
   },
   "extra": {
