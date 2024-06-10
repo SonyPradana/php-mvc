@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Karnels;
 
-use System\Container\Container;
+use System\Integrate\Application;
 use System\Integrate\Http\Karnel;
 use System\Router\RouteDispatcher;
 use System\Router\Router;
@@ -16,21 +16,23 @@ class HttpKernel extends Karnel
     /** @var \Whoops\Handler */
     private $handler;
 
-    public function __construct(Container $app)
+    public function __construct(Application $app)
     {
         parent::__construct($app);
 
-        if (app()->isDev()) {
-            /* @var \Whoops\Handler\PrettyPageHandler */
-            $this->handler = $this->app->make('error.PrettyPageHandler');
-            $this->handler->setPageTitle('php mvc');
+        $this->app->bootedCallback(function () {
+            if (false === $this->app->isProduction()) {
+                /* @var \Whoops\Handler\PrettyPageHandler */
+                $this->handler = $this->app->make('error.PrettyPageHandler');
+                $this->handler->setPageTitle('php mvc');
 
-            /* @var \Whoops\Run */
-            $this->run = $app->make('error.handle');
-            $this->run
-              ->pushHandler($this->handler)
-              ->register();
-        }
+                /* @var \Whoops\Run */
+                $this->run = $this->app->make('error.handle');
+                $this->run
+                  ->pushHandler($this->handler)
+                  ->register();
+            }
+        });
     }
 
     protected function dispatcher($request): array
