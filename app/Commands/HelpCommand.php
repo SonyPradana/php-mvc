@@ -2,7 +2,6 @@
 
 namespace App\Commands;
 
-use App\Karnels\ConsoleKernel;
 use System\Integrate\Console\HelpCommand as ConsoleHelpCommand;
 
 class HelpCommand extends ConsoleHelpCommand
@@ -26,9 +25,4 @@ class HelpCommand extends ConsoleHelpCommand
  (__  )/ /_/ / | |/ // /_/ // / / // / / // /_/ /
 /____/ \__,_/  |___/ \__,_//_/ /_//_/ /_/ \__,_/  ';
 
-    public function __construct($argv, $default_option = [])
-    {
-        parent::__construct($argv, $default_option);
-        $this->commands = ConsoleKernel::$command;
-    }
 }
