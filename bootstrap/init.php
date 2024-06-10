@@ -1,8 +1,8 @@
 <?php
 
 use App\Exceptions\Handler;
-use App\Karnels\ConsoleKernel;
-use App\Karnels\HttpKernel;
+use App\Kernels\ConsoleKernel;
+use App\Kernels\HttpKernel;
 
 Dotenv\Dotenv::createImmutable(dirname(__DIR__))->load();
 
