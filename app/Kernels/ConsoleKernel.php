@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace App\Kernels;
 
 use System\Integrate\Application;
-use System\Integrate\Console\Karnel;
+use System\Integrate\Console\Karnel as Kernel;
 
-class ConsoleKernel extends Karnel
+class ConsoleKernel extends Kernel
 {
     /** @var \Whoops\Run */
     private $run;
