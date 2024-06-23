@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace App\Kernels;
 
 use System\Integrate\Application;
-use System\Integrate\Http\Karnel;
+use System\Integrate\Http\Karnel as Kernel;
 use System\Router\RouteDispatcher;
 use System\Router\Router;
 
-class HttpKernel extends Karnel
+class HttpKernel extends Kernel
 {
     /** @var \Whoops\Run */
     private $run;
