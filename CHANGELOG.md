@@ -6,6 +6,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.0.0-beta.1]
+### Removed
+- Removed support php 7.4.
+
+### Changed
+- Changed `Kernel::__construct()` from `Container::class` to `Application::class`.
+- Changed `HelpCommand::class` to default (except benner).
+- Changed array wrap in `app/config/command.config.php` (` return [ 'commands' => [] ]`}).
+- Changed typo file namespace `app\Karnels\HttpKernel.php` and `app\Karnels\ConsoleKernel.php` to `app\Kernels\HttpKernel.php` and `app\Kernels\ConsoleKernel.php`.
+
+### Added
+- Added new git ignore (cache application) in `bootstrap/cache/.gitignore`.
+- Added `ConfigCommand::class` to create and clear config cache.
+- Added `PackageDiscoveryCommand::class` to discovery vendor package by composer.
+
 ## [1.1.0] - 2024-05-22
 ### Added
 - added mail config.
