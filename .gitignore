@@ -1,13 +1,31 @@
-
+# Environment
 .env
-/vendor/
-/node_modules/
+
+# Cache
+.php-cs-fixer.cache
+.phpunit.result.cache
+/.phpunit.cache
+
+# Build output
+/public/build
+/public/hot
+
+# Dependencies
+/vendor
+/node_modules
+
+# Lock
 package-lock.json
 yarn.lock
 pnpm-lock.yaml
 composer.lock
-.php-cs-fixer.cache
-.phpunit.result.cache
-/.phpunit.cache
-/public/build
-/public/hot
+
+# Visual Studio Code configs
+/.vscode
+
+# JetBrains IDEs
+/.idea
+
+# Logs
+npm-debug.log
+yarn-error.log
