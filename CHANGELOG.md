@@ -6,13 +6,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [2.0.0-beta.1]
+## [2.0.0-beta.2] - 2024-06-27
+### Changed
+- Changed `HelpCommand::class` to default (except benner).
+- Changed update gitignore list and group by category.
+- Changed depreceted method `public_Path()` to `publicPath()` in `ViewServiceProvider::class`.
+- Changed make `Controller::class` without any extends (`System\Router\Controller::class`).
+
+## [2.0.0-beta.1] - 2024-06-24
 ### Removed
 - Removed support php 7.4.
 
 ### Changed
 - Changed `Kernel::__construct()` from `Container::class` to `Application::class`.
-- Changed `HelpCommand::class` to default (except benner).
 - Changed array wrap in `app/config/command.config.php` (` return [ 'commands' => [] ]`}).
 - Changed typo file namespace `app\Karnels\HttpKernel.php` and `app\Karnels\ConsoleKernel.php` to `app\Kernels\HttpKernel.php` and `app\Kernels\ConsoleKernel.php`.
 

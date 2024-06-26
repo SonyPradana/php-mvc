@@ -128,6 +128,15 @@ public function index(MyPDO $pdo): array
 Router::get('/profile', Profile::class);
 ```
 
+### Optimize
+Optimeze by cached Application.
+```bash
+# cache view compiler
+php cli view:cache
+# cache application config
+php cli config:cache
+```
+
 ## License
 
 php-mvc is open-source software licensed under the **[MIT license](https://opensource.org/licenses/MIT)**.
