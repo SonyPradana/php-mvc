@@ -11,8 +11,8 @@
 /public/hot
 
 # Dependencies
-/vendor/
-/node_modules/
+/vendor
+/node_modules
 
 # Lock
 package-lock.json
