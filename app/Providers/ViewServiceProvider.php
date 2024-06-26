@@ -20,8 +20,8 @@ class ViewServiceProvider extends ServiceProvider
 
     protected function registerViteResolver(): void
     {
-        $this->app->set('vite.gets', fn (): Vite => new Vite($this->app->public_path(), '/build/'));
-        $this->app->set('vite.location', fn (): string => $this->app->public_path() . '/build/manifest.json');
+        $this->app->set('vite.gets', fn (): Vite => new Vite($this->app->publicPath(), '/build/'));
+        $this->app->set('vite.location', fn (): string => $this->app->publicPath() . '/build/manifest.json');
         $this->app->set('vite.hasManifest', fn (): bool => file_exists($this->app->get('vite.location')));
     }
 
