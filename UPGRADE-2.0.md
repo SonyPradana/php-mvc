@@ -79,3 +79,49 @@ Gitignore
 // bootstrap\cache\.gitignore
 +  *.php
 ```
+
+* added gitigonre list
+```diff
+// bootstrap\cache\.gitignore
++  /.vscode
++  /.idea
+```
+
+Controller
+-----
+
+* Remove any Extends in Conteroller
+```php
+-  use System\Http\Response;
+-  use System\Router\Controller as BaseController;
+
+-  class Controller extends BaseController
++  class Controller
+  {
+-      /**
+-       * @param array<string, mixed> $portal
+-       */
+-      public static function renderView(string $view, array $portal = []): Response
+-      {
+-          return view($view, $portal);
+-      }
+-
+-      public static function viewExists(string $view): bool
+-      {
+-          return file_exists(view_path() . $view . '.template.php');
+-      }
+  }
+```
+
+ViewServiceProvider
+---
+
+* Change deprecated method
+```php
+-          $this->app->set('vite.gets', fn (): Vite => new Vite($this->app->public_path(), '/build/'));
+-          $this->app->set('vite.location', fn (): string => $this->app->public_path() . '/build/manifest.json');
++          $this->app->set('vite.gets', fn (): Vite => new Vite($this->app->publicPath(), '/build/'));
++          $this->app->set('vite.location', fn (): string => $this->app->publicPath() . '/build/manifest.json');
+```
+
+
