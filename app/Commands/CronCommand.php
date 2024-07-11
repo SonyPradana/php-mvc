@@ -7,6 +7,7 @@ use React\EventLoop\Loop;
 use System\Console\Style\Style;
 use System\Cron\Schedule;
 use System\Integrate\Console\CronCommand as ConsoleCronCommand;
+use System\Support\Facades\Schedule as Scheduler;
 use System\Time\Now;
 
 class CronCommand extends ConsoleCronCommand
@@ -51,7 +52,7 @@ class CronCommand extends ConsoleCronCommand
             $watch_start = microtime(true);
 
             $this->scheduler($schedule = new Schedule(now()->timestamp, new Log()));
-            $schedule->execute();
+            Scheduler::add($schedule)->execute();
 
             $watch_end = round(microtime(true) - $watch_start, 3) * 1000;
             $print
@@ -73,8 +74,6 @@ class CronCommand extends ConsoleCronCommand
         ->retry(2)
         ->justInTime()
         ->animusly()
-        ->eventName('savanna');
-
-        // others schedule
+        ->eventName('schedule.from.' . __CLASS__);
     }
 }

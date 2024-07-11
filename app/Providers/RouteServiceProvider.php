@@ -21,5 +21,7 @@ class RouteServiceProvider extends ServiceProvider
                 require_once base_path('/routes/api.php'),
             ]
         );
+
+        require_once base_path('/routes/schedule.php');
     }
 }

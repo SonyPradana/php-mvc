@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Providers;
 
+use App\Commands\Cron\Log;
+use System\Cron\Schedule;
 use System\Integrate\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -14,5 +16,8 @@ class AppServiceProvider extends ServiceProvider
         $this->app->set('error.handle', fn () => new \Whoops\Run());
         $this->app->set('error.PrettyPageHandler', fn () => new \Whoops\Handler\PrettyPageHandler());
         $this->app->set('error.PlainTextHandler', fn () => new \Whoops\Handler\PlainTextHandler());
+
+        // register schedule to containel
+        $this->app->set('schedule', fn () => new Schedule(time(), new Log()));
     }
 }
