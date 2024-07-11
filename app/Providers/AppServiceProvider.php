@@ -18,6 +18,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->set('error.PlainTextHandler', fn () => new \Whoops\Handler\PlainTextHandler());
 
         // register schedule to containel
-        $this->app->set('schedule', fn () => new Schedule(time(), new Log()));
+        $this->app->set('cron.log', fn (): Log => new Log());
+        $this->app->set('schedule', fn (): Schedule => new Schedule(now()->timestamp, $this->app['cron.log']));
     }
 }
