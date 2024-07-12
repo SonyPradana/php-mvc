@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Added call registered schedule route in `RouterServiceProvider::class`.
 - Added `Schedule::class` to Application container.
+- Changed htaccess rule (public/.htaccess).
 
 ## [2.0.0-beta.2] - 2024-06-27
 ### Changed

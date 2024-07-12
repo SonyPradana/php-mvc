@@ -161,3 +161,75 @@ Schedule::call(static function () {
 +         $this->app->set('cron.log', fn (): Log => new Log());
 +         $this->app->set('schedule', fn (): Schedule => new Schedule(now()->timestamp, $this->app['cron.log']));
 ```
+
+Migration
+-----
+
+* users table
+```php
+// database\migration\2024_07_12_210700_create_users_and_accounts.php
+<?php
+
+use System\Database\MySchema\Table\Create;
+use System\Support\Facades\Schema;
+
+return [
+    'up' => [
+        Schema::table('users', function (Create $column) {
+            $column('user')->varChar(36);
+            $column('password')->varChar(448);
+            $column('created_at')->timestamp()->null();
+            $column('updated_at')->timestamp()->null();
+
+            $column->primaryKey('user');
+        }),
+
+        Schema::table('accounts', function (Create $column) {
+            $column('user')->varChar(36);
+            $column('email')->varChar(448);
+            $column('email_verified_at')->timestamp()->null();
+
+            $column->unique('email');
+            $column->primaryKey('user');
+        }),
+    ],
+    'down' => [
+        Schema::drop()->table('users'),
+        Schema::drop()->table('accounts'),
+    ],
+];
+```
+
+* User Model
+```php
+ - * @property string|null $pwd
+ + * @property string|null $password
+```
+
+htaccess
+-----
+
+* public htaccess
+```htaccess
+<IfModule mod_rewrite.c>
+    <IfModule mod_negotiation.c>
+        Options -MultiViews -Indexes
+    </IfModule>
+
+    RewriteEngine On
+
+    # Handle Authorization Header
+    RewriteCond %{HTTP:Authorization} .
+    RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+
+    # Redirect Trailing Slashes If Not A Folder...
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_URI} (.+)/$
+    RewriteRule ^ %1 [L,R=301]
+
+    # Send Requests To Front Controller...
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteRule ^(.*)$ index.php [QSA,L]
+</IfModule>
+```
