@@ -114,7 +114,7 @@ Controller
 ```
 
 ViewServiceProvider
----
+-----
 
 * Change deprecated method
 ```php
@@ -124,4 +124,40 @@ ViewServiceProvider
 +          $this->app->set('vite.location', fn (): string => $this->app->publicPath() . '/build/manifest.json');
 ```
 
+Shedule
+-----
 
+* Added Schedule route
+```php
+// routes\schedule.php
+<?php
+
+declare(strict_types=1);
+
+use System\Support\Facades\Schedule;
+
+Schedule::call(static function () {
+    return [
+        'code' => 200,
+        'data' => 'hai'
+    ];
+})
+    ->everyTenMinute()
+    ->animusly()
+    ->eventName('schedule.from.routes');
+```
+
+* Register Schedule
+```php
+// app\Providers\RouteServiceProvider.php
++        require_once base_path('/routes/schedule.php');
+```
+```php
+// app\Providers\AppServiceProvider.php
++ use App\Commands\Cron\Log;
++ use System\Cron\Schedule;
+
++         // register schedule to containel
++         $this->app->set('cron.log', fn (): Log => new Log());
++         $this->app->set('schedule', fn (): Schedule => new Schedule(now()->timestamp, $this->app['cron.log']));
+```

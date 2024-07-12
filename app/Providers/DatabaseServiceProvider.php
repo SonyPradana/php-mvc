@@ -8,7 +8,6 @@ use System\Database\MyPDO;
 use System\Database\MyQuery;
 use System\Database\MySchema;
 use System\Integrate\ServiceProvider;
-use System\Support\Facades\PDO;
 
 class DatabaseServiceProvider extends ServiceProvider
 {
@@ -43,8 +42,5 @@ class DatabaseServiceProvider extends ServiceProvider
             'MySchema',
             fn () => new MySchema($this->app->get(MySchema\MyPDO::class))
         );
-
-        // register facede
-        new PDO($this->app);
     }
 }

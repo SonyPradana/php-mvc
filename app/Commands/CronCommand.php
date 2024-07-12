@@ -50,8 +50,7 @@ class CronCommand extends ConsoleCronCommand
 
             $watch_start = microtime(true);
 
-            $this->scheduler($schedule = new Schedule(now()->timestamp, new Log()));
-            $schedule->execute();
+            $this->getSchedule()->execute();
 
             $watch_end = round(microtime(true) - $watch_start, 3) * 1000;
             $print
@@ -73,8 +72,6 @@ class CronCommand extends ConsoleCronCommand
         ->retry(2)
         ->justInTime()
         ->animusly()
-        ->eventName('savanna');
-
-        // others schedule
+        ->eventName('schedule.from.' . __CLASS__);
     }
 }
