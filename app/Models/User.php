@@ -8,7 +8,7 @@ use System\Database\MyModel\Model;
 
 /**
  * @property string|null $user
- * @property string|null $pwd
+ * @property string|null $password
  */
 class User extends Model
 {
