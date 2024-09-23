@@ -1,6 +1,8 @@
 <?php
 
 return [
+    'CACHE_STORAGE' => $_ENV['CACHE_STORAGE'] ?? 'file',
+
     // redis driver
     'REDIS_HOST' => $_ENV['REDIS_HOST'] ?? '127.0.0.1',
     'REDIS_PASS' => $_ENV['REDIS_PASS'] ?? '',
