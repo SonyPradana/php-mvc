@@ -4,7 +4,11 @@ return [
     'BASEURL'           => $_ENV['BASEURL'] ?? 'http://localhost',
     'time_zone'         => 'Asia/Jakarta',
     'APP_KEY'           => $_ENV['APP_KEY'] ?? '',
-    'ENVIRONMENT'       => $_ENV['ENVIRONMENT'] ?? 'dev',
+    'ENVIRONMENT'       => $_ENV['ENVIRONMENT'] ?? $_ENV['APP_ENV'] ?? 'dev',
+    'APP_DEBUG'         => $_ENV['APP_DEBUG'],
+
+    'BCRYPT_ROUNDS'     => $_ENV['BCRYPT_ROUNDS'] ?? 12,
+    'CONFIG_STORAGE'    => $_ENV['file'] ?? 'file',
 
     'COMMNAD_PATH'          => DIRECTORY_SEPARATOR . 'app' . DIRECTORY_SEPARATOR . 'Commands' . DIRECTORY_SEPARATOR,
     'CONTROLLER_PATH'       => DIRECTORY_SEPARATOR . 'app' . DIRECTORY_SEPARATOR . 'Controllers' . DIRECTORY_SEPARATOR,
@@ -27,5 +31,6 @@ return [
         App\Providers\RouteServiceProvider::class,
         App\Providers\DatabaseServiceProvider::class,
         App\Providers\ViewServiceProvider::class,
+        App\Providers\CacheServiceProvider::class,
     ],
 ];
