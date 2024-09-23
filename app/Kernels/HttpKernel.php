@@ -21,7 +21,7 @@ class HttpKernel extends Kernel
         parent::__construct($app);
 
         $this->app->bootedCallback(function () {
-            if (false === $this->app->isProduction()) {
+            if ($this->app->isDebugMode()) {
                 /* @var \Whoops\Handler\PrettyPageHandler */
                 $this->handler = $this->app->make('error.PrettyPageHandler');
                 $this->handler->setPageTitle('php mvc');
