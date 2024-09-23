@@ -42,11 +42,14 @@ jobs:
         with:
           node-version: 18
 
-      - name: Install Node.js Dependencies
-        run: npm install
+      - name: Install pnpm
+        run: npm install -g pnpm
+
+      - name: Install Node.js Dependencies with pnpm
+        run: pnpm install
 
       - name: Build Vite Project
-        run: npm run build
+        run: pnpm run build
 
       - name: Execute tests
         run: vendor/bin/phpunit
