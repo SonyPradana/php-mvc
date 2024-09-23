@@ -15,10 +15,10 @@ class CacheServiceProvider extends ServiceProvider
     public function boot()
     {
         $config = Config::get('CACHE_STORAGE', 'file');
-        $cache = match (true) {
-            $config === 'file' => 'cache.file',
+        $cache  = match (true) {
+            $config === 'file'  => 'cache.file',
             $config === 'array' => 'cache.file',
-            default => 'cache.file'
+            default             => 'cache.file',
         };
 
         $this->app->set(
