@@ -13,6 +13,7 @@ return [
         System\Integrate\Console\MaintenanceCommand::$command,
         System\Integrate\Console\ConfigCommand::$command,
         System\Integrate\Console\PackageDiscoveryCommand::$command,
+        System\Integrate\Console\ClearCacheCommand::$command,
         // more command here
     ],
 ];
