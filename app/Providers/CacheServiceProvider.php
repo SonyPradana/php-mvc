@@ -17,7 +17,7 @@ class CacheServiceProvider extends ServiceProvider
         $config = Config::get('CACHE_STORAGE', 'file');
         $cache  = match (true) {
             $config === 'file'  => 'cache.file',
-            $config === 'array' => 'cache.file',
+            $config === 'array' => 'cache.array',
             default             => 'cache.file',
         };
 
