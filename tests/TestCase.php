@@ -12,6 +12,5 @@ abstract class TestCase extends IntegrateTastCase
     protected function setUp(): void
     {
         $this->app = $this->createApplication();
-        parent::setUp();
     }
 }

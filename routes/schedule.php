@@ -7,7 +7,7 @@ use System\Support\Facades\Schedule;
 Schedule::call(static function () {
     return [
         'code' => 200,
-        'data' => 'hai'
+        'data' => 'hai',
     ];
 })
     ->everyTenMinute()

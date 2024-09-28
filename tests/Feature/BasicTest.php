@@ -11,8 +11,8 @@ final class BasicTest extends TestCase
      */
     public function it_can_see_welcome_page(): void
     {
-        $response = $this->get('/');
-
-        $response->assertOk();
+        $this
+            ->get('/')
+            ->assertOk();
     }
 }

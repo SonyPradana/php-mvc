@@ -5,6 +5,6 @@ use System\Router\Router;
 
 Router::get('/', [IndexController::class, 'index']);
 
-Router::get('/say/(:any)', function($text) {
-  return "say $text";
+Router::get('/say/(:any)', function ($text) {
+    return "say $text";
 });

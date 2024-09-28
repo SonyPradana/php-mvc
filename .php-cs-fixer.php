@@ -2,7 +2,10 @@
 
 $finder = PhpCsFixer\Finder::create()
     ->in(__DIR__ . DIRECTORY_SEPARATOR . 'app')
+    ->in(__DIR__ . DIRECTORY_SEPARATOR . 'config')
     ->in(__DIR__ . DIRECTORY_SEPARATOR . 'database')
+    ->in(__DIR__ . DIRECTORY_SEPARATOR . 'public')
+    ->in(__DIR__ . DIRECTORY_SEPARATOR . 'routes')
     ->append(['.php-cs-fixer.php']);
 
 $rules = [

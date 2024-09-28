@@ -21,7 +21,7 @@ $app = require_once dirname(__DIR__) . '/bootstrap/init.php';
 $karnel = $app->make(System\Integrate\Http\Karnel::class);
 
 /**
- * Handle Respone from httpkarnel
+ * Handle Respone from httpkarnel.
  */
 $response = $karnel->handle(
     $request = (new System\Http\RequestFactory())->getFromGloball()
