@@ -29,6 +29,7 @@ class ViewServiceProvider extends ServiceProvider
     {
         $global_template_var = [
             'vite_has_manifest' => $this->app->get('vite.hasManifest'),
+            'vite_hmr_script'   => $this->app->get('vite.gets')->isRunningHRM() ? $this->app->get('vite.gets')->getHmrScript() : '',
         ];
         $extensions = $this->app->get('config')['VIEW_EXTENSIONS'] ?? [];
 
