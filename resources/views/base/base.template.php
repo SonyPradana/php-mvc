@@ -6,7 +6,7 @@
     <title>{% yield('title') %}</title>
 
     {% if ($vite_has_manifest) %}
-    <?php echo $vite_running_hmr ? $vite_hmr_script : ''; ?>
+    <?php echo $vite_hmr_script; ?>
     <link rel="stylesheet" href="{{ vite('resources/css/app.css') }}">
     <script type="module" src="{{ vite('resources/js/app.js') }}"></script>
     {% else %}

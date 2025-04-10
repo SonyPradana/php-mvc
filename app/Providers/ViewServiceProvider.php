@@ -23,15 +23,13 @@ class ViewServiceProvider extends ServiceProvider
         $this->app->set('vite.gets', fn (): Vite => new Vite($this->app->publicPath(), '/build/'));
         $this->app->set('vite.location', fn (): string => $this->app->publicPath() . '/build/manifest.json');
         $this->app->set('vite.hasManifest', fn (): bool => file_exists($this->app->get('vite.location')));
-        $this->app->set('vite.isRunningHMR', fn (): bool => $this->app->get('vite.gets')->isRunningHRM());
     }
 
     protected function registerViewResolver(): void
     {
         $global_template_var = [
             'vite_has_manifest' => $this->app->get('vite.hasManifest'),
-            'vite_running_hmr'  => $this->app->get('vite.isRunningHMR'),
-            'vite_hmr_script'   => $this->app->get('vite.gets')->getHmrScript(),
+            'vite_hmr_script'   => $this->app->get('vite.gets')->isRunningHRM() ? $this->app->get('vite.gets')->getHmrScript() : '',
         ];
         $extensions = $this->app->get('config')['VIEW_EXTENSIONS'] ?? [];
 
