@@ -5,6 +5,20 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [2.0.0] - 2025-04-12
+
+### Added
+- Added `vite_hmr_script` to global templator variable.
+
+## [2.0.0-rc] - 2024-09-28
+
+### Changed
+- Changed config folder location from `app/config` to `config`.
+- Changed default environment debug mode to `true`.
+
+## [2.0.0-beta.3] - 2024-07-12
+
 ### Added
 - Added schedule route ('routes/schedule.php') add schedule using Shedule facade.
 
@@ -12,6 +26,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added call registered schedule route in `RouterServiceProvider::class`.
 - Added `Schedule::class` to Application container.
 - Changed htaccess rule (public/.htaccess).
+- Chenged database migration addind `create_at` and `update_at`.
+- Chenged database migration change `pwd` to `password`.
 
 ## [2.0.0-beta.2] - 2024-06-27
 ### Changed
