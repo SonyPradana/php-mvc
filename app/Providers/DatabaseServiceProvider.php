@@ -14,23 +14,21 @@ class DatabaseServiceProvider extends ServiceProvider
     public function boot()
     {
         $configs = $this->app->get('config');
-        $sql_dsn = [
-            'host'           => $configs['DB_HOST'],
-            'user'           => $configs['DB_USER'],
-            'password'       => $configs['DB_PASS'],
-            'database_name'  => $configs['DB_NAME'],
-        ];
+        $default = $configs['db.default'];
+        $connention = $configs['db.connections'];
 
-        $this->app->set('dsn.sql', $sql_dsn);
+        $this->app->set('dsn.default', $default);
+        $this->app->set('dsn.connenction', $connention);
+        $this->app->set('dsn.use', $connention[$default]);
 
         $this->app->set(
             MyPDO::class,
-            fn () => new MyPDO($sql_dsn)
+            fn () => new MyPDO($this->app->get('dsn.use'))
         );
 
         $this->app->set(
             MySchema\MyPDO::class,
-            fn () => new MySchema\MyPDO($sql_dsn)
+            fn () => new MySchema\MyPDO($this->app->get('dsn.use'))
         );
 
         $this->app->set(

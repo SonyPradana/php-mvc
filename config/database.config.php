@@ -1,8 +1,13 @@
 <?php
 
 return [
-    'DB_HOST' => $_ENV['DB_HOST'] ?? 'localhost',
-    'DB_USER' => $_ENV['DB_USER'] ?? 'root',
-    'DB_PASS' => $_ENV['DB_PASS'] ?? '',
-    'DB_NAME' => $_ENV['DB_NAME'] ?? '',
+    'db.default'     => 'mysql',
+    'db.connections' => [
+        'mysql' => [
+            'host' => $_ENV['DB_HOST'] ?? 'localhost',
+            'user' => $_ENV['DB_USER'] ?? 'root',
+            'password' => $_ENV['DB_PASS'] ?? '',
+            'database_name' => $_ENV['DB_NAME'] ?? '',
+        ],
+    ],
 ];
