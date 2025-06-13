@@ -13,13 +13,14 @@ class DatabaseServiceProvider extends ServiceProvider
 {
     public function boot()
     {
-        $configs = $this->app->get('config');
-        $default = $configs['db.default'];
+        $configs    = $this->app->get('config');
+        $default    = $configs['db.default'];
         $connention = $configs['db.connections'];
 
         $this->app->set('dsn.default', $default);
         $this->app->set('dsn.connenction', $connention);
         $this->app->set('dsn.use', $connention[$default]);
+        $this->app->alias('dsn.use', 'dsn.sql');
 
         $this->app->set(
             MyPDO::class,
