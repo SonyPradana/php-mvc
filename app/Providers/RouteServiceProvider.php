@@ -12,15 +12,22 @@ class RouteServiceProvider extends ServiceProvider
 {
     public function boot()
     {
-        Router::middleware([
-            // middleware
-            AppMiddleware::class,
-        ])->group(
-            fn () => [
-                require_once base_path('/routes/web.php'),
-                require_once base_path('/routes/api.php'),
-            ]
-        );
+        if (file_exists($cache = $this->app->getApplicationCachePath() . 'route.php')) {
+            $routes = (array) require $cache;
+            foreach ($routes as $route) {
+                Router::addRoutes($route);
+            }
+        } else {
+            Router::middleware([
+                // middleware
+                AppMiddleware::class,
+            ])->group(
+                fn () => [
+                    require_once base_path('/routes/web.php'),
+                    require_once base_path('/routes/api.php'),
+                ]
+            );
+        }
 
         require_once base_path('/routes/schedule.php');
     }

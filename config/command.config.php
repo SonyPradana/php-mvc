@@ -14,6 +14,7 @@ return [
         System\Integrate\Console\ConfigCommand::$command,
         System\Integrate\Console\PackageDiscoveryCommand::$command,
         System\Integrate\Console\ClearCacheCommand::$command,
+        System\Integrate\Console\RouteCacheCommand::$command,
         // more command here
     ],
 ];
