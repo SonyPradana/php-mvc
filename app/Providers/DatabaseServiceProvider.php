@@ -13,23 +13,23 @@ class DatabaseServiceProvider extends ServiceProvider
 {
     public function boot()
     {
-        $configs    = $this->app->get('config');
-        $default    = $configs['db.default'];
-        $connention = $configs['db.connections'];
+        $configs     = $this->app->get('config');
+        $default     = $configs['db.default'];
+        $connentions = $configs['db.connections'];
+        $dsn         = $connentions[$default];
 
         $this->app->set('dsn.default', $default);
-        $this->app->set('dsn.connenction', $connention);
-        $this->app->set('dsn.use', $connention[$default]);
-        $this->app->alias('dsn.use', 'dsn.sql');
+        $this->app->set('dsn.connenctions', $connentions);
+        $this->app->set('dsn.sql', $dsn);
 
         $this->app->set(
             MyPDO::class,
-            fn () => new MyPDO($this->app->get('dsn.use'))
+            fn () => new MyPDO($this->app->get('dsn.sql'))
         );
 
         $this->app->set(
             MySchema\MyPDO::class,
-            fn () => new MySchema\MyPDO($this->app->get('dsn.use'))
+            fn () => new MySchema\MyPDO($this->app->get('dsn.sql'))
         );
 
         $this->app->set(
@@ -39,7 +39,7 @@ class DatabaseServiceProvider extends ServiceProvider
 
         $this->app->set(
             'MySchema',
-            fn () => new MySchema($this->app->get(MySchema\MyPDO::class))
+            fn () => new MySchema($this->app->get(MySchema\MyPDO::class), $this->app->get('dsn.sql')['database'])
         );
     }
 }
