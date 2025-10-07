@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Providers;
 
+use System\Database\DatabaseManager;
 use System\Database\MyPDO;
 use System\Database\MyQuery;
 use System\Database\MySchema;
@@ -40,6 +41,12 @@ class DatabaseServiceProvider extends ServiceProvider
         $this->app->set(
             'MySchema',
             fn () => new MySchema($this->app->get(MySchema\MyPDO::class), $this->app->get('dsn.sql')['database'])
+        );
+
+        $this->app->set(
+            DatabaseManager::class,
+            fn () => (new DatabaseManager($this->app->get('dsn.connenctions')))
+                ->setDefaultConnection($this->app->get(MyPDO::class))
         );
     }
 }
