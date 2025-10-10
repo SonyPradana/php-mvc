@@ -8,6 +8,7 @@ use System\Http\Response;
 use System\Integrate\ServiceProvider;
 use System\Integrate\Vite;
 use System\View\Templator;
+use System\View\Templator\DirectiveTemplator;
 use System\View\TemplatorFinder;
 
 class ViewServiceProvider extends ServiceProvider
@@ -16,6 +17,7 @@ class ViewServiceProvider extends ServiceProvider
     {
         $this->registerViteResolver();
         $this->registerViewResolver();
+        $this->registerViteDirectives();
     }
 
     protected function registerViteResolver(): void
@@ -23,6 +25,17 @@ class ViewServiceProvider extends ServiceProvider
         $this->app->set('vite.gets', fn (): Vite => new Vite($this->app->publicPath(), '/build/'));
         $this->app->set('vite.location', fn (): string => $this->app->publicPath() . '/build/manifest.json');
         $this->app->set('vite.hasManifest', fn (): bool => file_exists($this->app->get('vite.location')));
+    }
+
+    protected function registerViteDirectives(): void
+    {
+        if ($this->app->has('vite.gets')) {
+            DirectiveTemplator::register('vite', function (array $attributes): string {
+                $vite = $this->app->get('vite.gets');
+
+                return $vite(...$attributes);
+            });
+        }
     }
 
     protected function registerViewResolver(): void
