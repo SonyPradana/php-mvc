@@ -16,8 +16,13 @@ class RateLimiterServiceProvider extends ServiceProvider
         /** @var CacheManager */
         $cache   = $this->app->get('cache');
         $rate    = new RateLimiterFactory($cache);
-        $thottle = new ThrottleMiddleware($rate->createFixedWindow(60, 60));
 
-        $this->app->set(ThrottleMiddleware::class, fn () => $thottle);
+        $this->app->set(RateLimiterFactory::class, fn () => $rate);
+        $this->app->set(ThrottleMiddleware::class, fn () => new ThrottleMiddleware(
+            limiter: $rate->createFixedWindow(
+                limit: 3,
+                windowSeconds: 60
+            ))
+        );
     }
 }
