@@ -11,25 +11,20 @@ use System\Router\Router;
 
 class HttpKernel extends Kernel
 {
-    /** @var \Whoops\Run */
-    private $run;
-    /** @var \Whoops\Handler */
-    private $handler;
-
     public function __construct(Application $app)
     {
         parent::__construct($app);
 
         $this->app->bootedCallback(function () {
-            if ($this->app->isDebugMode()) {
+            if ($this->app->isDebugMode() && class_exists(\Whoops\Run::class)) {
                 /* @var \Whoops\Handler\PrettyPageHandler */
-                $this->handler = $this->app->make('error.PrettyPageHandler');
-                $this->handler->setPageTitle('php mvc');
+                $handler = $this->app->make('error.PrettyPageHandler');
+                $handler->setPageTitle('php mvc');
 
                 /* @var \Whoops\Run */
-                $this->run = $this->app->make('error.handle');
-                $this->run
-                  ->pushHandler($this->handler)
+                $run = $this->app->make('error.handle');
+                $run
+                  ->pushHandler($handler)
                   ->register();
             }
         });
