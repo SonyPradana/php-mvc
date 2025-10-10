@@ -32,5 +32,6 @@ return [
         App\Providers\DatabaseServiceProvider::class,
         App\Providers\ViewServiceProvider::class,
         App\Providers\CacheServiceProvider::class,
+        App\Providers\RateLimiterServiceProvider::class,
     ],
 ];
