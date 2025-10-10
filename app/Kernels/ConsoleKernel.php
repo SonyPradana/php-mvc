@@ -14,16 +14,16 @@ class ConsoleKernel extends Kernel
         parent::__construct($app);
 
         $this->app->bootedCallback(function () {
-              if (class_exists(\Whoops\Run::class)) {
-                 /* @var \Whoops\Handler\PlainTextHandler */
-                 $handler = $this->app->make('error.PlainTextHandler');
+            if ($this->app->isDebugMode() && class_exists(\Whoops\Run::class)) {
+                /* @var \Whoops\Handler\PlainTextHandler */
+                $handler = $this->app->make('error.PlainTextHandler');
 
-                 /* @var \Whoops\Run */
-                 $run = $this->app->make('error.handle');
-                 $run
-                   ->pushHandler($handler)
-                   ->register();
-              }
+                /* @var \Whoops\Run */
+                $run = $this->app->make('error.handle');
+                $run
+                  ->pushHandler($handler)
+                  ->register();
+            }
         });
     }
 }
