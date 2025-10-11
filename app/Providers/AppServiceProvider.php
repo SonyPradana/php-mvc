@@ -19,9 +19,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         // error handle
-        $this->app->set('error.handle', fn () => new \Whoops\Run());
-        $this->app->set('error.PrettyPageHandler', fn () => new \Whoops\Handler\PrettyPageHandler());
-        $this->app->set('error.PlainTextHandler', fn () => new \Whoops\Handler\PlainTextHandler());
+        $this->registerErrorHandle();
 
         // register schedule to containel
         $this->app->set('cron.log', fn (): Log => new Log());
@@ -29,6 +27,15 @@ class AppServiceProvider extends ServiceProvider
 
         // hash
         $this->registerHash();
+    }
+
+    private function registerErrorHandle(): void
+    {
+        if ($this->app->isDebugMode() && class_exists(\Whoops\Run::class)) {
+            $this->app->set('error.handle', fn () => new \Whoops\Run());
+            $this->app->set('error.PrettyPageHandler', fn () => new \Whoops\Handler\PrettyPageHandler());
+            $this->app->set('error.PlainTextHandler', fn () => new \Whoops\Handler\PlainTextHandler());
+        }
     }
 
     private function registerHash(): void

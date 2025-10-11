@@ -9,25 +9,21 @@ use System\Integrate\Console\Karnel as Kernel;
 
 class ConsoleKernel extends Kernel
 {
-    /** @var \Whoops\Run */
-    private $run;
-
-    /** @var \Whoops\Handler */
-    private $handler;
-
     public function __construct(Application $app)
     {
         parent::__construct($app);
 
         $this->app->bootedCallback(function () {
-            /* @var \Whoops\Handler\PlainTextHandler */
-            $this->handler = $this->app->make('error.PlainTextHandler');
+            if ($this->app->isDebugMode() && class_exists(\Whoops\Run::class)) {
+                /* @var \Whoops\Handler\PlainTextHandler */
+                $handler = $this->app->make('error.PlainTextHandler');
 
-            /* @var \Whoops\Run */
-            $this->run = $this->app->make('error.handle');
-            $this->run
-              ->pushHandler($this->handler)
-              ->register();
+                /* @var \Whoops\Run */
+                $run = $this->app->make('error.handle');
+                $run
+                  ->pushHandler($handler)
+                  ->register();
+            }
         });
     }
 }
