@@ -6,6 +6,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.1.0] - 2025-04-12
+### Changed
+- Changed config multiple database configuration and new database manager class ([#34](https://github.com/sonypradana/php-mvc/pull/34)).
+- Cached make all route can be cache ([#33](https://github.com/sonypradana/php-mvc/pull/33)).
+- Prevent whoops error handler in production ([#37](https://github.com/sonypradana/php-mvc/pull/37)).
+
+### Added
+- Added RateLimiter Service Provider ([#36](https://github.com/sonypradana/php-mvc/pull/36)).
+- Added register vite directive ([#35](https://github.com/sonypradana/php-mvc/pull/35)).
+
+
 ## [2.0.0] - 2025-04-12
 
 ### Added
