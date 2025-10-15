@@ -7,6 +7,16 @@
 # 🚀 PHP MVC Skeleton
 Welcome to **php-mvc**, a minimal MVC framework designed to streamline your PHP development process. This lightweight framework offers essential features for building web applications while maintaining simplicity and ease of use.
 
+## 🪐 Feature
+- MVC structure
+- Application Container (power with [php-di](https://github.com/PHP-DI/PHP-DI))
+- Router Support
+- Models builder
+- Query builder
+- CLI command
+- Service Provider and Middleware
+- Templator (template engine)
+
 ## 🎯 Quick Start (4 Steps)
 
 ### 1️⃣ Create Your Project
