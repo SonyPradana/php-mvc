@@ -11,7 +11,7 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        php: [8.0, 8.1, 8.2, 8.3]
+        php: [8.0, 8.1, 8.2, 8.3, 8.4, 8.5]
 
     name: PHP ${{ matrix.php }} on MariaDB 10
 
@@ -23,16 +23,19 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php }}
-          extensions: dom, curl, libxml, mbstring, zip, pcntl
+          extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, pdo_mysql
           tools: composer:v2
           coverage: none
+
+      - name: Validate composer.json and composer.lock
+        run: composer validate --strict
 
       - name: Install dependencies
         uses: nick-fields/retry@v2
         with:
           timeout_minutes: 5
           max_attempts: 5
-          command: composer update --prefer-stable --prefer-dist --no-interaction --no-progress
+          command: composer install --prefer-dist --no-interaction --no-progress
 
       - name: Copy environment file
         run: cp .env.example .env
@@ -40,10 +43,10 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: 20
 
       - name: Install pnpm
-        run: npm install -g pnpm
+        run: npm install -g pnpm@latest
 
       - name: Install Node.js Dependencies with pnpm
         run: pnpm install
