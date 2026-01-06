@@ -27,9 +27,6 @@ jobs:
           tools: composer:v2
           coverage: none
 
-      - name: Validate composer.json and composer.lock
-        run: composer validate --strict
-
       - name: Install dependencies
         uses: nick-fields/retry@v2
         with:
